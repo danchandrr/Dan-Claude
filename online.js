@@ -433,6 +433,11 @@
     onAch() { if (O.profile) { clearTimeout(statT); statT = setTimeout(syncStats, 2000); } },
     pushInfo: () => ({ supported: pushOK(), ios: isIOS && !standalone, signedIn: !!O.profile, denied: 'Notification' in window && Notification.permission === 'denied', on: O.push.on, busy: O.push.busy, hour: REM.hour == null ? 19 : REM.hour }),
     enablePush, disablePush,
+    // "Report a problem": works signed in or not; signed-in reports carry the username
+    async sendReport(r) {
+      const { error } = await sb.from('reports').insert({ user_id: O.user ? O.user.id : null, subject: r.subject, kind: r.kind, note: r.note || null, context: r.context || null });
+      return !error;
+    },
     dailyBoardHTML(date) {
       if (!O.profile) return `<p class="hint">${O.user ? 'Choose a username' : 'Sign in'} under Friends &amp; leaderboards to compare today's score.</p>`;
       return `<span class="label" style="margin-top:12px;display:block">Today's leaderboard</span>${dailyRows(date)}`;

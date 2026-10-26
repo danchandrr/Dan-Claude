@@ -138,3 +138,31 @@ create table if not exists public.push_subs (
 alter table public.push_subs enable row level security;
 drop policy if exists "push own" on public.push_subs;
 create policy "push own" on public.push_subs for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- ---------------------------------------------------------------------------
+-- "Report a problem": players flag a case or picture that looks medically wrong.
+-- Anyone can send one; nobody can read them through the app. Read them in Table Editor → reports.
+create table if not exists public.reports (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users on delete set null,
+  subject text not null check (char_length(subject) <= 120),
+  kind text not null check (kind in ('clue', 'answer', 'tx', 'picture', 'teach', 'typo', 'other')),
+  note text check (char_length(note) <= 1000),
+  context jsonb,
+  done boolean not null default false,
+  created_at timestamptz not null default now()
+);
+alter table public.reports enable row level security;
+drop policy if exists "reports send" on public.reports;
+create policy "reports send" on public.reports for insert to anon, authenticated
+  with check ((user_id is null or user_id = auth.uid()) and done = false);
+grant insert on public.reports to anon, authenticated;
+
+-- Newest reports first, with the reporter's username
+create or replace view public.report_inbox with (security_invoker = true) as
+  select r.id, r.created_at, r.subject, r.kind, r.note, p.username, r.done
+  from public.reports r left join public.profiles p on p.id = r.user_id
+  order by r.created_at desc;
+revoke all on public.report_inbox from anon, authenticated;
+
+notify pgrst, 'reload schema';

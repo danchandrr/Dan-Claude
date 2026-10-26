@@ -722,6 +722,8 @@ li.rdwait{list-style:none;padding:0;background:none}
 .achbar{display:block;height:6px;border-radius:3px;background:var(--panel-2);overflow:hidden;margin-top:4px}.achbar i{display:block;height:100%;background:var(--scrub)}
 .achbar.big{height:10px;border-radius:5px}
 .achwhen{color:var(--muted)}.linkbtn{border:0;background:none;padding:0;color:var(--scrub);font-weight:700;text-decoration:underline;font-size:12.5px}
+#repov .emov{z-index:58}
+.rplink{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-weight:600}.rplink .ic{width:13px;height:13px}.rdfoot .rplink{margin-left:auto}
 #achtoast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);z-index:70;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);max-width:calc(100% - 32px)}
 #achtoast.on{transform:translate(-50%,0)}
 #achtoast .ai{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--scrub);color:var(--scrub-ink);flex:none}
@@ -3618,7 +3620,7 @@ function renderPatient(i){
     else body=`<span class="verdict ${o.kind==='good'?'good':'meh'}">${ic(o.kind==='good'?'check':'alert')}${DISPO_NAME[o.pick]}${o.kind==='good'?': right call':''}</span><h2>${esc(d.n)}</h2>${tierBadge(d.t)}
      ${o.kind!=='good'?`<p>${esc(o.label)}. The right destination was <b>${DISPO_NAME[o.right].toLowerCase()}</b>.</p>`:''}
      <div class="bd">${o.bd.rows.map(([a,b])=>`<span>${a}</span><span>${b}</span>`).join('')}<span class="tot">Points</span><span class="tot">${fmt(o.pts)}</span><span>Grant earned</span><span>₲${fmt(o.grant)}</span></div>`;
-    right=`<section class="panel result o5">${body}<p class="hint">The teaching point for this case is in your Casebook.</p><button class="btn primary" data-act="clear">${ic('bed')}Clear the bay</button></section>`;
+    right=`<section class="panel result o5">${body}<p class="hint">The teaching point for this case is in your Casebook. ${reportLink('c',d.n)}</p><button class="btn primary" data-act="clear">${ic('bed')}Clear the bay</button></section>`;
   }
   const cc=hidden(p)?MASK[d.n].cc:d.cc,bv=hidden(p)?MASK[d.n].v:d.v,cam=p.cam&&CAMEO_PT_BY[p.cam];
   const flags=[p.focus?`<span class="flag">${ic('star')}Your specialty</span>`:'',p.bounce?`<span class="flag">${ic('alert')}Back after being sent home</span>`:'',p.showSys?`<span class="flag">${ic(SYS_IC[d.s])}System: ${d.s}</span>`:'',
@@ -3792,7 +3794,7 @@ function renderBook(){
   const found=D.filter(d=>S.meta.book[d.n]).length;
   return`<div class="pagehead"><div><span class="label">Diagnosed at least once</span><h1>Casebook ${found}/${D.length}</h1></div><p style="color:var(--muted);margin:0">Best score <b class="mono">${fmt(S.meta.best)}</b> · Runs ${S.meta.runs} · Emergencies saved ${S.meta.ems||0}</p></div>
    ${[4,3,2,1,0].map(t=>`<h3 style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">${tierBadge(t)}<span class="label">${TIERS[t].pts} pts base · ${TIERS[t].note}</span></h3>
-    <div class="book">${D.filter(d=>d.t===t).map(d=>S.meta.book[d.n]?`<details class="entry"><summary><b>${ic(SYS_IC[d.s])}${esc(d.n)}</b><small>${d.s} · diagnosed ×${S.meta.book[d.n]} · tap for the teaching point</small></summary><p class="pearl">${esc(d.p)}</p>${(READ_AT[d.n]||[]).length?`<div class="studyrow">${READ_AT[d.n].map(r=>`<button class="rdchip" data-study="${r[2]}">${ic(RD_KIND[READS[r[2]].k][1])}${readTitle(r[2])}</button>`).join('')}</div>`:''}</details>`:`<div class="entry unk"><b>${ic(SYS_IC[d.s])}Undiagnosed</b><small>${d.s}</small></div>`).join('')}</div>`).join('')}`;
+    <div class="book">${D.filter(d=>d.t===t).map(d=>S.meta.book[d.n]?`<details class="entry"><summary><b>${ic(SYS_IC[d.s])}${esc(d.n)}</b><small>${d.s} · diagnosed ×${S.meta.book[d.n]} · tap for the teaching point</small></summary><p class="pearl">${esc(d.p)}</p>${(READ_AT[d.n]||[]).length?`<div class="studyrow">${READ_AT[d.n].map(r=>`<button class="rdchip" data-study="${r[2]}">${ic(RD_KIND[READS[r[2]].k][1])}${readTitle(r[2])}</button>`).join('')}</div>`:''}<p class="hint" style="margin:4px 0 0">${reportLink('c',d.n)}</p></details>`:`<div class="entry unk"><b>${ic(SYS_IC[d.s])}Undiagnosed</b><small>${d.s}</small></div>`).join('')}</div>`).join('')}`;
 }
 
 function renderEmer(){
@@ -3908,7 +3910,7 @@ function renderPuzzle(x,o){
   const right=st.done
     ?`<section class="panel result o5"><span class="verdict ${st.won?'good':'bad'}">${ic(st.won?'check':'x')}${st.won?'Solved':'Out of guesses'}</span><h2>${esc(d.n)}</h2>${d.custom?'':tierBadge(d.t)}
        <div class="bd"><span>Clues used</span><span>${dailyClues(st)}</span><span>Wrong guesses</span><span>${dailyWrong(st)}</span>${st.rb?`<span>Pictures read</span><span>${st.rb>0?'+':''}${st.rb}</span>`:''}<span class="tot">Score</span><span class="tot">${fmt(st.score)}</span></div>
-       ${d.tx?`<p style="margin:0 0 10px"><b>Treatment:</b> ${esc(d.tx)}</p>`:''}${guesses}${o.after(st)}</section>`
+       ${d.tx?`<p style="margin:0 0 10px"><b>Treatment:</b> ${esc(d.tx)}</p>`:''}${guesses}${o.after(st)}${d.custom?'':`<p class="hint">${reportLink('c',d.n)}</p>`}</section>`
     :`<section class="panel orders o5"><div class="stab"><span class="label">Score if solved now</span><b class="mono">${fmt(dailyScore(st))}</b></div><div class="ordgrid">${ords}</div><p class="hint">Each clue costs 60 points and each wrong guess 150. Read a picture right for 60 back. ${wrongLeft} wrong guess${wrongLeft===1?'':'es'} left.</p></section>
       <section class="panel dx o6"><h2>Diagnosis</h2>
        <div class="combo"><input id="dxin" type="text" autocomplete="off" placeholder="Start typing a disease…" aria-label="Diagnosis" role="combobox" aria-expanded="false" aria-controls="dxlist"><button class="btn primary" data-act="submit">Submit</button><div class="list" id="dxlist" role="listbox" hidden></div></div>${guesses}</section>`;
@@ -4459,7 +4461,7 @@ function renderRead(){
    <p class="rdq"><b>${r.k==='ecg'?'What does this ECG show?':r.k==='abg'?'How would you interpret this gas?':r.k==='xr'?'What is the main finding?':'What do you see?'}</b>${ctx&&!done?` <span class="hint">${ctx}</span>`:''}</p>
    <div class="rdopts">${opts}</div>
    ${done?`<div class="minimsg ${ok||o.pick<0?'good':''}">${ok?'Right read.':o.pick<0?'Answer: '+esc(r.o[0])+'.':'Not quite.'} ${esc(r.x)}</div>${report}`:''}
-   <div class="rdfoot">${done?`<button class="btn primary" data-act="${o.where==='drill'?'rdnext':'rdclose'}">${o.where==='drill'?ic('play')+'Next one':ic('check')+'Done'}</button>${o.where==='drill'?`<button class="btn" data-act="rdclose">Stop</button>`:''}`
+   <div class="rdfoot">${done?`<button class="btn primary" data-act="${o.where==='drill'?'rdnext':'rdclose'}">${o.where==='drill'?ic('play')+'Next one':ic('check')+'Done'}</button>${o.where==='drill'?`<button class="btn" data-act="rdclose">Stop</button>`:''}${reportLink('r',o.key)}`
      :o.where==='bed'||o.where==='pz'?`<button class="btn" data-act="rdskip">Skip and read the report</button>`:`<button class="btn" data-act="rdreveal">Show the answer</button>`}</div>
   </div></div>`;
 }
@@ -4748,6 +4750,38 @@ function renderRoles(){
      return`<article class="achcard ${open?'on':''} ${k==='diag'?'ks':''}"><span class="ai">${ic(open?(k==='diag'?'cane':'badge'):'keycard')}</span><div><b>${hide?'Secret specialty':esc(SPECS[k].n)}</b><small>${open?'Unlocked':esc(req?req.t:'')}</small>
       ${!open&&!hide?roleProg(k).map(([l,v,g])=>`<span class="achbar"><i style="width:${Math.round(v/g*100)}%"></i></span><small class="mono">${esc(l)} ${v}/${g}</small>`).join(''):''}
       ${hide&&q&&q.stage?`<small>Dr. Hoof's test: day ${q.stage} of 3${q.done?' done':''}</small>`:''}</div></article>`}).join('')}</div>`;
+}
+
+/* ---- Report a problem: players flag a case or picture that looks medically wrong ---- */
+const RP_KINDS=[['clue','A clue or result is wrong'],['answer','The diagnosis does not fit the clues'],['tx','The treatment or options are wrong'],['picture','The picture looks wrong'],['teach','The teaching point is wrong'],['typo','Typo or wording'],['other','Something else']];
+const reportLink=(kind,subj)=>`<button class="linkbtn rplink" data-report="${kind}|${esc(subj)}">${ic('alert')}Report a problem</button>`;
+function rpHost(){let el=document.getElementById('repov');if(!el){el=document.createElement('div');el.id='repov';document.body.appendChild(el)}return el}
+function openReport(spec){const i=spec.indexOf('|');S.rep={k:spec.slice(0,i),subj:spec.slice(i+1),sent:false,busy:false};renderReport()}
+function renderReport(){
+  const el=rpHost(),r=S.rep;if(!r){el.innerHTML='';return}
+  const pic=r.k==='r',title=pic&&READS[r.subj]?readTitle(r.subj):r.subj;
+  const kinds=RP_KINDS.filter(([k])=>pic?['picture','answer','teach','typo','other'].includes(k):k!=='picture');
+  el.innerHTML=`<div class="emov minov" role="dialog" aria-modal="true" aria-label="Report a problem"><div class="panel minicard">
+   <div class="minihead">${ic('alert')}<div><span class="label">Report a problem${pic?' with this picture':''}</span><h2>${esc(title)}</h2></div><button class="iconbtn rdx" data-act="rpclose" aria-label="Close">${ic('x')}</button></div>
+   ${r.sent?`<div class="minimsg good">Thank you. The report has been sent.</div><div class="rdfoot"><button class="btn primary" data-act="rpclose">Done</button></div>`:`
+   <label class="edf"><span>What is wrong?</span><select id="rpkind">${kinds.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></label>
+   <label class="edf"><span>Details <small>what it should say, and a source if you have one</small></span><textarea id="rpnote" rows="4" maxlength="1000" placeholder="For example: with these ECG changes, IV calcium should come first"></textarea></label>
+   <p class="hint" style="margin:0">The report includes the ${pic?'picture':'case'} name and your note, plus your username if you are signed in.</p>
+   <div class="rdfoot"><button class="btn primary" data-act="rpsend" ${r.busy?'disabled':''}>${ic('send')}${r.busy?'Sending…':'Send report'}</button><button class="btn" data-act="rpclose">Cancel</button></div>`}</div></div>`;
+}
+async function sendReport(){
+  const r=S.rep;if(!r||r.busy)return;
+  const kind=($('#rpkind')||{}).value||'other',note=(($('#rpnote')||{}).value||'').trim().slice(0,1000);
+  const payload={subject:((r.k==='r'?'Picture: ':'Case: ')+r.subj).slice(0,120),kind,note,context:{screen:S.screen,spec:(S.doctor&&S.doctor.spec)||null,picture:r.k==='r'?r.subj:null}};
+  if(window.ZSOnline&&ZSOnline.sendReport){
+    r.busy=true;renderReport();const ok=await ZSOnline.sendReport(payload);r.busy=false;
+    if(ok)r.sent=true;else toast('Could not send. Check your connection and try again.');
+    renderReport();return;
+  }
+  // Inside Claude there is no server to send to, so copy the report instead
+  const text=`Zebra Shift report\n${payload.subject}\nProblem: ${(RP_KINDS.find(x=>x[0]===kind)||[])[1]}\n${note}`;
+  try{await navigator.clipboard.writeText(text);toast('Copied. Reports are sent from the app version; paste this to the developer.')}catch(e){toast('Reports are sent from the app version of the game.')}
+  S.rep=null;renderReport();
 }
 
 /* ===================== SHARE CARDS ===================== */
@@ -5080,6 +5114,7 @@ document.addEventListener('click',e=>{
   if(ds.dord){pzOrder(ds.dord);return}
   if(ds.read){openRead(pzMode()?'pz':'bed',ds.read[0],+ds.read.slice(1));return}
   if(ds.study){openRead('study',null,null,ds.study);return}
+  if(ds.report){openReport(ds.report);return}
   if(ds.rdpick!=null&&S.read){readPick(ds.rdpick);return}
   if(ds.drill){drillNext(ds.drill==='any'?'':ds.drill);return}
   if(ds.achf){S.ui.achf=ds.achf;render();return}
@@ -5113,6 +5148,8 @@ document.addEventListener('click',e=>{
     case'aidebrief':aiDebrief();break;
     case'daily':S.screen='daily';render();window.scrollTo({top:0});break;
     case'online':S.screen='online';render();window.scrollTo({top:0});break;
+    case'rpclose':S.rep=null;renderReport();break;
+    case'rpsend':sendReport();break;
     case'rdclose':readClose(false);break;
     case'rdskip':readClose(true);break;
     case'rdzoom':{const z=document.querySelector('#readov .rdscroll');if(z){const on=z.classList.toggle('zoom');b.innerHTML=ic('search')+(on?'Fit to screen':'Zoom in')}break}
@@ -5194,6 +5231,7 @@ document.addEventListener('pointerdown',e=>{
   e.preventDefault();if(b.dataset.act==='miniact')miniAct();else cprTap();
 });
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&S.rep){S.rep=null;renderReport();return}
   if(e.key==='Escape'&&S.read){readClose(false);return}
   if((e.code==='Space'||e.key===' ')&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){
     if(S.cpr&&S.cpr.stage==='cpr'){e.preventDefault();cprTap();return}
@@ -5275,7 +5313,7 @@ function boot(data){
     if(S.meta)S.meta.chats=S.meta.chats||{};
     if(S.run&&S.run.phase){const sel=S.sel,pz=S.paused;fixRun(S.run);S.sel=sel;S.paused=pz}
   }
-  S.read=null;render();bootHash();addEventListener('hashchange',bootHash);
+  S.read=null;S.rep=null;render();bootHash();addEventListener('hashchange',bootHash);
   requestAnimationFrame(ecgFrame);
 }
 window.claude?.hot?.snapshot?.(()=>({S:Object.assign({},S,{ui:Object.assign({},S.ui,{chat:null})})}));
