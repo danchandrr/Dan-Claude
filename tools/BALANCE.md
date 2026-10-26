@@ -26,7 +26,7 @@ They also differ in how much of the chart they want before guessing, and how oft
 - **The economy explodes.** Long runs pay hundreds of thousands of grant; every item is maxed within 12 runs.
 - **Hard first shift for non-clinicians.** The student bot loses on shift 1 in 96% of first runs.
 
-## Proposed changes (`tools/balance_patch.py`)
+## Changes applied to the game (`tools/balance_patch.py`)
 
 1. Shift 1 has 5 patients and they deteriorate 60% slower.
 2. From shift 4, patients deteriorate 8% faster each shift, up to about three times as fast. Shifts can grow to 20 patients and arrivals keep speeding up.
@@ -124,3 +124,5 @@ Not-yet-clinical players on **Intern** difficulty with the changes: median shift
 - Arrests are common: about 0.6 per patient for an average doctor. CPR may come up more often than is fun.
 - Pathology and Cardiology unlock slowly from shift play alone (both need 10 good picture reads); the Reading room speeds them up.
 - The bot's decisions are simplified (it never uses consults, items' active effects are passive, and it reads the chart in a fixed order), so absolute numbers matter less than the direction of a change.
+
+New careers now start on **Intern**, labelled "Beginner friendly" in the doctor creator.

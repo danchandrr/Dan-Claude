@@ -2083,7 +2083,7 @@ const SPECS={
  tox:{n:'Toxicology',d:'More poisonings, which arrive with +2 stability, a clue charted and their organ system shown. Wrong treatments cost 1 less stability for everyone.',focus:d=>d.s==='Toxicology',bonus:{stab:2,clues:1,elim:1},fx:m=>{m.txPen++}}
 };
 const DIFFS={
- intern:{n:'Intern',d:'+3 stability per patient. Score ×0.8.',fx:m=>{m.stab+=3;m.score-=.2}},
+ intern:{n:'Intern',d:'The place to start if you are new. +3 stability per patient. Score ×0.8.',fx:m=>{m.stab+=3;m.score-=.2}},
  resident:{n:'Resident',d:'The standard shift.',fx:()=>{}},
  attending:{n:'Attending',d:'−2 stability, no hints on wrong guesses, shorter emergencies. Score +50%.',fx:m=>{m.stab-=2;m.score+=.5;m.noHints=true;m.emTime-=8}}
 };
@@ -2575,7 +2575,7 @@ let STORE={active:null,slots:[null,null,null]};
 let S={v:2,screen:'menu',tab:'shift',slot:null,doctor:null,meta:null,run:null,staff:null,ui:{menu:'main',chat:null,chatDraft:'',confirmDel:null,exportSlot:null,importText:'',confirmImp:null},draft:null};
 function freshMeta(){return{grant:800,owned:{coffee:{lv:1}},loadout:['coffee'],pity:0,book:{},best:0,intro:true,runs:0,lastPull:[],ems:0,up:{},mute:false,saves:0,chats:{}}}
 function freshStaff(){return Object.fromEntries(STAFF.map(s=>[s.id,0]))}
-function defaultDoctor(){return{first:'Alex',last:'Reyes',gender:'nb',name:'Alex Reyes',skin:2,hair:'short',hc:1,scrub:1,glasses:false,cap:false,steth:true,coat:false,earrings:false,facial:'none',spec:'em',diff:'resident'}}
+function defaultDoctor(){return{first:'Alex',last:'Reyes',gender:'nb',name:'Alex Reyes',skin:2,hair:'short',hc:1,scrub:1,glasses:false,cap:false,steth:true,coat:false,earrings:false,facial:'none',spec:'em',diff:'intern'}}
 const fullName=d=>`${(d&&d.first)||''} ${(d&&d.last)||''}`.trim();
 // Older saves stored one "name" field; split it into first and last
 function normDoc(src){
@@ -2646,8 +2646,11 @@ function revealCat(p,c){const d=D[p.d];if(p.rev[c]<d[c].length){p.rev[c]++;p.las
 function rarityRange(t,id){const lo=t===0?0:t===4?3:t-(id%2);return TIERS[lo].k+' or '+TIERS[lo+1].k}
 
 /* ===================== RUN FLOW ===================== */
-const shiftSize=s=>Math.min(14,6+2*(s-1));
-const spawnGap=s=>Math.max(16,36-2.5*(s-1))+Math.random()*12;
+const shiftSize=s=>s===1?5:Math.min(20,6+2*(s-1));
+const spawnGap=s=>Math.max(8,36-2.5*(s-1))+Math.random()*12;
+// Shift 1 is forgiving; from shift 4 patients deteriorate 8% faster each shift, up to about three times as fast
+const shiftPace=s=>s===1?1.6:Math.max(.3,1-.08*Math.max(0,s-3));
+const emGap=()=>120+Math.random()*90;
 function startRun(){
   S.run={shift:1,rep:0,score:0,streak:0,perks:[],used:{},phase:'floor',beds:Array(bedCount()).fill(null),queue:[],toArrive:shiftSize(1),arrived:0,spawnT:0,nextGap:spawnGap(1),clock:0,
     shieldUsed:0,treated:0,earned:0,rarest:-1,rarestName:'',crashes:0,deaths:0,lwbs:0,saves:0,chat:{},gift:{},cons:{},vchat:{},buff:{},cameos:[],visitors:pickVisitors(),autoRoscUsed:false,emClock:0,emNext:90+Math.random()*60,em:null,emWins:0,nid:1};
@@ -2679,7 +2682,7 @@ function fillFromQueue(){
   }
 }
 function tierWeights(shift,minT){
-  const base=[50,30,14,5,1],f=1+.4*(shift-1);
+  const base=[50,30,14,5,1],f=1+.3*(Math.min(shift,7)-1);
   return base.map((b,t)=>t<minT?0:b*Math.pow(f,t));
 }
 function rollTier(shift,minT){
@@ -2738,7 +2741,7 @@ function decayInterval(p){
   if(p.tut)return 0;
   if(hidden(p)||!['case','treat','proc'].includes(p.phase))return 0;
   const base={1:14,2:24,3:45}[acuity(p)];if(!base)return 0;
-  let iv=base;
+  let iv=base*shiftPace(S.run?S.run.shift:1);
   if(up('monitor'))iv*=1.25;
   if(up('oxygen')&&['resp','unconscious','drowsy'].includes(D[p.d].pose))iv*=1.5;
   if(p.phase==='treat')iv*=1.25;
@@ -2853,7 +2856,7 @@ function pointsBreakdown(p,f,label){
   const r=S.run,d=D[p.d],m=mods();
   const rows=[];let v=TIERS[d.t].pts;rows.push([TIERS[d.t].k+' case',fmt(v)]);
   const eff=1+.08*Math.max(0,p.stab);v*=eff;rows.push(['Stability left ('+Math.max(0,p.stab)+')','×'+eff.toFixed(2)]);
-  const sm=1+.2*(r.shift-1);if(sm>1){v*=sm;rows.push(['Shift '+r.shift,'×'+sm.toFixed(1)])}
+  const sm=1+.2*(Math.min(r.shift,6)-1);if(sm>1){v*=sm;rows.push(['Shift '+r.shift,'×'+sm.toFixed(1)])}
   if(p.grand){v*=1.5;rows.push(['Grand Rounds','×1.5'])}
   if(p.caught){v*=1.5;rows.push(['Caught before it turned','×1.5'])}
   if(p.cam){v*=1.25;rows.push(['Special guest','×1.25'])}
@@ -2883,7 +2886,7 @@ function takePerk(id){
   r.perks.push(id);
   if(id==='scrubs')r.rep=Math.min(maxRep(),r.rep+1);
   else if(p.now)p.now(r);
-  r.shift++;r.shieldUsed=0;r.autoRoscUsed=false;r.draft=null;r.chat={};r.gift={};r.cons={};r.vchat={};r.buff={};r.visitors=pickVisitors();S.ui.chat=null;r.slog=[];r.dbText=null;r.dbErr=null;r.dbBusy=false;
+  r.shift++;r.emRep=false;r.shieldUsed=0;r.autoRoscUsed=false;r.draft=null;r.chat={};r.gift={};r.cons={};r.vchat={};r.buff={};r.visitors=pickVisitors();S.ui.chat=null;r.slog=[];r.dbText=null;r.dbErr=null;r.dbBusy=false;
   r.phase='floor';r.beds=Array(bedCount()).fill(null);r.queue=[];r.toArrive=shiftSize(r.shift);r.arrived=0;r.spawnT=0;r.clock=0;r.nextGap=spawnGap(r.shift);
   spawn();spawn();save();render();toast(p.n+' added');achEvent('reach',{shift:r.shift});
 }
@@ -3092,10 +3095,10 @@ function emFinish(ok,reason){
   const left=emLeft(e);
   let pts=0,grant=0;
   if(ok){
-    pts=Math.round(TIERS[d.t].pts*2.5*(1+left/e.dur)*(1+.2*(r.shift-1))*(1+Math.max(-.5,m.score))/10)*10;
+    pts=Math.round(TIERS[d.t].pts*2.5*(1+left/e.dur)*(1+.2*(Math.min(r.shift,6)-1))*(1+Math.max(-.5,m.score))/10)*10;
     if(e.cam)pts=Math.round(pts*1.25/10)*10;
     grant=Math.floor(pts/GRANT_DIV*(1+m.grant));
-    r.score+=pts;r.earned+=grant;S.meta.grant+=grant;r.rep=Math.min(maxRep(),r.rep+1);r.streak++;r.emWins++;S.meta.ems=(S.meta.ems||0)+1;
+    r.score+=pts;r.earned+=grant;S.meta.grant+=grant;if(!r.emRep){r.rep=Math.min(maxRep(),r.rep+1);r.emRep=true}r.streak++;r.emWins++;S.meta.ems=(S.meta.ems||0)+1;
     if(d.t>r.rarest){r.rarest=d.t;r.rarestName=d.n}
   }else{r.rep--;r.streak=0}
   e.phase='done';e.res={ok,pts,grant,reason,left};
@@ -3156,7 +3159,7 @@ setInterval(()=>{
   if(S.paused||S.mini||S.cpr||S.read||r.em||r.phase!=='floor'||(S.tab==='staff'&&S.ui.chat))return;
   const changed=worldTick(dt);
   if(r.phase!=='floor'){render();return}
-  if(r.arrived>=3||r.shift>1){r.emClock+=dt;if(r.emClock>=r.emNext){r.emClock=0;r.emNext=90+Math.random()*90;triggerEmergency();return}}
+  if(r.arrived>=3||r.shift>1){r.emClock+=dt;if(r.emClock>=r.emNext){r.emClock=0;r.emNext=emGap();triggerEmergency();return}}
   uiAcc+=dt;
   if(changed){save();if(S.tab==='shift')softRender();else renderHUD();uiAcc=0}
   else if(S.tab==='shift')liveTick();
@@ -5127,7 +5130,7 @@ function renderCreate(){
       <button class="btn" data-act="randname">${ic('dice')}Random</button></div></div>
     <div class="field"><span class="label">Gender</span><div class="opts">${GENDERS.map(([k,l])=>`<button class="opt" data-set="gender:${k}" aria-pressed="${d.gender===k}">${l}</button>`).join('')}</div><p class="hint" style="margin:0">Co-workers will refer to you as ${PRON[d.gender]||'they/them'}.</p></div>
     ${specPicker(d)}
-    <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}</b><span>${s.d}</span></button>`).join('')}</div></div>
+    <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}${k==='intern'?' <span class="chip y">Beginner friendly</span>':''}</b><span>${s.d}</span></button>`).join('')}</div></div>
     <div class="field"><span class="label">Skin tone</span><div class="opts">${sw('skin',DSKIN,'Skin tone')}</div></div>
     <div class="field"><span class="label">Hair style</span><div class="opts">${HSTYLES.map(([k,l])=>`<button class="opt" data-set="hair:${k}" aria-pressed="${d.hair===k}">${l}</button>`).join('')}</div></div>
     <div class="field"><span class="label">Hair or headscarf colour</span><div class="opts">${sw('hc',HAIRC,'Hair colour')}</div></div>
