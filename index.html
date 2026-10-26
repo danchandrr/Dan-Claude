@@ -723,6 +723,23 @@ li.rdwait{list-style:none;padding:0;background:none}
 .achbar.big{height:10px;border-radius:5px}
 .achwhen{color:var(--muted)}.linkbtn{border:0;background:none;padding:0;color:var(--scrub);font-weight:700;text-decoration:underline;font-size:12.5px}
 #repov .emov{z-index:58}
+/* Specialty dropdown */
+.specdd{position:relative;max-width:560px}
+.specsel,.specopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:var(--ink)}
+.specsel{border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 12px}
+.specsel:hover,.specdd.open .specsel{border-color:var(--scrub)}
+.specsel span,.specopt span{display:flex;flex-direction:column;min-width:0;flex:1}
+.specsel small,.specopt small{font-size:12px;color:var(--muted);line-height:1.35}
+.specsel .chev{width:20px;height:20px;flex:none;transition:transform .15s}.specdd.open .chev{transform:rotate(180deg)}
+.specic{width:34px;height:34px;flex:none;border-radius:9px;background:var(--scrub-soft);padding:4px}
+.specic.cane{display:grid;place-items:center;padding:0;background:#E7DFF5;color:#6B4FB3}.specic.cane .ic{width:20px;height:20px}
+.specfull{max-width:560px;margin:8px 0 0}
+.speclist{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 6px);max-height:min(420px,60vh);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);padding:6px}
+.specopt{border:0;background:transparent;border-radius:9px;padding:8px 10px}
+button.specopt:hover{background:var(--scrub-soft)}.specopt[aria-selected="true"]{background:var(--panel-2)}
+.specopt>.ic{width:18px;height:18px;flex:none;color:var(--scrub)}
+.specopt.locked{opacity:.75;cursor:not-allowed}.specopt.locked>.ic{width:34px;height:34px;padding:8px;border-radius:9px;background:var(--panel-2);color:var(--muted)}
+.specsep{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px;border-top:1px solid var(--line);margin-top:6px}
 .rplink{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-weight:600}.rplink .ic{width:13px;height:13px}.rdfoot .rplink{margin-left:auto}
 #achtoast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);z-index:70;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);max-width:calc(100% - 32px)}
 #achtoast.on{transform:translate(-50%,0)}
@@ -2384,6 +2401,26 @@ function specGear(k,cy){
     case'diag':return`<path d="M64 82V55" stroke="#4A2E1C" stroke-width="2.6" stroke-linecap="round"/><path d="M64 55c0-4.5 6-4.5 6 0" fill="none" stroke="#4A2E1C" stroke-width="2.6" stroke-linecap="round"/><path d="M47 62.5l3 6 3-6" fill="none" stroke="#7B2D26" stroke-width="1.5"/>`;
   }
   return'';
+}
+// Specialty icon: the same gear as on the portrait, cropped to just the item
+const SPEC_BOX={em:'47 55 13 19',gp:'46 55 14 19',im:'46 55 14 19',surg:'46 53 14 21',path:'46 55 14 19',neuro:'46 55 14 19',anaes:'28 40 24 24',
+  id:'21.5 61.5 11 11',paeds:'21.5 61.5 11 11',obgyn:'21.5 61.5 11 11',cardio:'21.5 61.5 11 11',tox:'21.5 61.5 11 11',diag:'56 47 24 36'};
+const specIcon=k=>k==='diag'?`<i class="specic cane">${ic('cane')}</i>`:`<svg class="specic" viewBox="${SPEC_BOX[k]||'0 0 80 80'}" aria-hidden="true">${specGear(k,33)}</svg>`;
+// One-line summaries for the dropdown; the full perks show under the chosen specialty
+const SPEC_SHORT={em:'+1 stability, longer emergencies',gp:'A little help with every patient',im:'Tests cost less',surg:'Fewer wrong treatments, easier procedures',anaes:'Easier procedures, better CPR',
+  id:'Wrong guesses cost less',path:'+30% on Rare cases and above',paeds:'More children, and easier for you',obgyn:'More O&G cases, and easier for you',cardio:'More heart cases, better CPR',
+  neuro:'More brain and nerve cases',tox:'More poisonings, safer treatments',diag:'Everybody lies. Zebras pay more.'};
+// Specialty picker: unlocked ones first, then locked ones with what it takes to earn them
+function specPicker(d){
+  const keys=Object.keys(SPECS),open=keys.filter(roleOpen),locked=keys.filter(k=>!roleOpen(k)).sort((a,b)=>!!ROLE_REQ[a].secret-!!ROLE_REQ[b].secret);
+  const cur=SPECS[d.spec]?d.spec:'em',o=!!S.ui.specOpen;
+  const item=k=>`<button type="button" role="option" class="specopt" data-set="spec:${k}" aria-selected="${k===cur}">${specIcon(k)}<span><b>${esc(SPECS[k].n)}</b><small>${esc(SPEC_SHORT[k]||'')}</small></span>${k===cur?ic('check'):''}</button>`;
+  const lock=k=>{const r=ROLE_REQ[k],hide=r.secret;return`<div class="specopt locked" role="option" aria-disabled="true">${ic('keycard')}<span><b>${hide?'Secret specialty':esc(SPECS[k].n)}</b><small>${esc(r.t)}</small>${hide?'':`<small class="lockprog">${roleProg(k).map(([l,v,g])=>`${esc(l)} ${v}/${g}`).join(' · ')}</small>`}</span></div>`};
+  return`<div class="field"><span class="label">Specialty <span class="hint" style="text-transform:none;letter-spacing:0;font-weight:400">${open.length} of ${keys.length} unlocked</span></span>
+   <div class="specdd ${o?'open':''}">
+    <button type="button" class="specsel" data-act="specdd" aria-haspopup="listbox" aria-expanded="${o}">${specIcon(cur)}<span><b>${esc(SPECS[cur].n)}</b><small>${esc(SPEC_SHORT[cur]||'')}</small></span><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    ${o?`<div class="speclist" role="listbox" aria-label="Specialty">${open.map(item).join('')}${locked.length?`<div class="specsep">Locked · earn these on shift</div>${locked.map(lock).join('')}`:''}</div>`:''}
+   </div><p class="hint specfull">${esc(SPECS[cur].d)}</p></div>`;
 }
 function patientLook(p){
   if(p.cam&&CAMEO_PT_BY[p.cam])return CAMEO_PT_BY[p.cam].look;
@@ -4996,7 +5033,7 @@ function renderCreate(){
       <div class="field"><label class="label" for="drlast">Last name</label><input type="text" id="drlast" maxlength="24" value="${esc(d.last||'')}" autocomplete="off" placeholder="e.g. Okafor"></div></div>
       <button class="btn" data-act="randname">${ic('dice')}Random</button></div></div>
     <div class="field"><span class="label">Gender</span><div class="opts">${GENDERS.map(([k,l])=>`<button class="opt" data-set="gender:${k}" aria-pressed="${d.gender===k}">${l}</button>`).join('')}</div><p class="hint" style="margin:0">Co-workers will refer to you as ${PRON[d.gender]||'they/them'}.</p></div>
-    <div class="field"><span class="label">Specialty</span><div class="optcards">${Object.entries(SPECS).map(([k,s])=>roleOpen(k)?`<button class="optcard" data-set="spec:${k}" aria-pressed="${d.spec===k}"><b>${k==='diag'?ic('cane'):''}${s.n}</b><span>${s.d}</span></button>`:ROLE_REQ[k].secret?`<button class="optcard locked" disabled><b>${ic('keycard')}Secret specialty</b><span>${esc(ROLE_REQ[k].t)}</span></button>`:`<button class="optcard locked" disabled><b>${ic('keycard')}${s.n}</b><span>${esc(ROLE_REQ[k].t)}</span><span class="lockprog">${roleProg(k).map(([l,v,g])=>`${esc(l)} ${v}/${g}`).join(' · ')}</span></button>`).join('')}</div></div>
+    ${specPicker(d)}
     <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}</b><span>${s.d}</span></button>`).join('')}</div></div>
     <div class="field"><span class="label">Skin tone</span><div class="opts">${sw('skin',DSKIN,'Skin tone')}</div></div>
     <div class="field"><span class="label">Hair style</span><div class="opts">${HSTYLES.map(([k,l])=>`<button class="opt" data-set="hair:${k}" aria-pressed="${d.hair===k}">${l}</button>`).join('')}</div></div>
@@ -5101,7 +5138,7 @@ document.addEventListener('click',e=>{
     if(!s){toast('That code could not be read. Check it was copied in full.');return}
     if(STORE.slots[i]&&S.ui.confirmImp!==i){S.ui.confirmImp=i;render();return}
     s.updated=Date.now();STORE.slots[i]=s;STORE.active=i;writeStore();S.ui.confirmImp=null;S.ui.importText='';toast('Imported into slot '+(i+1));S.ui.menu='load';render();return}
-  if(ds.set){const[k,v]=ds.set.split(':');if(k==='spec'&&!roleOpen(v))return;S.draft[k]=['skin','hc','scrub'].includes(k)?+v:v;render();return}
+  if(ds.set){const[k,v]=ds.set.split(':');if(k==='spec'&&!roleOpen(v))return;if(k==='spec')S.ui.specOpen=false;S.draft[k]=['skin','hc','scrub'].includes(k)?+v:v;render();return}
   if(ds.tog){S.draft[ds.tog]=!S.draft[ds.tog];render();return}
   if(ds.bed!==undefined){S.sel=+ds.bed;monNext=0;render();window.scrollTo({top:0});return}
   if(ds.dispo){dispo(ds.dispo);return}
@@ -5148,6 +5185,7 @@ document.addEventListener('click',e=>{
     case'aidebrief':aiDebrief();break;
     case'daily':S.screen='daily';render();window.scrollTo({top:0});break;
     case'online':S.screen='online';render();window.scrollTo({top:0});break;
+    case'specdd':S.ui.specOpen=!S.ui.specOpen;render();break;
     case'rpclose':S.rep=null;renderReport();break;
     case'rpsend':sendReport();break;
     case'rdclose':readClose(false);break;
@@ -5224,13 +5262,14 @@ document.addEventListener('submit',e=>{
   else if(e.target.dataset.codeform){const i=$('#codein');if(i)openCode(i.value)}
   else if(e.target.dataset.onform&&window.ZSOnline)ZSOnline.submit(e.target.dataset.onform);
 });
-document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('.logo,.brand'))achEvent('poke');if(e.target.closest('#landsvg'))landClick(e);const u=e.target.closest('[data-us]');if(u)cvcUS(u.dataset.us)});
+document.addEventListener('click',e=>{if(!e.target.closest)return;if(S.ui.specOpen&&!e.target.closest('.specdd')){S.ui.specOpen=false;render()}if(e.target.closest('.logo,.brand'))achEvent('poke');if(e.target.closest('#landsvg'))landClick(e);const u=e.target.closest('[data-us]');if(u)cvcUS(u.dataset.us)});
 // Timing actions fire on press, not release, so the judged moment matches the tap
 document.addEventListener('pointerdown',e=>{
   const b=e.target.closest&&e.target.closest('[data-act="miniact"],[data-act="cprtap"]');if(!b)return;
   e.preventDefault();if(b.dataset.act==='miniact')miniAct();else cprTap();
 });
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&S.ui.specOpen){S.ui.specOpen=false;render();return}
   if(e.key==='Escape'&&S.rep){S.rep=null;renderReport();return}
   if(e.key==='Escape'&&S.read){readClose(false);return}
   if((e.code==='Space'||e.key===' ')&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){
