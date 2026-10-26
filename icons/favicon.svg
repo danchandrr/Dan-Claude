@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <pattern id="z" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#F4F4F4"/><rect width="5" height="10" fill="#111"/>
+    </pattern>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#z)"/>
+  <path d="M24 9h16v15h15v16H40v15H24V40H9V24h15z" fill="#D8352A" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+</svg>
