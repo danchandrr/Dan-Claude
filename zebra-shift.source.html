@@ -675,11 +675,26 @@ li.rdwait{list-style:none;padding:0;background:none}
 .edf textarea{resize:vertical}
 .edrd{display:flex;gap:6px;flex-wrap:wrap}.edrd .chip{font-size:12px;padding:4px 6px 4px 8px;white-space:normal}
 .chipx{border:0;background:none;padding:0 0 0 4px;display:inline-grid;place-items:center;color:inherit}
-/* Menu extras */
-.menugrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:380px;margin-top:10px}
-.menugrid .btn{flex-direction:column;align-items:flex-start;gap:2px;padding:11px 12px;font-size:14px;text-align:left}
-.menugrid .btn .ic{width:20px;height:20px;color:var(--scrub)}.menugrid .btn small{font-weight:400;color:var(--muted);font-size:12px}
-.menugrid .btn .dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--alarm);color:#fff;font-size:11px;line-height:18px;text-align:center}
+/* Main menu: logo and actions on the left, the ambulance and Case of the day on the right */
+.menu{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"head art" "main art";gap:8px 36px;align-items:start;align-content:center;min-height:calc(100vh - 60px)}
+.mhead{grid-area:head;align-self:end}.mart{grid-area:art;align-self:center}.mmain{grid-area:main}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:540px}.mtop .label{margin:0}
+.menu .tagline{margin:12px 0 4px;font-size:17px}
+.mprimary{display:flex;gap:10px;flex-wrap:wrap;max-width:540px;margin-top:10px}
+.mprimary .btn{flex:1 1 200px;justify-content:flex-start;gap:10px}.mprimary .btn .ic{width:22px;height:22px}
+.mprimary .btn span{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2;min-width:0}
+.mprimary small{font-weight:400;opacity:.8;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.mtiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:540px;margin-top:10px}
+.mtile{justify-content:flex-start;align-items:center;gap:9px;padding:9px 10px;text-align:left;min-width:0}
+.mtile .ic{width:20px;height:20px;color:var(--scrub);flex:none}
+.mtile span{display:flex;flex-direction:column;min-width:0}.mtile b{font-size:14px;display:flex;gap:5px;align-items:center}
+.mtile small{font-weight:400;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtile .dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--alarm);color:#fff;font-size:11px;line-height:18px;text-align:center}
+.mart .dailycard{margin:12px 0 0}
+.disclaimer.short{margin-top:14px;max-width:540px}
+@media (max-width:860px){.menu{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "art" "main";min-height:0;gap:14px;padding-block:6px 20px}
+ .mtop,.mprimary,.mtiles,.disclaimer.short{max-width:none}.menu .tagline{font-size:15px;margin:8px 0 0}.mhead .logo{font-size:clamp(40px,12vw,64px)}}
+@media (max-width:560px){.mtiles{grid-template-columns:repeat(2,minmax(0,1fr))}.mart .dailycard{flex-direction:row;align-items:center;padding:12px 14px}.mart .dailycard q{font-size:16px}.mart .dailycard .btn{flex:none;padding:9px 12px}}
 /* Achievements */
 .achgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .achcard{display:flex;gap:12px;padding:12px;border-radius:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);min-width:0}
@@ -4830,15 +4845,6 @@ function renderRemind(){
     <div class="rowbtns" style="margin-top:8px"><button class="btn" data-act="remgcal">${ic('clock')}Google Calendar</button><button class="btn" data-act="remics">${ic('clock')}Apple or Outlook calendar</button></div></section>`;
 }
 
-function menuGrid(){
-  const inb=window.ZSOnline&&ZSOnline.inbox?ZSOnline.inbox().length:0;
-  return`<div class="menugrid">
-   <button class="btn" data-act="chal">${ic('trophy')}Challenge a friend<small>${inb?`<span class="dot">${inb}</span> waiting for you`:'Same patients, best score'}</small></button>
-   <button class="btn" data-act="cases">${ic('doc')}Write a case<small>${CASES.mine.length?CASES.mine.length+' written':'Share it with friends'}</small></button>
-   <button class="btn" data-act="reads">${ic('monitor')}Reading room<small>ECGs, X-rays, gases, slides</small></button>
-   <button class="btn" data-act="ach">${ic('badge')}Achievements<small>${achCount()} of ${ACHS.length} · ${Object.keys(SPECS).filter(roleOpen).length} specialties</small></button>
-   <button class="btn" data-menu="remind">${ic('pager')}Daily reminder<small>${REM.on||REM.cal?'Set':'Off'}</small></button></div>`;
-}
 async function bootHash(){
   const h=location.hash||'';let done=false;
   if(/^#(c|k)=/.test(h))done=await openCode(h,false);
@@ -4875,21 +4881,30 @@ function renderMenu(){
     <li>Write your own case, add pictures to read, and share it as a link. Friends play it like the Case of the day.</li>
     <li>Achievements come in three kinds: regular, fun and secret. Secret ones stay hidden until you stumble on them.</li>
    </ol>${DISCLAIMER}<p style="margin-top:16px"><button class="btn" data-menu="main">Back</button></p></div>`;
+  const on=window.ZSOnline,inb=on&&ZSOnline.inbox?ZSOnline.inbox().length:0,roles=Object.keys(SPECS).filter(roleOpen).length;
+  const tile=(attr,icn,label,sub,dot='')=>`<button class="btn mtile" ${attr}>${ic(icn)}<span><b>${label}${dot}</b><small>${sub}</small></span></button>`;
+  // Two main actions, then everything else as small tiles; on phones the ambulance sits right under the logo
   return`<div class="menu">
-   <div><p class="label">An ER roguelike</p><h1 class="logo">Zebra<br><span>Shift</span></h1>
-    <p class="tagline">Diagnose, treat and survive the night shift. Common cases keep you alive. Zebras make you a legend.</p>
-    <div class="menubtns">
-     ${act?`<button class="btn primary" data-act="continue">${ic('play')}Continue<small>${drName(slotSummary(act).d)} · slot ${STORE.active+1}</small></button>`:''}
-     <button class="btn ${act?'':'primary'}" data-act="newcareer">${ic('plus')}New career</button>
-     <button class="btn" data-menu="load">${ic('folder')}Load career<small>${STORE.slots.filter(Boolean).length}/3 slots used</small></button>
-     ${act?`<button class="btn" data-act="editdoc">${ic('user')}Edit doctor</button>`:''}
-     <button class="btn" data-menu="transfer">${ic('swap')}Back up or import a save</button>
-     <button class="btn" data-act="daily">${ic('star')}Case of the day<small>${dStatus}</small></button>
-     ${window.ZSOnline?`<button class="btn" data-act="online">${ic('people')}Friends &amp; leaderboards<small>${esc(ZSOnline.label())}</small></button>`:''}
-     <button class="btn" data-menu="help">${ic('help')}How to play</button>
-     <button class="btn" data-act="music" aria-pressed="${AUD.pref.music}">${ic(AUD.pref.music?'music':'musicoff')}Lobby music<small>${AUD.pref.music?'On':'Off'}</small></button>
-    </div>${menuGrid()}${DISCLAIMER}</div>
-   <div><section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section>${MENU_ART}${act?`<div class="panel slotcard" style="margin-top:14px">${slotHeader(act,STORE.active)}</div>`:''}</div></div>`;
+   <header class="mhead"><div class="mtop"><p class="label">An ER roguelike</p><button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="Lobby music ${AUD.pref.music?'on':'off'}" title="Lobby music ${AUD.pref.music?'on':'off'}">${ic(AUD.pref.music?'music':'musicoff')}</button></div>
+    <h1 class="logo">Zebra<br><span>Shift</span></h1>
+    <p class="tagline">Diagnose, treat and survive the night shift. Common cases keep you alive. Zebras make you a legend.</p></header>
+   <div class="mart">${MENU_ART}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
+   <div class="mmain">
+    <div class="mprimary">${act?`<button class="btn primary big" data-act="continue">${ic('play')}<span>Continue<small>${drName(slotSummary(act).d)} · slot ${STORE.active+1}</small></span></button>`:''}<button class="btn ${act?'':'primary'} big" data-act="newcareer">${ic('plus')}<span>New career${act?'':'<small>Pick a specialty and start</small>'}</span></button></div>
+    <div class="mtiles">
+     ${tile('data-menu="load"','folder','Careers',`${STORE.slots.filter(Boolean).length}/3 slots used`)}
+     ${act?tile('data-act="editdoc"','user','Edit doctor',esc((SPECS[normDoc(act.doctor).spec]||SPECS.em).n)):''}
+     ${on?tile('data-act="online"','people','Friends',esc(ZSOnline.label())):''}
+     ${tile('data-act="chal"','trophy','Challenge',inb?inb+' waiting for you':'Beat a friend',inb?`<span class="dot">${inb}</span>`:'')}
+     ${tile('data-act="cases"','doc','Write a case',CASES.mine.length?CASES.mine.length+' written':'Share with friends')}
+     ${tile('data-act="reads"','monitor','Reading room','ECGs, X-rays, slides')}
+     ${tile('data-act="ach"','badge','Achievements',`${achCount()}/${ACHS.length} · ${roles} specialties`)}
+     ${tile('data-menu="remind"','pager','Reminder',REM.on||REM.cal?'Set':'Off')}
+     ${tile('data-menu="transfer"','swap','Back up','Move a save')}
+     ${tile('data-menu="help"','help','How to play','Rules and tips')}
+    </div>
+    <p class="disclaimer short"><b>For education and entertainment only.</b> Not medical advice. <button class="linkbtn" data-menu="help">Read more</button></p>
+   </div></div>`;
 }
 function slotHeader(s,i){
   const{d,m}=slotSummary(s);
