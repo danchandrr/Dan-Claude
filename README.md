@@ -42,6 +42,29 @@ The online features (sign-in, friends, an all-time leaderboard, a daily leaderbo
 
 Scores are reported by each player's own device, so a determined player could fake one. That's fine for friends comparing results, but they aren't proof of anything.
 
+## Challenges and daily reminders (one time)
+
+Challenge links, written cases, the Reading room and achievements work for everyone with no setup. Two extras need the online project:
+
+**Challenges sent inside the game, and achievement counts.** Open **SQL Editor → New query**, paste the whole of `supabase/schema.sql` again and click **Run**. It adds the new tables and keeps everything already there.
+
+**Daily reminder notifications.** These come from a small server function that runs once an hour:
+
+1. **Turn on two extensions.** In **Database → Extensions**, switch on `pg_cron` and `pg_net`.
+2. **Create the function.** Open **Edge Functions → Deploy a new function → Via editor**. Name it `daily-reminder`, paste in `supabase/functions/daily-reminder/index.ts`, and deploy. In the function's settings, turn **off** "Enforce JWT verification". It checks its own secret instead.
+3. **Add three secrets.** Under **Edge Functions → Secrets**, add `VAPID_PUBLIC_KEY` (the `vapidKey` value in `config.js`), `VAPID_PRIVATE_KEY`, and `CRON_SECRET` (any long random text). Keep the last two private.
+4. **Schedule it.** In **SQL Editor**, run this, with your `CRON_SECRET` pasted in:
+   ```sql
+   select cron.schedule('zebra-daily-reminder', '0 * * * *', $$
+     select net.http_post(
+       url := 'https://yqkxewvkawkjixjjwqxb.supabase.co/functions/v1/daily-reminder',
+       headers := jsonb_build_object('Content-Type', 'application/json', 'x-cron-secret', 'PASTE_CRON_SECRET_HERE'),
+       body := '{}'::jsonb)
+   $$);
+   ```
+
+Players then turn reminders on from **Daily reminder** in the main menu. On iPhone this only works once the game has been added to the Home Screen (iOS 16.4 or later). Anyone can use the calendar reminder instead, which needs no setup.
+
 ## Put it in the app stores
 
 The game is a Progressive Web App, so it can be packaged without rewriting it:
@@ -71,4 +94,5 @@ Before submitting a medical-themed game, add a short disclaimer to the store lis
 | `supabase/schema.sql` | Database tables and access rules for the online features |
 | `vendor/` | The Supabase client library (MIT licence) |
 | `privacy.html` | Privacy notice shown at sign-in |
+| `supabase/functions/daily-reminder/` | Sends the daily reminder notifications |
 | `tools/build_app.py` | Rebuilds `index.html` from the source |

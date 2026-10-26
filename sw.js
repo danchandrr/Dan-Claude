@@ -1,6 +1,6 @@
 // Zebra Shift service worker: keeps the game playable offline.
 // Bump VERSION whenever index.html changes so players get the new build.
-const VERSION = 'zebra-shift-v5';
+const VERSION = 'zebra-shift-v6';
 const SHELL = [
   './',
   './index.html',
@@ -64,4 +64,22 @@ self.addEventListener('fetch', e => {
   if (url.origin === location.origin) {
     e.respondWith(caches.match(req).then(hit => hit || fetch(req)));
   }
+});
+
+// Daily reminder notifications sent by the daily-reminder function
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) { d = { body: e.data && e.data.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Zebra Shift', {
+    body: d.body || 'A new patient is waiting.', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png',
+    tag: 'daily', data: { url: d.url || './#daily' }
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || './#daily', self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    for (const c of list) if (c.url.startsWith(self.registration.scope) && 'focus' in c) { c.navigate(url); return c.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });

@@ -13,11 +13,12 @@
   const O = {
     user: null, profile: null, loading: true, tab: 'board', boardScope: 'all',
     email: '', codeSent: false, busy: false, msg: '', err: '',
-    board: null, dboard: {}, friends: null, cloud: null, confirmDel: false
+    board: null, dboard: {}, friends: null, cloud: null, confirmDel: false,
+    chal: [], push: { busy: false, on: false }
   };
   // Re-render the screens that show online data, keeping whatever the player is typing
   const rr = () => {
-    if (!['online', 'daily', 'menu'].includes(S.screen)) return;
+    if (!['online', 'daily', 'menu', 'chal'].includes(S.screen)) return;
     const a = document.activeElement, id = a && a.tagName === 'INPUT' && a.id, val = id && a.value;
     render();
     const b = id && document.getElementById(id);
@@ -60,7 +61,7 @@
     if (fromLink && S.screen === 'menu') { fromLink = false; S.screen = 'online'; }
     if (error) return fail(error, 'Could not load your profile.');
     O.profile = data;
-    if (O.profile) { syncStats(); pushTodayDaily(); loadFriends(); checkCloud(); loadBoard(); }
+    if (O.profile) { syncStats(); pushTodayDaily(); loadFriends(); checkCloud(); loadBoard(); loadChallenges(); pushCheck(); }
     rr();
   }
   sb.auth.onAuthStateChange((_ev, session) => {
@@ -78,6 +79,8 @@
     const s = localStats();
     const { data, error } = await sb.from('profiles').update({ ...s, updated_at: new Date().toISOString() }).eq('id', O.user.id).select().maybeSingle();
     if (!error && data) O.profile = data;
+    // achievements live in their own column, so an older database without it still syncs everything else
+    if (typeof achCount === 'function') sb.from('profiles').update({ ach: achCount() }).eq('id', O.user.id).then(() => {}, () => {});
   }
   async function uploadSaves() {
     if (!O.profile) return;
@@ -140,6 +143,7 @@
       incoming: rows.filter(r => r.status === 'pending' && r.addressee === O.user.id).map(r => byId[r.requester]).filter(Boolean),
       outgoing: rows.filter(r => r.status === 'pending' && r.requester === O.user.id).map(r => byId[r.addressee]).filter(Boolean)
     };
+    if (O.friends.accepted.length) achEvent('friend');
     rr();
   }
   async function addFriend(name) {
@@ -162,13 +166,79 @@
     O.busy = true; rr();
     const { error } = await sb.from('friendships').update({ status: 'accepted' }).eq('requester', id).eq('addressee', O.user.id);
     O.busy = false; if (error) return fail(error, 'Could not accept the request.');
-    O.msg = 'Friend added.'; sfx('right'); loadFriends();
+    O.msg = 'Friend added.'; sfx('right'); achEvent('friend'); loadFriends();
   }
   async function unfriend(id) {
     const me = O.user.id;
     const { error } = await sb.from('friendships').delete().or(`and(requester.eq.${me},addressee.eq.${id}),and(requester.eq.${id},addressee.eq.${me})`);
     if (error) return fail(error, 'Could not remove that friend.');
     loadFriends();
+  }
+
+  /* ---------- challenges between friends ---------- */
+  // A challenge row carries the seed and disease tags; each player's five scores fill in as they finish
+  async function loadChallenges() {
+    if (!O.profile) return;
+    const { data, error } = await sb.from('challenges').select('id,seed,cases,from_scores,to_scores,from_id,to_id,created_at,sender:profiles!challenges_from_id_fkey(username),receiver:profiles!challenges_to_id_fkey(username)').order('created_at', { ascending: false }).limit(50);
+    if (error) return;
+    O.chal = data || [];
+    for (const r of O.chal) {
+      const rec = CHAL[r.seed];
+      if (r.from_id === O.user.id && r.to_scores && rec && !rec.reply) { rec.reply = { n: '@' + ((r.receiver || {}).username || 'friend'), sc: r.to_scores }; saveChal(); toast(rec.reply.n + ' answered your challenge'); }
+    }
+    if (['chal', 'menu'].includes(S.screen)) render();
+  }
+  const inbox = () => O.profile ? O.chal.filter(r => r.to_id === O.user.id && !r.to_scores && !(CHAL[r.seed] && CHAL[r.seed].done)).map(r => ({ id: r.id, from: (r.sender || {}).username || 'friend', sc: r.from_scores })) : [];
+  function playChallenge(id) {
+    const r = O.chal.find(x => x.id === id); if (!r) return;
+    chalFromPayload({ t: 'c', s: r.seed, cs: r.cases, n: '@' + ((r.sender || {}).username || 'friend'), sc: r.from_scores }, id);
+  }
+  async function sendChallenge(friendId, rec) {
+    if (!O.profile || !rec) return;
+    if (!rec.done) { rec.target = friendId; saveChal(); toast('Play your five patients first. It sends when you finish.'); return; }
+    const { error } = await sb.from('challenges').insert({ from_id: O.user.id, to_id: friendId, seed: rec.id, cases: rec.tags, from_scores: chalScores(rec) });
+    if (error) { toast('Could not send the challenge. ' + (error.message || '')); return; }
+    rec.sentTo = (rec.sentTo || []).concat(friendId); saveChal(); achEvent('chalsent');
+    const f = ((O.friends && O.friends.accepted) || []).find(p => p.id === friendId);
+    toast('Challenge sent' + (f ? ' to @' + f.username : '')); render();
+  }
+  async function answerChallenge(id, scores) {
+    const { error } = await sb.from('challenges').update({ to_scores: scores }).eq('id', id);
+    if (!error) { toast('Your result was sent back'); loadChallenges(); }
+  }
+
+  /* ---------- daily reminder notifications ---------- */
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const pushOK = () => !!C.vapidKey && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && !(isIOS && !standalone);
+  const b64key = k => { const p = '='.repeat((4 - k.length % 4) % 4), raw = atob((k + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(raw, c => c.charCodeAt(0)); };
+  async function pushCheck() {
+    if (!pushOK()) return;
+    try { const reg = await navigator.serviceWorker.getRegistration(); const sub = reg && await reg.pushManager.getSubscription(); O.push.on = !!sub && !!REM.on; } catch (e) { }
+    rr();
+  }
+  async function enablePush(hour) {
+    if (!pushOK() || !O.profile) return;
+    O.push.busy = true; rr();
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { O.push.busy = false; toast('Notifications were not allowed.'); rr(); return; }
+      const reg = await navigator.serviceWorker.ready;
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64key(C.vapidKey) });
+      const j = sub.toJSON(), t = new Date(); t.setHours(hour, 0, 0, 0);
+      const { error } = await sb.from('push_subs').upsert({ endpoint: j.endpoint, user_id: O.user.id, p256dh: j.keys.p256dh, auth: j.keys.auth, hour_utc: t.getUTCHours(), tz_offset: t.getTimezoneOffset() });
+      if (error) throw error;
+      REM.on = true; REM.hour = hour; saveRem(); O.push.on = true; achEvent('remind');
+      toast('Daily reminder on for ' + hourLabel(hour));
+    } catch (e) { toast('Could not turn on notifications. ' + ((e && e.message) || '')); }
+    O.push.busy = false; rr();
+  }
+  async function disablePush() {
+    try {
+      const reg = await navigator.serviceWorker.getRegistration(), sub = reg && await reg.pushManager.getSubscription();
+      if (sub) { await sb.from('push_subs').delete().eq('endpoint', sub.endpoint); await sub.unsubscribe(); }
+    } catch (e) { }
+    REM.on = false; saveRem(); O.push.on = false; toast('Daily reminder off'); rr();
   }
 
   /* ---------- rendering ---------- */
@@ -182,10 +252,11 @@
   .onl-form input{flex:1 1 200px;min-width:0;font:inherit;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel-2);color:var(--ink)}
   .onl-form input:focus{border-color:var(--scrub);outline:none}
   .onl-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-  .onl-rows li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:var(--panel-2);min-width:0}
+  .onl-rows li{display:flex;align-items:center;gap:8px 10px;padding:7px 10px;border-radius:10px;background:var(--panel-2);min-width:0;flex-wrap:wrap}
   .onl-rows li.me{outline:2px solid var(--scrub)}
   .onl-rows .rank{font:700 14px var(--f-mono);width:26px;text-align:right;color:var(--muted);flex:none}
-  .onl-rows .who{flex:1;min-width:0;line-height:1.2}
+  .onl-rows .who{flex:1 1 130px;min-width:0;line-height:1.2}
+  .onl-rows .btn{padding:7px 11px;font-size:14px}
   .onl-rows .who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .onl-rows .who span{font-size:12px;color:var(--muted)}
   .onl-rows .pts{font:700 15px var(--f-mono);white-space:nowrap}
@@ -255,14 +326,14 @@
       ${!f ? '<p class="onl-small">Loading…</p>' : `
         ${f.incoming.length ? `<span class="label">Requests for you</span><ul class="onl-rows">${f.incoming.map(p => row(p, null, btn('accept:' + p.id, 'Accept', 'primary') + btn('remove:' + p.id, 'Decline'))).join('')}</ul>` : ''}
         <span class="label">Your friends · ${f.accepted.length}</span>
-        ${f.accepted.length ? `<ul class="onl-rows">${f.accepted.map(p => row(p, null, `<span class="pts">${fmt(p.best)}</span>` + btn('remove:' + p.id, 'Remove'))).join('')}</ul>` : '<p class="onl-small">No friends yet.</p>'}
+        ${f.accepted.length ? `<ul class="onl-rows">${f.accepted.map(p => row(p, null, `<span class="pts">${fmt(p.best)}</span>` + btn('challenge:' + p.id, ic('trophy') + 'Challenge', 'primary') + btn('remove:' + p.id, 'Remove'))).join('')}</ul>` : '<p class="onl-small">No friends yet.</p>'}
         ${f.outgoing.length ? `<span class="label">Waiting for a reply</span><ul class="onl-rows">${f.outgoing.map(p => row(p, null, btn('remove:' + p.id, 'Cancel'))).join('')}</ul>` : ''}`}
     </section>`;
   }
   function accountView() {
     const p = O.profile, s = localStats();
     return `<section class="panel onl-card"><div style="display:flex;gap:12px;align-items:center">${portrait(docLook(normDoc(p.doctor)), { label: 'Your doctor' })}<div><h2>${esc(p.display || p.username)}</h2><p class="onl-small">@${esc(p.username)} · ${esc(p.spec || '')}</p></div></div>
-      <div class="dbstats"><span><b>${fmt(p.best)}</b> best score</span><span><b>${p.cases}</b> cases diagnosed</span><span><b>${p.runs}</b> runs</span><span><b>${p.ems}</b> emergencies saved</span></div>
+      <div class="dbstats"><span><b>${fmt(p.best)}</b> best score</span><span><b>${typeof achCount === 'function' ? achCount() : 0}</b> achievements</span><span><b>${p.cases}</b> cases diagnosed</span><span><b>${p.runs}</b> runs</span><span><b>${p.ems}</b> emergencies saved</span></div>
       <p class="onl-small">Signed in as ${esc(O.user.email || '')}. Your careers back up to the cloud automatically while you play, so you can carry on from another device.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap">${'<button class="btn" data-on="upload">' + ic('swap') + 'Back up now</button>'}<button class="btn" data-on="signout">${ic('door')}Sign out</button></div>
       <button class="btn danger" data-on="delete">${ic('trash')}${O.confirmDel ? 'Tap again to delete your account for good' : 'Delete my account'}</button>
@@ -292,6 +363,7 @@
     else if (k === 'google') { await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: here() } }); return; }
     else if (k === 'accept') { accept(v); return; }
     else if (k === 'remove') { unfriend(v); return; }
+    else if (k === 'challenge') { const seed = chalNew(); CHAL[seed].target = v; saveChal(); S.ui.ch = seed; S.screen = 'chal'; render(); window.scrollTo({ top: 0 }); return; }
     else if (k === 'cloudload') { loadCloud(); return; }
     else if (k === 'cloudkeep') { O.cloud = null; uploadSaves(); }
     else if (k === 'upload') { await uploadSaves(); syncStats(); O.msg = 'Backed up.'; }
@@ -328,7 +400,7 @@
       const { data, error } = await sb.from('profiles').insert({ id: O.user.id, username: u, ...localStats() }).select().maybeSingle();
       O.busy = false;
       if (error) return fail(error.code === '23505' ? { message: 'That username is taken. Try another.' } : error, 'Could not save the username.');
-      O.profile = data; sfx('right'); pushTodayDaily(); loadFriends(); checkCloud(); loadBoard(); rr();
+      O.profile = data; sfx('right'); pushTodayDaily(); loadFriends(); checkCloud(); loadBoard(); loadChallenges(); rr();
     } else if (form === 'friend') {
       addFriend(($('#on-friend') || {}).value);
     }
@@ -346,6 +418,12 @@
       clearTimeout(saveT); saveT = setTimeout(uploadSaves, 20000);
     },
     onDaily(date, st) { postDaily(date, st); },
+    myName: () => O.profile ? '@' + O.profile.username : null,
+    friendsList: () => (O.profile && O.friends && O.friends.accepted) || [],
+    inbox, playChallenge, sendChallenge, answerChallenge, refreshChallenges: loadChallenges,
+    onAch() { if (O.profile) { clearTimeout(statT); statT = setTimeout(syncStats, 2000); } },
+    pushInfo: () => ({ supported: pushOK(), ios: isIOS && !standalone, signedIn: !!O.profile, denied: 'Notification' in window && Notification.permission === 'denied', on: O.push.on, busy: O.push.busy, hour: REM.hour == null ? 19 : REM.hour }),
+    enablePush, disablePush,
     dailyBoardHTML(date) {
       if (!O.profile) return `<p class="hint">${O.user ? 'Choose a username' : 'Sign in'} under Friends &amp; leaderboards to compare today's score.</p>`;
       return `<span class="label" style="margin-top:12px;display:block">Today's leaderboard</span>${dailyRows(date)}`;

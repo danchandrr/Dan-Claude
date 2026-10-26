@@ -89,3 +89,52 @@ language sql security definer set search_path = public, auth as $$
 $$;
 revoke all on function public.delete_me() from public, anon;
 grant execute on function public.delete_me() to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Added with challenges, achievements and daily reminders. Run the whole file again; it is safe.
+
+-- How many achievements each player has (shown on their profile)
+alter table public.profiles add column if not exists ach integer not null default 0 check (ach between 0 and 500);
+
+-- Friend challenges: the same five patients for both players
+create table if not exists public.challenges (
+  id uuid primary key default gen_random_uuid(),
+  from_id uuid not null references public.profiles on delete cascade,
+  to_id uuid not null references public.profiles on delete cascade,
+  seed text not null check (char_length(seed) between 4 and 16),
+  cases jsonb not null,
+  from_scores jsonb not null,
+  to_scores jsonb,
+  created_at timestamptz not null default now(),
+  check (from_id <> to_id)
+);
+alter table public.challenges enable row level security;
+drop policy if exists "challenges read" on public.challenges;
+create policy "challenges read" on public.challenges for select using (auth.uid() in (from_id, to_id));
+-- You can only challenge someone who has accepted your friend request (or whose request you accepted)
+drop policy if exists "challenges send" on public.challenges;
+create policy "challenges send" on public.challenges for insert with check (
+  from_id = auth.uid() and to_scores is null and exists (
+    select 1 from public.friendships f where f.status = 'accepted'
+      and ((f.requester = from_id and f.addressee = to_id) or (f.requester = to_id and f.addressee = from_id))));
+-- Only the person challenged can fill in their scores, and only that column
+drop policy if exists "challenges answer" on public.challenges;
+create policy "challenges answer" on public.challenges for update using (to_id = auth.uid()) with check (to_id = auth.uid());
+revoke update on public.challenges from anon, authenticated;
+grant update (to_scores) on public.challenges to authenticated;
+drop policy if exists "challenges remove" on public.challenges;
+create policy "challenges remove" on public.challenges for delete using (auth.uid() in (from_id, to_id));
+
+-- Daily reminder notifications: one row per device that asked for them
+create table if not exists public.push_subs (
+  endpoint text primary key check (char_length(endpoint) < 1000),
+  user_id uuid not null references auth.users on delete cascade,
+  p256dh text not null,
+  auth text not null,
+  hour_utc integer not null check (hour_utc between 0 and 23),
+  tz_offset integer not null default 0 check (tz_offset between -900 and 900),
+  created_at timestamptz not null default now()
+);
+alter table public.push_subs enable row level security;
+drop policy if exists "push own" on public.push_subs;
+create policy "push own" on public.push_subs for all using (user_id = auth.uid()) with check (user_id = auth.uid());

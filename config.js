@@ -4,5 +4,7 @@
 window.ZS_CONFIG = {
   supabaseUrl: 'https://yqkxewvkawkjixjjwqxb.supabase.co',
   supabaseKey: 'sb_publishable_p6tnTiBt776LL94SjAG2eg_RTBDJ8zA',   // publishable key (safe to be public)
-  google: true       // Google provider is switched on in Supabase → Authentication
+  google: true,      // Google provider is switched on in Supabase → Authentication
+  // Public half of the key pair that signs daily reminder notifications (the private half is a Supabase secret)
+  vapidKey: 'BAFkmhW6sde9gIdQBVy_JxpUOKiCPJBTgy-WPrsa2ahwdfMOke-iuKaEDDg8uCaf6lAqZUvfQMmObvYbafz33l0'
 };

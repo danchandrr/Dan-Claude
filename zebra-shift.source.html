@@ -145,6 +145,7 @@ body::after{content:"";position:fixed;top:-240px;left:-240px;width:calc(100% + 4
 .sec li{padding:7px 10px;border-radius:8px;background:var(--panel-2);font-size:14px}
 .sec li.lock{background:transparent;border:1px dashed var(--line);color:var(--muted);font-style:italic}
 .sec li.new{animation:pop .5s ease-out}
+.sec li.empty{background:transparent;color:var(--muted);font-style:italic;padding:2px 0}
 .sec li.none{display:none;background:transparent;color:var(--muted);font-style:italic;padding:2px 0}
 .pinbar,.emvit{display:none}
 details.entry summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:5px}
@@ -608,6 +609,100 @@ button.bedcard:hover{border-color:var(--scrub)}
 @media (max-width:400px){.brand .bw{display:none}.ordgrid{grid-template-columns:minmax(0,1fr)}.cprchoice{grid-template-columns:minmax(0,1fr)}}
 @media (pointer:coarse){.btn,.ord,.opt,.qchip,.emopts button,.tx button,.dispo button,.cons{min-height:44px}.iconbtn{width:42px;height:42px}}
 
+.rdscroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.ecgsheet{display:block;width:100%;height:auto}
+.rdscroll.zoom .ecgsheet{min-width:1100px}
+.rdzoom{margin:6px 0 0 auto;display:flex}
+.ecgsheet text{font:700 13px var(--f-mono);fill:#1d1b1b;stroke:none}.ecgsheet .foot{font-size:11px;fill:#7a5a57}
+.ecgsheet .cal{stroke-width:1.2}.ecgsheet .sep{stroke-width:1.6}
+.rdpic{display:grid;place-items:center;background:#000;border-radius:12px;overflow:hidden}
+.rdpic svg{display:block;width:100%;max-width:440px;height:auto}
+.xray .xrm{font:800 22px var(--f-body);fill:#e9ecec}
+.abg{font:14px/1.45 var(--f-mono);background:#fbfaf3;color:#1f2420;border-radius:6px;padding:14px 16px;box-shadow:inset 0 0 0 1px #d9d6c3;max-width:460px;margin:0 auto}
+.abgh{display:flex;flex-direction:column;gap:2px;border-bottom:1px dashed #b9b59c;padding-bottom:8px;margin-bottom:8px}.abgh span{font-size:12px;color:#5c5f52}
+.abg table{border-collapse:collapse;width:100%}.abg th{text-align:left;font-weight:700;padding:2px 0}.abg td{padding:2px 6px;text-align:right}
+.abg .flag{color:#b3261e;font-weight:800;width:1.5em;text-align:left}.abg .rng{color:#7b7e72;font-size:12px}.abg tr.fl td:nth-child(2){font-weight:800}
+.abgf{margin:8px 0 0;font-size:11.5px;color:#5c5f52;border-top:1px dashed #b9b59c;padding-top:6px}
+/* Readings: the picture viewer and the clue buttons that open it */
+.rdov{align-items:flex-start}
+.rdcard{width:min(1040px,100%)}
+.rdcard .minihead{align-items:flex-start}.rdcard .minihead>div{flex:1;min-width:0}
+.rdx{flex:none}
+.rdq{margin:4px 0 0}.rdq .hint{display:inline;margin:0}
+.rdopts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rdopts button{text-align:left;border:1.5px solid var(--line);background:var(--panel-2);border-radius:10px;padding:11px 13px;font-weight:700;color:var(--ink)}
+.rdopts button:hover:not(:disabled){border-color:var(--scrub);background:var(--scrub-soft)}
+.rdopts button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,transparent)}
+.rdopts button.wrong{border-color:var(--alarm);background:color-mix(in srgb,var(--alarm) 14%,transparent)}
+.rdopts button:disabled{cursor:default}
+.rdrep{margin:0;font-size:14px;color:var(--muted)}
+.rdfoot{display:flex;gap:8px;flex-wrap:wrap}
+li.rdwait{list-style:none;padding:0;background:none}
+.rdbtn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1.5px dashed var(--scrub);background:var(--scrub-soft);color:var(--ink);border-radius:10px;padding:9px 12px}
+.rdbtn .ic{width:22px;height:22px;color:var(--scrub)}.rdbtn b{display:block}.rdbtn small{color:var(--muted);font-size:12px}
+.rdbtn:hover{filter:brightness(1.04)}
+.rdchip{margin-left:8px;border:0;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:var(--panel-2);color:var(--muted);vertical-align:1px}
+.rdchip .ic{width:12px;height:12px}.rdchip.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}.rdchip.bad{color:var(--alarm);background:color-mix(in srgb,var(--alarm) 12%,transparent)}
+.studyrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.readgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.readtile{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:18px;text-align:left;color:var(--ink)}
+.readtile .ic{width:34px;height:34px;color:var(--scrub)}.readtile b{font-family:var(--f-display);font-size:20px}.readtile small{color:var(--muted)}
+.readtile:hover{border-color:var(--scrub)}
+/* Shared layout bits for the newer screens */
+.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.rowbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gform{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.gform input,.gform select{flex:1 1 200px;min-width:0;font:inherit;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel-2);color:var(--ink)}
+.grows{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.grows li{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;border-radius:10px;background:var(--panel-2);min-width:0}
+.grows .who{flex:1 1 180px;min-width:0;display:flex;flex-direction:column}.grows .who b{overflow-wrap:anywhere}.grows .who span{font-size:12px;color:var(--muted)}
+.grows .rowbtns .btn{padding:7px 11px;font-size:14px}
+.chalcard{padding:18px}
+.chalbig{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 12px}.chalbig b{font-size:40px;font-weight:800}.chalbig .vs{color:var(--muted);font-weight:700}
+.chalpts{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.chaltab{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:14px}
+.chaltab th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px}
+.chaltab td{padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}.chaltab td small{display:block;color:var(--muted);font-size:12px}
+.chalfr{margin-top:14px}
+.pearlbox{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--scrub-soft)}.pearlbox p{margin:4px 0 0}
+/* Case editor */
+.edcard{padding:18px}.edcard h3{margin:16px 0 8px}.edcard h3:first-of-type{margin-top:0}
+.edgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.edgrid.vit{grid-template-columns:repeat(3,minmax(0,1fr))}
+.edf{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;min-width:0}.edf.wide{grid-column:1/-1}
+.edf small{font-weight:400;color:var(--muted)}
+.edf input,.edf select,.edf textarea{font:inherit;font-weight:400;padding:9px 11px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel-2);color:var(--ink);min-width:0;width:100%}
+.edf textarea{resize:vertical}
+.edrd{display:flex;gap:6px;flex-wrap:wrap}.edrd .chip{font-size:12px;padding:4px 6px 4px 8px;white-space:normal}
+.chipx{border:0;background:none;padding:0 0 0 4px;display:inline-grid;place-items:center;color:inherit}
+/* Menu extras */
+.menugrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:380px;margin-top:10px}
+.menugrid .btn{flex-direction:column;align-items:flex-start;gap:2px;padding:11px 12px;font-size:14px;text-align:left}
+.menugrid .btn .ic{width:20px;height:20px;color:var(--scrub)}.menugrid .btn small{font-weight:400;color:var(--muted);font-size:12px}
+.menugrid .btn .dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--alarm);color:#fff;font-size:11px;line-height:18px;text-align:center}
+/* Achievements */
+.achgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.achcard{display:flex;gap:12px;padding:12px;border-radius:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);min-width:0}
+.achcard>div{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}.achcard b{color:var(--ink)}.achcard small{font-size:12.5px}
+.achcard .ai{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--panel-2)}
+.achcard .ai .ic{width:24px;height:24px}
+.achcard.on{border-style:solid;background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
+.achcard.on .ai{background:var(--scrub);color:var(--scrub-ink)}.achcard.on.kf .ai{background:var(--amber);color:#fff}.achcard.on.ks .ai{background:#6B4FB3;color:#fff}
+.achbar{display:block;height:6px;border-radius:3px;background:var(--panel-2);overflow:hidden;margin-top:4px}.achbar i{display:block;height:100%;background:var(--scrub)}
+.achbar.big{height:10px;border-radius:5px}
+.achwhen{color:var(--muted)}.linkbtn{border:0;background:none;padding:0;color:var(--scrub);font-weight:700;text-decoration:underline;font-size:12.5px}
+#achtoast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);z-index:70;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);max-width:calc(100% - 32px)}
+#achtoast.on{transform:translate(-50%,0)}
+#achtoast .ai{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--scrub);color:var(--scrub-ink);flex:none}
+#achtoast.f .ai{background:var(--amber);color:#fff}#achtoast.s .ai{background:#6B4FB3;color:#fff}
+#achtoast .ic{width:22px;height:22px}#achtoast small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}#achtoast b{font-family:var(--f-display)}
+/* Share picture */
+.cardov{width:min(520px,100%)}.cardov img{width:100%;border-radius:12px;display:block}
+/* Reminder */
+.remcard{max-width:620px}.remcard .gform select{flex:0 1 160px}
+@media (max-width:820px){.twocol{grid-template-columns:minmax(0,1fr)}.rdopts{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.edgrid,.edgrid.vit{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.edgrid .edf.wide{grid-column:1/-1}.chalbig b{font-size:32px}}
+
 @media (prefers-reduced-motion:reduce){*,body::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -748,7 +843,7 @@ const D=[
  h:['Appendix and gallbladder surgery years ago','Vomiting green fluid','No bowel movement or wind for two days'],
  e:['Distended, tympanic abdomen','High-pitched "tinkling" bowel sounds'],
  l:['Na 132, K 3.1, urea raised','Lactate 1.6 mmol/L'],
- i:['CT: dilated small bowel loops with a transition point; no ischaemia'],
+ i:['Abdominal X-ray: dilated central small-bowel loops with valvulae conniventes','CT: dilated small bowel loops with a transition point; no ischaemia'],
  tx:'Nil by mouth, NG decompression, IV fluids',w:['Laxatives and an enema','High-fibre diet','Oral metoclopramide and discharge'],al:['SBO','bowel obstruction','adhesions'],ecg:'sinus',pose:'pain',
  p:'Previous abdominal surgery plus vomiting and distension: think adhesions.'},
 // ---- Uncommon
@@ -1482,7 +1577,7 @@ const D=[
 {n:'Sickle Cell Pain Crisis',t:0,s:'Haematologic',a:[14,35],x:'A',cc:'My bones are in agony. It is a crisis.',v:[112,'124/76',20,97,37.6],
  h:['Sickle cell disease; this feels like previous crises','Pain in the back and both legs','Has been dehydrated after a stomach bug'],
  e:['Tender long bones with no swelling','Chest clear, normal oxygen'],
- l:['Hb 74 (baseline 78); reticulocytes high','Chest X-ray clear'],
+ l:['Blood film: sickle cells, target cells and Howell–Jolly bodies; Hb 74 (baseline 78)','Chest X-ray clear'],
  i:['Chest X-ray: no new infiltrate'],
  tx:'Strong analgesia within 30 minutes, fluids, oxygen if needed',w:['Exchange transfusion for everyone','Oral paracetamol only','Discharge without analgesia'],al:['sickle crisis','vaso-occlusive crisis'],ecg:'sinus',pose:'pain',dispo:'ward',
  p:'Give strong pain relief within 30 minutes of arrival. Keep checking for acute chest syndrome.'},
@@ -1704,7 +1799,22 @@ const D=[
  l:['Urine dip: trace leukocytes only','Anti-Xa level raised'],
  i:['CT head: right-sided crescent-shaped chronic subdural haematoma'],
  tx:'Reverse the anticoagulant, neurosurgical review for burr holes',w:['Oral antibiotics for a UTI','Increase the apixaban','Haloperidol for delirium'],al:['SDH','subdural','chronic subdural'],ecg:'afib',pose:'confused',dispo:'theatre',mim:'Uncomplicated Cystitis',
- p:'A positive urine dip in an older person rarely explains new confusion by itself. Ask about falls and anticoagulants.'}
+ p:'A positive urine dip in an older person rarely explains new confusion by itself. Ask about falls and anticoagulants.'},
+// ---- Added with the reading room; "late" keeps them out of the Case of the day pool so old and new versions agree
+{n:'Primary Spontaneous Pneumothorax',t:0,s:'Respiratory',a:[17,30],x:'M',late:true,cc:"Sharp pain on the left side of my chest, and I'm a bit short of breath.",v:[98,'124/76',20,95,36.8],
+ h:['Pain came on suddenly while watching TV','Tall and slim; smokes cannabis','No injury; never had this before'],
+ e:['Reduced breath sounds and hyper-resonance on the left','Trachea central; neck veins not distended'],
+ l:['ECG: sinus rhythm, otherwise normal'],
+ i:['Chest X-ray: left pneumothorax with a visible lung edge'],
+ tx:'Needle aspiration (or observe if small), chest drain if it fails',w:['Thrombolysis','Nebulised salbutamol and steroids','CT pulmonary angiogram and heparin'],al:['pneumothorax','PSP','collapsed lung'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Tall, thin young men who smoke are the classic group. Tracheal shift, low blood pressure or distended neck veins mean tension: decompress first.'},
+{n:'Perforated Peptic Ulcer',t:1,s:'Gastro/Hepatic',a:[45,80],x:'A',late:true,cc:'Sudden terrible pain in my stomach. It hurts to move.',v:[116,'104/66',24,96,37.9],
+ h:['Pain came on suddenly two hours ago and is now everywhere','Takes naproxen for back pain; smokes','Months of burning pain after meals'],
+ e:['Board-like rigid abdomen; lies very still','Absent bowel sounds; pain at the tip of the right shoulder'],
+ l:['WBC 15.1; amylase mildly raised (380 U/L)','Lactate 2.6 mmol/L'],
+ i:['Erect chest X-ray: free gas under the right hemidiaphragm','CT abdomen: free gas and fluid around the duodenum'],
+ tx:'Nil by mouth, IV fluids, PPI, antibiotics and emergency surgical repair',w:['Urgent endoscopy to find the ulcer','Oral antacids and discharge','IV octreotide alone'],al:['perforation','perforated ulcer','perforated duodenal ulcer','pneumoperitoneum','perforated viscus'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Sudden peritonitis with shoulder-tip pain and free gas under the diaphragm means a perforated viscus. A mildly raised amylase does not make it pancreatitis.'}
 ];
 // rhythm + bed pose for the original cases
 const EXTRA={'Acute Appendicitis':['sinus','pain'],'Community-Acquired Pneumonia':['sinus','shiver'],'ST-Elevation Myocardial Infarction':['stemi','chest'],'Acute Asthma Exacerbation':['sinus','resp'],'Acute Pyelonephritis':['sinus','shiver'],'Diabetic Ketoacidosis':['sinus','drowsy'],'Ureteric Colic':['sinus','pain'],'Cellulitis':['sinus','alert'],'Acute Cholecystitis':['sinus','pain'],'Pulmonary Embolism':['sinus','resp'],'Ischaemic Stroke':['afib','confused'],'Anaphylaxis':['sinus','resp'],'Acute Gout':['sinus','alert'],'Acute Pancreatitis':['sinus','hunched'],'Subarachnoid Haemorrhage':['twinv','drowsy'],'Aortic Dissection':['sinus','chest'],'Meningococcal Meningitis':['sinus','drowsy'],'Ruptured Ectopic Pregnancy':['sinus','pain'],'Thyroid Storm':['afib','agitated'],'Tension Pneumothorax':['sinus','resp'],'Ruptured Abdominal Aortic Aneurysm':['sinus','pain'],'Carbon Monoxide Poisoning':['sinus','confused'],'Testicular Torsion':['sinus','pain'],'Bleeding Peptic Ulcer':['sinus','drowsy'],'Acute Angle-Closure Glaucoma':['sinus','hunched'],'Addisonian Crisis':['peaked','drowsy'],'HSV Encephalitis':['sinus','confused'],'Guillain–Barré Syndrome':['sinus','alert'],'Necrotising Fasciitis':['sinus','pain'],'Phaeochromocytoma Crisis':['sinus','agitated'],'Thrombotic Thrombocytopenic Purpura':['sinus','confused'],'Kawasaki Disease':['sinus','shiver'],'Falciparum Malaria':['sinus','shiver'],'Boerhaave Syndrome':['sinus','chest'],'Methanol Poisoning':['sinus','confused'],'Cauda Equina Syndrome':['sinus','alert'],'Acute Intermittent Porphyria':['sinus','pain'],"Wilson's Disease":['sinus','confused'],'Tetanus':['sinus','rigid'],'Foodborne Botulism':['sinus','drowsy'],'Haemophagocytic Lymphohistiocytosis':['sinus','shiver'],'Rabies':['sinus','agitated'],'Hereditary Angioedema':['sinus','resp'],"Weil's Disease":['sinus','shiver'],'Scurvy':['sinus','alert'],'Creutzfeldt–Jakob Disease':['sinus','confused'],'Primary Amoebic Meningoencephalitis':['sinus','unconscious'],'Anti-NMDA Receptor Encephalitis':['sinus','agitated'],'Inhalational Anthrax':['sinus','resp'],'Grayanotoxin (Mad Honey) Poisoning':['avblock','drowsy']};
@@ -2540,7 +2650,7 @@ function order(cat){
   if(p.phase!=='case'||p.rev[cat]>=d[cat].length)return;
   const c=cost(cat,p),m=mods();
   if(cat==='h'&&c===0&&(p.freeHUsed||0)<m.freeH)p.freeHUsed=(p.freeHUsed||0)+1;
-  p.stab-=c;sfx({h:'page',e:'steth',l:'lab',i:'xray'}[cat]);
+  p.stab-=c;p.ordered=(p.ordered||0)+1;sfx({h:'page',e:'steth',l:'lab',i:'xray'}[cat]);
   if((cat==='e'&&m.examAll)||(cat==='l'&&m.testsAll)){p.rev[cat]=d[cat].length;p.last=cat+'*'}
   else{p.rev[cat]++;p.last=cat+(p.rev[cat]-1)}
   if(p.stab<=0)arrest(S.sel);
@@ -2552,7 +2662,7 @@ function guess(name){
   const m=mods();
   if(g===d){
     sfx('right');
-    S.meta.book[d.n]=(S.meta.book[d.n]||0)+1;
+    S.meta.book[d.n]=(S.meta.book[d.n]||0)+1;achEvent('dx',{d,p,wrong:p.guesses.filter(x=>!x.ok).length});
     if(hidden(p)){p.caught=true;p.defused=true;toast('Caught it early. Nicely done.')}
     const nw=Math.max(0,3-m.elim-(p.elimBonus||0));
     p.tx=shuffle([d.tx,...shuffle(d.w).slice(0,nw)]);p.txWrong=[];
@@ -2560,7 +2670,7 @@ function guess(name){
     p.phase='treat';save();render();return;
   }
   // Rarity hints are hidden by default; only the Cane item adds rarer / more common
-  p.guesses.push({n:name,sys:g.s===d.s,cmp:m.cane?Math.sign(d.t-g.t):null,hide:m.noHints});
+  p.guesses.push({n:name,sys:g.s===d.s,cmp:m.cane?Math.sign(d.t-g.t):null,hide:m.noHints});achEvent('wrong',{g,d});
   let pen=Math.max(0,2-m.wrong);const b=S.run.buff||{};
   if(pen&&m.cane>=2)pen=0;
   if(pen&&(p.freeWrongUsed||0)<m.freeWrong){pen=0;p.freeWrongUsed=(p.freeWrongUsed||0)+1}
@@ -2604,7 +2714,7 @@ function patientDies(i,reason){
   p.phase='dead';p.doneT=0;p.out={kind:'death',reason};
   if(m.shield>(+r.shieldUsed||0)){r.shieldUsed=(+r.shieldUsed||0)+1;p.out.forgiven=true}else r.rep--;
   r.deaths++;r.streak=0;sfx('flat');
-  logCase({k:'death',n:D[p.d].n,name:p.name,reason,wrong:p.guesses.filter(g=>!g.ok).map(g=>g.n)});
+  logCase({k:'death',n:D[p.d].n,name:p.name,reason,wrong:p.guesses.filter(g=>!g.ok).map(g=>g.n)});achEvent('death');
 }
 function dispo(code){
   const r=S.run,p=curP();if(!p||p.phase!=='dispo')return;const d=D[p.d],right=d.dispo;
@@ -2629,7 +2739,7 @@ function dispo(code){
   }else r.streak++;
   sfx('door');if(grant)setTimeout(()=>sfx('coin'),350);
   p.phase='done';p.doneT=0;p.out={kind:code===right?'good':'meh',pick:code,right,bd,pts:bd.total,grant,label};
-  logCase({k:'treated',n:d.n,name:p.name,wrong:p.guesses.filter(g=>!g.ok).map(g=>g.n),wrongTx:p.wrongTx,procFails:p.procFails,pick:code,right,rosc:!!p.rosc,missed:!!(p.masked&&p.turned&&!p.caught)});
+  logCase({k:'treated',n:d.n,name:p.name,wrong:p.guesses.filter(g=>!g.ok).map(g=>g.n),wrongTx:p.wrongTx,procFails:p.procFails,pick:code,right,rosc:!!p.rosc,missed:!!(p.masked&&p.turned&&!p.caught)});achEvent('dispo',{right:code===right,unsafe:!!repLoss});
   if(r.rep<=0){endRun();return}
   save();render();
 }
@@ -2658,7 +2768,7 @@ function clearBed(i){
 function checkShiftEnd(){
   const r=S.run;
   if(r.phase==='floor'&&r.arrived>=r.toArrive&&r.beds.every(b=>!b)&&!r.queue.length&&!r.em){
-    r.phase='break';r.draft=shuffle(PERKS.map(p=>p.id)).slice(0,3);S.sel=null;sfx('bell');return true;
+    r.phase='break';r.draft=shuffle(PERKS.map(p=>p.id)).slice(0,3);S.sel=null;sfx('bell');achEvent('shiftend',{r});return true;
   }
   return false;
 }
@@ -2669,7 +2779,7 @@ function takePerk(id){
   else if(p.now)p.now(r);
   r.shift++;r.shieldUsed=0;r.autoRoscUsed=false;r.draft=null;r.chat={};r.gift={};r.cons={};r.vchat={};r.buff={};r.visitors=pickVisitors();S.ui.chat=null;r.slog=[];r.dbText=null;r.dbErr=null;r.dbBusy=false;
   r.phase='floor';r.beds=Array(bedCount()).fill(null);r.queue=[];r.toArrive=shiftSize(r.shift);r.arrived=0;r.spawnT=0;r.clock=0;r.nextGap=spawnGap(r.shift);
-  spawn();spawn();save();render();toast(p.n+' added');
+  spawn();spawn();save();render();toast(p.n+' added');achEvent('reach',{shift:r.shift});
 }
 function endRun(){
   const r=S.run;
@@ -2678,7 +2788,7 @@ function endRun(){
   S.meta.grant+=bonus;r.earned+=bonus;
   r.newBest=r.score>S.meta.best;
   if(r.newBest)S.meta.best=r.score;
-  r.phase='over';save();render();
+  r.phase='over';achEvent('runend',{shift:r.shift,score:r.score});save();render();
 }
 function liveVitals(p){
   const d=D[p.d];let[hr,bp,rr,sp,t]=hidden(p)?MASK[d.n].v:d.v;let[sys,dia]=bp.split('/').map(Number);
@@ -2782,7 +2892,7 @@ async function chatSend(text){
   const c=S.ui.chat;if(!c||c.busy)return;text=String(text||'').trim().slice(0,600);if(!text)return;
   const w=WHO(c.id),hist=chatHist(c.id);
   hist.push({role:'user',content:text});if(hist.length>24)hist.splice(0,hist.length-24);
-  S.ui.chatDraft='';c.err='';chatReward(c.id);
+  S.ui.chatDraft='';c.err='';chatReward(c.id);achEvent('chat',{id:c.id});
   if(SAMPLE_STATE!=='on'){hist.push({role:'assistant',content:scriptedLine(w)});save();render();scrollChat();return}
   c.busy=true;c.pending='';c.ctl=new AbortController();save();render();scrollChat();
   try{
@@ -2808,7 +2918,7 @@ function gift(id){
   const aff=S.staff[id]||0;
   S.meta.grant-=40;S.staff[id]=Math.min(5,aff+2);r.gift[id]=true;
   if(!S.ui.chat||S.ui.chat.id!==id){if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();S.ui.chat={id,busy:false,pending:'',err:'',ctl:null}}
-  chatHist(id).push({role:'user',content:'(You hand over a coffee.)'},{role:'assistant',content:st.gift});sfx('pour');
+  chatHist(id).push({role:'user',content:'(You hand over a coffee.)'},{role:'assistant',content:st.gift});sfx('pour');achEvent('gift');
   if(aff<2&&S.staff[id]>=2)toast(st.ab.n+' consult unlocked');
   save();render();scrollChat();
 }
@@ -2881,7 +2991,7 @@ function emFinish(ok,reason){
     if(d.t>r.rarest){r.rarest=d.t;r.rarestName=d.n}
   }else{r.rep--;r.streak=0}
   e.phase='done';e.res={ok,pts,grant,reason,left};
-  logCase({k:ok?'em-ok':'em-fail',n:d.n,name:e.name,reason,wrongCalls:e.wrong.map(i=>D[e.opts[i]].n)});sfx(ok?'right':'flat');if(ok)setTimeout(()=>sfx('coin'),400);
+  logCase({k:ok?'em-ok':'em-fail',n:d.n,name:e.name,reason,wrongCalls:e.wrong.map(i=>D[e.opts[i]].n)});sfx(ok?'right':'flat');if(ok)setTimeout(()=>sfx('coin'),400);achEvent('em',{ok});
   save();render();
 }
 function closeEmer(){
@@ -2935,7 +3045,7 @@ setInterval(()=>{
   const r=S.run;
   if(r.em)emTick(dt);
   // The floor holds still while you are talking in the Staff Room
-  if(S.paused||S.mini||S.cpr||r.em||r.phase!=='floor'||(S.tab==='staff'&&S.ui.chat))return;
+  if(S.paused||S.mini||S.cpr||S.read||r.em||r.phase!=='floor'||(S.tab==='staff'&&S.ui.chat))return;
   const changed=worldTick(dt);
   if(r.phase!=='floor'){render();return}
   if(r.arrived>=3||r.shift>1){r.emClock+=dt;if(r.emClock>=r.emNext){r.emClock=0;r.emNext=90+Math.random()*90;triggerEmergency();return}}
@@ -3012,7 +3122,7 @@ function ambStop(){
   try{const t=A.ctx.currentTime;A.out.gain.cancelScheduledValues(t);A.out.gain.setValueAtTime(A.out.gain.value,t);A.out.gain.linearRampToValueAtTime(0,t+.6);
     setTimeout(()=>{A.srcs.forEach(s=>{try{s.stop()}catch(e){}});try{A.out.disconnect()}catch(e){}},800)}catch(e){}
 }
-function toggleMusic(){AUD.pref.music=!AUD.pref.music;saveAudioPref();if(AUD.pref.music)ambStart();else ambStop();toast(AUD.pref.music?'Lobby music on':'Lobby music off');render()}
+function toggleMusic(){AUD.pref.music=!AUD.pref.music;saveAudioPref();achEvent('music',{on:AUD.pref.music});if(AUD.pref.music)ambStart();else ambStop();toast(AUD.pref.music?'Lobby music on':'Lobby music off');render()}
 // Browsers only allow sound after the first tap or key press
 const ambKick=()=>{if(AUD.pref.music&&!AUD.amb)ambStart();else audioCtx()};
 document.addEventListener('pointerdown',ambKick,true);document.addEventListener('keydown',ambKick,true);
@@ -3211,7 +3321,7 @@ function landClick(ev){
 }
 function miniDone(ok,msg){
   const o=S.mini;S.mini=null;$('#mini').innerHTML='';
-  const P=PROCS[o.id];
+  const P=PROCS[o.id];achEvent('proc',{ok});
   if(o.ctx.kind==='em'){
     const e=S.run.em;if(!e||e.phase!=='proc')return;
     if(ok){e.procDone.push(o.id);toast(P.n+' done.');if(D[e.d].proc.every(x=>e.procDone.includes(x))){emFinish(true,'tx');return}}
@@ -3282,7 +3392,7 @@ function renderCPR(){
 function cprDone(){
   const c=S.cpr,r=S.run,p=r.beds[c.bed];S.cpr=null;$('#mini').innerHTML='';
   if(!p){render();return}
-  if(c.rosc){p.phase=p.prev&&p.prev!=='arrest'?p.prev:'case';p.stab=3;p.rosc=true;p.decay=0;r.saves++;toast('ROSC. Keep going: find out why they arrested.')}
+  if(c.rosc){p.phase=p.prev&&p.prev!=='arrest'?p.prev:'case';p.stab=3;p.rosc=true;p.decay=0;r.saves++;achEvent('rosc');toast('ROSC. Keep going: find out why they arrested.')}
   else patientDies(c.bed,'Resuscitation was unsuccessful.');
   if(r.rep<=0){endRun();return}
   save();render();
@@ -3318,7 +3428,7 @@ function pull(n){
   S.meta.grant-=price;
   const rs=[];for(let i=0;i<n;i++)rs.push(rollRarity());
   if(n===10&&Math.max(...rs)<2)rs[9]=2;
-  S.meta.lastPull=rs.map(grantTool);sfx('drawer');sfx('jingle',Math.max(...rs));
+  S.meta.lastPull=rs.map(grantTool);achEvent('pull',{n,best:Math.max(...rs)});sfx('drawer');sfx('jingle',Math.max(...rs));
   justPulled=true;save();render();justPulled=false;
   if(Math.max(...rs)===3)toast('Legendary requisition approved!');
 }
@@ -3413,7 +3523,7 @@ function renderPatient(i){
   const strip=`<div class="bedstrip"><button class="btn" data-act="floor">${ic('back')}Floor</button>${r.beds.map((q,k)=>{if(!q)return`<button class="bs" disabled>Bay ${k+1}<small>empty</small></button>`;const c=bedStatus(q)[2];return`<button class="bs ${c} ${k===i?'cur':''}" data-bed="${k}">Bay ${k+1}<small>${esc(q.name.split(' ')[0])}</small></button>`}).join('')}<span class="mono fbclock" id="clock">${clockText(r.clock)}</span></div>`;
   const sec=c=>{const all=d[c],n=p.rev[c];
     return`<section class="panel sec"><header><h3>${ic(CAT_IC[c])}${CAT[c]}</h3><span class="label">${n}/${all.length}</span></header><ul>
-     ${all.map((txt,k)=>k<n?`<li class="${(p.last===c+k||p.last===c+'*')?'new':''}">${esc(txt)}</li>`:`<li class="lock">Not yet ordered</li>`).join('')}${n?'':'<li class="none">Nothing ordered yet</li>'}</ul></section>`};
+     ${all.map((txt,k)=>k<n?clueLi(d,c,k,p.rd,p.last===c+k||p.last===c+'*'):`<li class="lock">Not yet ordered</li>`).join('')}${n?'':'<li class="none">Nothing ordered yet</li>'}</ul></section>`};
   const segs=Array.from({length:p.max},(_,k)=>`<i class="${k<p.stab?'on':''}"></i>`).join('');
   const lvl=ratio<=.3?'low':ratio<=.6?'mid':'';
   const ords=['h','e','l','i'].map(c=>{const left=d[c].length-p.rev[c],cc=cost(c,p),dis=p.phase!=='case'||left<=0;
@@ -3457,7 +3567,7 @@ function renderPatient(i){
     p.dxName&&p.phase==='case'?`<span class="flag">${ic('crown')}Diagnosis: ${esc(d.n)}</span>`:''].join('');
   // Phone only: a pinned summary so name, vitals and complaint stay in view while scrolling to the orders
   const pv=(l,v,col,a)=>`<span class="${a?'ab':''}" style="color:var(${col})"><small>${l}</small><b>${v}</b></span>`;
-  const latest=(()=>{if(p.phase!=='case'||!p.last)return'';const c=p.last[0],k=p.last.slice(1),txt=k==='*'?d[c].slice(0,p.rev[c]).join('; '):d[c][+k];return txt?`<p class="pinnew">${ic(CAT_IC[c])}<span><b>New:</b> ${esc(txt)}</span></p>`:''})();
+  const latest=(()=>{if(p.phase!=='case'||!p.last)return'';const c=p.last[0],k=p.last.slice(1),txt=k==='*'?d[c].slice(0,p.rev[c]).map((_,j)=>clueText(d,c,j,p.rd)).join('; '):clueText(d,c,+k,p.rd);return txt?`<p class="pinnew">${ic(CAT_IC[c])}<span><b>New:</b> ${esc(txt)}</span></p>`:''})();
   const pin=`<div class="pinbar o1" aria-label="Patient summary">
     <div class="pinrow">${portrait(look,{cls:'mini',gown:true,child:p.age<13,label:'Patient'})}<div class="pinwho"><b>${esc(p.name)}</b><span>${p.age}${p.age<6?'y':''} ${p.sex} · Bay ${i+1} · ESI ${acuity(p)}</span></div><span class="pinst ${stCls}"><i></i>${stTxt}</span></div>
     <div class="pinmon"><canvas class="ecg" data-rhythm="${lv.rhythm}" data-hr="${lv.hr}" aria-hidden="true"></canvas><div class="pinvit">${pv('HR',lv.hr,'--mon-hr',ab.hr)}${pv('BP',lv.bp,'--mon-bp',ab.bp)}${pv('SpO₂',lv.sp,'--mon-sp',ab.sp)}${pv('RR',lv.rr,'--mon-rr',ab.rr)}${pv('T',Number(lv.t).toFixed(1),'--mon-t',ab.t)}</div></div>
@@ -3553,7 +3663,7 @@ function renderOver(){
    <p>${r.rarest>=0?`Rarest case: <b>${esc(r.rarestName)}</b> ${tierBadge(r.rarest)}`:'No cases treated this run.'}</p>
    ${debriefHTML(r)}
    <p style="color:var(--muted)">Best score: ${fmt(S.meta.best)}. Spend grant money in Requisition before your next run.</p>
-   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" data-act="start">${ic('play')}Start a new run</button><button class="btn" data-tab="req">${ic('cabinet')}Open Requisition</button><button class="btn" data-act="menu">${ic('door')}Main menu</button></div></div>`;
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" data-act="start">${ic('play')}Start a new run</button><button class="btn" data-act="cardshare" data-card="run">${ic('send')}Share</button><button class="btn" data-tab="req">${ic('cabinet')}Open Requisition</button><button class="btn" data-act="menu">${ic('door')}Main menu</button></div></div>`;
 }
 const QUICK=['How is your night going?','Any advice on my patients?','Teach me a clinical pearl','Tell me about yourself'];
 function chatPanel(){
@@ -3623,7 +3733,7 @@ function renderBook(){
   const found=D.filter(d=>S.meta.book[d.n]).length;
   return`<div class="pagehead"><div><span class="label">Diagnosed at least once</span><h1>Casebook ${found}/${D.length}</h1></div><p style="color:var(--muted);margin:0">Best score <b class="mono">${fmt(S.meta.best)}</b> · Runs ${S.meta.runs} · Emergencies saved ${S.meta.ems||0}</p></div>
    ${[4,3,2,1,0].map(t=>`<h3 style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">${tierBadge(t)}<span class="label">${TIERS[t].pts} pts base · ${TIERS[t].note}</span></h3>
-    <div class="book">${D.filter(d=>d.t===t).map(d=>S.meta.book[d.n]?`<details class="entry"><summary><b>${ic(SYS_IC[d.s])}${esc(d.n)}</b><small>${d.s} · diagnosed ×${S.meta.book[d.n]} · tap for the teaching point</small></summary><p class="pearl">${esc(d.p)}</p></details>`:`<div class="entry unk"><b>${ic(SYS_IC[d.s])}Undiagnosed</b><small>${d.s}</small></div>`).join('')}</div>`).join('')}`;
+    <div class="book">${D.filter(d=>d.t===t).map(d=>S.meta.book[d.n]?`<details class="entry"><summary><b>${ic(SYS_IC[d.s])}${esc(d.n)}</b><small>${d.s} · diagnosed ×${S.meta.book[d.n]} · tap for the teaching point</small></summary><p class="pearl">${esc(d.p)}</p>${(READ_AT[d.n]||[]).length?`<div class="studyrow">${READ_AT[d.n].map(r=>`<button class="rdchip" data-study="${r[2]}">${ic(RD_KIND[READS[r[2]].k][1])}${readTitle(r[2])}</button>`).join('')}</div>`:''}</details>`:`<div class="entry unk"><b>${ic(SYS_IC[d.s])}Undiagnosed</b><small>${d.s}</small></div>`).join('')}</div>`).join('')}`;
 }
 
 function renderEmer(){
@@ -3664,78 +3774,931 @@ function renderEmer(){
 }
 
 /* ---- Case of the day: one seeded patient per calendar day, the same for every player ---- */
+/* ===================== PUZZLE CASES ===================== */
+// One patient played clue by clue for a score out of 1000. Case of the day, friend challenges and
+// cases players write all run on this, so they share the screen, scoring and readings.
 const DKEY='zebra-shift.daily',DAILY_MAX_WRONG=5;
 let DAILY={};try{DAILY=JSON.parse(localStorage.getItem(DKEY)||'{}')||{}}catch(e){DAILY={}}
 const saveDaily=()=>{try{localStorage.setItem(DKEY,JSON.stringify(DAILY))}catch(e){}};
 const dayStr=t=>t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
 const todayStr=()=>dayStr(new Date());
 function seeded(s){let a=hash(s);return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pzFresh=()=>({rev:{h:0,e:0,l:0,i:0},guesses:[],done:false,won:false,score:0,last:null,rd:{},rb:0});
+const dailyClues=st=>st.rev.h+st.rev.e+st.rev.l+st.rev.i;
+const dailyWrong=st=>st.guesses.filter(g=>!g.ok).length;
+// Each clue costs 60 and each wrong guess 150; reading a picture right earns 60 back, misreading costs 40
+const dailyScore=st=>Math.max(50,Math.min(1000,1000-60*dailyClues(st)-150*dailyWrong(st)+(st.rb||0)));
 function dailyCase(date){
-  const R=seeded('zebra-daily-'+date),pool=D.map((d,i)=>i).filter(i=>D[i].t>=1),di=pool[Math.floor(R()*pool.length)],d=D[di];
+  const R=seeded('zebra-daily-'+date),pool=D.map((d,i)=>i).filter(i=>D[i].t>=1&&!D[i].late),di=pool[Math.floor(R()*pool.length)],d=D[di];
   const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1));
   const firsts=sex==='M'?FIRST_M:FIRST_F,name=firsts[Math.floor(R()*firsts.length)]+' '+LAST[Math.floor(R()*LAST.length)];
   return{date,di,sex,age,name};
 }
-function dailyState(date){return DAILY[date]=DAILY[date]||{rev:{h:0,e:0,l:0,i:0},guesses:[],done:false,won:false,score:0,last:null}}
-const dailyClues=st=>st.rev.h+st.rev.e+st.rev.l+st.rev.i;
-const dailyWrong=st=>st.guesses.filter(g=>!g.ok).length;
-const dailyScore=st=>Math.max(50,1000-60*dailyClues(st)-150*dailyWrong(st));
+function dailyState(date){const st=DAILY[date]=DAILY[date]||pzFresh();st.rd=st.rd||{};return st}
 function dailyStreak(){let n=0;const t=new Date();for(;;){const s=DAILY[dayStr(t)];if(s&&s.won){n++;t.setDate(t.getDate()-1)}else if(n===0&&dayStr(t)===todayStr()&&!(s&&s.done)){t.setDate(t.getDate()-1)}else break}return n}
-function dailyAc(){const c=dailyCase(todayStr());return{d:c.di,guesses:dailyState(c.date).guesses}}
-function dailyOrder(cat){
-  const c=dailyCase(todayStr()),st=dailyState(c.date),d=D[c.di];
-  if(st.done||st.rev[cat]>=d[cat].length)return;
-  st.rev[cat]++;st.last=cat+(st.rev[cat]-1);sfx({h:'page',e:'steth',l:'lab',i:'xray'}[cat]);saveDaily();render();
-}
 function creditCasebook(n){
-  const i=STORE.active,s=i!=null&&STORE.slots[i];if(!s)return false;
+  const i=STORE.active,s=i!=null&&STORE.slots[i];if(!s||IDX[n]==null)return false;
   if(S.slot===i&&S.meta){S.meta.book[n]=(S.meta.book[n]||0)+1;save()}
   else{s.meta=s.meta||{};s.meta.book=s.meta.book||{};s.meta.book[n]=(s.meta.book[n]||0)+1;writeStore()}
   return true;
 }
-function dailyGuess(name){
-  const c=dailyCase(todayStr()),st=dailyState(c.date),d=D[c.di],g=D.find(x=>x.n===name);
-  if(st.done||!g||st.guesses.some(x=>x.n===name))return;
-  if(g===d){st.guesses.push({n:name,ok:true});st.done=st.won=true;st.score=dailyScore(st);st.credited=creditCasebook(d.n);sfx('right')}
+const pzMode=()=>['daily','chal','custom'].includes(S.screen);
+function pzCtx(){
+  if(S.screen==='daily'){const c=dailyCase(todayStr());return{kind:'daily',d:D[c.di],pt:c,st:dailyState(c.date),save:saveDaily,done:st=>{
+    if(st.won)st.credited=creditCasebook(D[c.di].n);saveDaily();
+    if(window.ZSOnline)ZSOnline.onDaily(c.date,st);
+    achEvent('daily',{won:st.won,clues:dailyClues(st),wrong:dailyWrong(st),streak:dailyStreak()})}}}
+  if(S.screen==='chal')return chalCtx();
+  if(S.screen==='custom')return customCtx();
+  return null;
+}
+function pzAc(){const x=pzCtx();return x&&!x.st.done?{guesses:x.st.guesses}:null}
+// The guess list is every disease, plus a written case's own answer when it is not one of them
+function pzNames(){const x=pzCtx();if(!x||IDX[x.d.n]!=null)return NAMES;return NAMES.concat([{n:x.d.n,al:x.d.al||[]}]).sort((a,b)=>a.n.localeCompare(b.n))}
+function pzOrder(cat){
+  const x=pzCtx();if(!x)return;const{d,st}=x;
+  if(st.done||st.rev[cat]>=d[cat].length)return;
+  st.rev[cat]++;st.last=cat+(st.rev[cat]-1);sfx({h:'page',e:'steth',l:'lab',i:'xray'}[cat]);x.save();render();
+}
+function pzGuess(name){
+  const x=pzCtx();if(!x)return;const{d,st}=x,g=D.find(y=>y.n===name),ok=name===d.n;
+  if(st.done||(!ok&&!g)||st.guesses.some(y=>y.n===name))return;
+  if(ok){st.guesses.push({n:name,ok:true});st.done=st.won=true;st.score=dailyScore(st);sfx('right')}
   else{st.guesses.push({n:name,ok:false,sys:g.s===d.s});sfx('wrong');if(dailyWrong(st)>=DAILY_MAX_WRONG){st.done=true;st.won=false;st.score=0;setTimeout(()=>sfx('flat'),300)}}
-  saveDaily();if(st.done&&window.ZSOnline)ZSOnline.onDaily(c.date,st);render(true);
+  x.save();if(st.done&&x.done)x.done(st);render(true);
 }
-function dailyShare(c,st){
-  const rows=st.guesses.map(g=>g.ok?'🟩':g.sys?'🟨':'⬛').join('');
-  return`Zebra Shift · Case of the day ${c.date}\n${st.won?`Solved ${rows} · ${dailyClues(st)} clues · ${st.score} pts`:`Missed ${rows}`}`;
-}
+const pzGrid=st=>st.guesses.map(g=>g.ok?'🟩':g.sys?'🟨':'⬛').join('');
+function dailyShare(c,st){return`Zebra Shift · Case of the day ${c.date}\n${st.won?`Solved ${pzGrid(st)} · ${dailyClues(st)} clues · ${st.score} pts`:`Missed ${pzGrid(st)}`}`}
 const dateLabel=s=>new Date(s+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
-function renderDaily(){
-  const c=dailyCase(todayStr()),st=dailyState(c.date),d=D[c.di],p={name:c.name,sex:c.sex,age:c.age},look=patientLook(p);
+// o: {label, title, sub, after(st) extra result HTML, back (act name)}
+function renderPuzzle(x,o){
+  const{d,st,pt}=x,look=patientLook({name:pt.name,sex:pt.sex,age:pt.age});
   const [hr,bp,rr,sp,t]=d.v,wrongLeft=DAILY_MAX_WRONG-dailyWrong(st);
   const vit=(lab,val,unit,col)=>`<div class="vital" style="color:var(${col})"><small>${lab}</small><b>${val}<i>${unit}</i></b></div>`;
   const sec=k=>{const all=d[k],n=st.done?all.length:st.rev[k];
     return`<section class="panel sec"><header><h3>${ic(CAT_IC[k])}${CAT[k]}</h3><span class="label">${n}/${all.length}</span></header><ul>
-     ${all.map((txt,j)=>j<n?`<li class="${st.last===k+j?'new':''}">${esc(txt)}</li>`:`<li class="lock">Not yet ordered</li>`).join('')}${n?'':'<li class="none">Nothing ordered yet</li>'}</ul></section>`};
+     ${all.map((txt,j)=>j<n?clueLi(d,k,j,st.done?Object.assign(Object.fromEntries((d.rd||READ_AT[d.n]||[]).map(r=>[r[0]+r[1],'skip'])),st.rd):st.rd,st.last===k+j):`<li class="lock">Not yet ordered</li>`).join('')}${all.length?'':'<li class="empty">None in this case</li>'}${n||!all.length?'':'<li class="none">Nothing ordered yet</li>'}</ul></section>`};
   const ords=['h','e','l','i'].map(k=>{const left=d[k].length-st.rev[k];
     return`<button class="ord" data-dord="${k}" ${st.done||left<=0?'disabled':''}><span class="oi">${ic(CAT_IC[k])}</span><span class="ot"><b>${CAT[k]}</b><span><span class="c">−60</span> pts · ${left} left</span></span></button>`}).join('');
-  const guesses=st.guesses.length?`<ul class="guesses">${st.guesses.map(g=>{const gd=D.find(x=>x.n===g.n)||d;return g.ok?`<li><b>${esc(g.n)}</b><span class="chip y">${ic('check')}correct</span></li>`:`<li><s>${esc(g.n)}</s><span class="chip ${g.sys?'y':'n'}">${ic(SYS_IC[gd.s])}${g.sys?'system match':'wrong system'}</span></li>`}).join('')}</ul>`:'';
-  const latest=!st.done&&st.last?(()=>{const k=st.last[0],txt=d[k][+st.last.slice(1)];return txt?`<p class="pinnew">${ic(CAT_IC[k])}<span><b>New:</b> ${esc(txt)}</span></p>`:''})():'';
-  const pin=`<div class="pinbar o1" aria-label="Patient summary"><div class="pinrow">${portrait(look,{cls:'mini',gown:true,child:c.age<13,label:'Patient'})}<div class="pinwho"><b>${esc(c.name)}</b><span>${c.age}${c.age<6?'y':''} ${c.sex} · Case of the day</span></div></div>
-    <div class="pinmon"><canvas class="ecg" data-rhythm="${d.ecg}" data-hr="${hr}" aria-hidden="true"></canvas><div class="pinvit"><span style="color:var(--mon-hr)"><small>HR</small><b>${hr}</b></span><span style="color:var(--mon-bp)"><small>BP</small><b>${bp}</b></span><span style="color:var(--mon-sp)"><small>SpO₂</small><b>${sp}</b></span><span style="color:var(--mon-rr)"><small>RR</small><b>${rr}</b></span><span style="color:var(--mon-t)"><small>T</small><b>${Number(t).toFixed(1)}</b></span></div></div>
+  const guesses=st.guesses.length?`<ul class="guesses">${st.guesses.map(g=>{const gd=D.find(y=>y.n===g.n);return g.ok?`<li><b>${esc(g.n)}</b><span class="chip y">${ic('check')}correct</span></li>`:`<li><s>${esc(g.n)}</s><span class="chip ${g.sys?'y':'n'}">${ic(SYS_IC[gd?gd.s:d.s]||'cross')}${g.sys?'system match':'wrong system'}</span></li>`}).join('')}</ul>`:'';
+  const latest=!st.done&&st.last?(()=>{const k=st.last[0],txt=d[k][+st.last.slice(1)];return txt?`<p class="pinnew">${ic(CAT_IC[k])}<span><b>New:</b> ${esc(clueText(d,k,+st.last.slice(1),st.rd))}</span></p>`:''})():'';
+  const sub=`${pt.age}${pt.age<6?'y':''} ${pt.sex} · ${esc(o.sub)}`;
+  const pin=`<div class="pinbar o1" aria-label="Patient summary"><div class="pinrow">${portrait(look,{cls:'mini',gown:true,child:pt.age<13,label:'Patient'})}<div class="pinwho"><b>${esc(pt.name)}</b><span>${sub}</span></div></div>
+    <div class="pinmon"><canvas class="ecg" data-rhythm="${d.ecg||'sinus'}" data-hr="${hr}" aria-hidden="true"></canvas><div class="pinvit"><span style="color:var(--mon-hr)"><small>HR</small><b>${hr}</b></span><span style="color:var(--mon-bp)"><small>BP</small><b>${bp}</b></span><span style="color:var(--mon-sp)"><small>SpO₂</small><b>${sp}</b></span><span style="color:var(--mon-rr)"><small>RR</small><b>${rr}</b></span><span style="color:var(--mon-t)"><small>T</small><b>${Number(t).toFixed(1)}</b></span></div></div>
     <p class="pincc">“${esc(d.cc)}”</p>${latest}</div>`;
   const right=st.done
-    ?`<section class="panel result o5"><span class="verdict ${st.won?'good':'bad'}">${ic(st.won?'check':'x')}${st.won?'Solved':'Out of guesses'}</span><h2>${esc(d.n)}</h2>${tierBadge(d.t)}
-       <div class="bd"><span>Clues used</span><span>${dailyClues(st)}</span><span>Wrong guesses</span><span>${dailyWrong(st)}</span><span class="tot">Score</span><span class="tot">${fmt(st.score)}</span></div>
-       <p style="margin:0 0 10px"><b>Treatment:</b> ${esc(d.tx)}</p>${guesses}
-       <p class="hint">${st.won?(st.credited?'Added to your Casebook, where you can read the teaching point.':'Start a career to keep a Casebook with teaching points.'):'Come back tomorrow for a new patient.'} ${dailyStreak()?`Streak: ${dailyStreak()} day${dailyStreak()>1?'s':''}.`:''}</p>
-       <textarea class="code" id="dshare" readonly>${esc(dailyShare(c,st))}</textarea>
-       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="dailyshare">${ic('copy')}Copy result</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}</section>`
-    :`<section class="panel orders o5"><div class="stab"><span class="label">Score if solved now</span><b class="mono">${fmt(dailyScore(st))}</b></div><div class="ordgrid">${ords}</div><p class="hint">Each clue costs 60 points and each wrong guess 150. ${wrongLeft} wrong guess${wrongLeft===1?'':'es'} left.</p></section>
+    ?`<section class="panel result o5"><span class="verdict ${st.won?'good':'bad'}">${ic(st.won?'check':'x')}${st.won?'Solved':'Out of guesses'}</span><h2>${esc(d.n)}</h2>${d.custom?'':tierBadge(d.t)}
+       <div class="bd"><span>Clues used</span><span>${dailyClues(st)}</span><span>Wrong guesses</span><span>${dailyWrong(st)}</span>${st.rb?`<span>Pictures read</span><span>${st.rb>0?'+':''}${st.rb}</span>`:''}<span class="tot">Score</span><span class="tot">${fmt(st.score)}</span></div>
+       ${d.tx?`<p style="margin:0 0 10px"><b>Treatment:</b> ${esc(d.tx)}</p>`:''}${guesses}${o.after(st)}</section>`
+    :`<section class="panel orders o5"><div class="stab"><span class="label">Score if solved now</span><b class="mono">${fmt(dailyScore(st))}</b></div><div class="ordgrid">${ords}</div><p class="hint">Each clue costs 60 points and each wrong guess 150. Read a picture right for 60 back. ${wrongLeft} wrong guess${wrongLeft===1?'':'es'} left.</p></section>
       <section class="panel dx o6"><h2>Diagnosis</h2>
        <div class="combo"><input id="dxin" type="text" autocomplete="off" placeholder="Start typing a disease…" aria-label="Diagnosis" role="combobox" aria-expanded="false" aria-controls="dxlist"><button class="btn primary" data-act="submit">Submit</button><div class="list" id="dxlist" role="listbox" hidden></div></div>${guesses}</section>`;
-  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${esc(dateLabel(c.date))} · the same patient for everyone today</span><h1>Case of the day</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${o.label}</span><h1>${o.title}</h1></div><button class="btn" data-act="${o.back||'dailyback'}">${ic('back')}${o.backLabel||'Menu'}</button></div>
    <div class="bay"><div class="col">${pin}
-    <div class="band dk">${portrait(look,{gown:true,child:c.age<13,mood:'flat',label:'Patient portrait'})}<div class="who"><b>${esc(c.name)}</b><span>${c.age}${c.age<6?'y':''} ${c.sex} · Case of the day</span></div><div class="barcode" aria-hidden="true"></div></div>
-    <div class="monitor dk"><canvas class="ecg" data-rhythm="${d.ecg}" data-hr="${hr}" aria-hidden="true"></canvas><div class="vitals">${vit('HR',hr,'bpm','--mon-hr')}${vit('NIBP',bp,'','--mon-bp')}${vit('SpO₂',sp,'%','--mon-sp')}${vit('RR',rr,'/min','--mon-rr')}${vit('TEMP',Number(t).toFixed(1),'°C','--mon-t')}</div></div>
+    <div class="band dk">${portrait(look,{gown:true,child:pt.age<13,mood:'flat',label:'Patient portrait'})}<div class="who"><b>${esc(pt.name)}</b><span>${sub}</span></div><div class="barcode" aria-hidden="true"></div></div>
+    <div class="monitor dk"><canvas class="ecg" data-rhythm="${d.ecg||'sinus'}" data-hr="${hr}" aria-hidden="true"></canvas><div class="vitals">${vit('HR',hr,'bpm','--mon-hr')}${vit('NIBP',bp,'','--mon-bp')}${vit('SpO₂',sp,'%','--mon-sp')}${vit('RR',rr,'/min','--mon-rr')}${vit('TEMP',Number(t).toFixed(1),'°C','--mon-t')}</div></div>
     <section class="panel cc dk"><span class="label">Presenting complaint</span><q>${esc(d.cc)}</q></section>
     <div class="chart o7">${sec('h')}${sec('e')}${sec('l')}${sec('i')}</div></div>
    <div class="col">${right}</div></div>`;
+}
+function renderDaily(){
+  const x=pzCtx(),c=x.pt;
+  return renderPuzzle(x,{label:`${esc(dateLabel(c.date))} · the same patient for everyone today`,title:'Case of the day',sub:'Case of the day',after:st=>`
+    <p class="hint">${st.won?(st.credited?'Added to your Casebook, where you can read the teaching point.':'Start a career to keep a Casebook with teaching points.'):'Come back tomorrow for a new patient.'} ${dailyStreak()?`Streak: ${dailyStreak()} day${dailyStreak()>1?'s':''}.`:''}</p>
+    <textarea class="code" id="dshare" readonly>${esc(dailyShare(c,st))}</textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="cardshare" data-card="daily">${ic('send')}Share a picture</button><button class="btn" data-act="dailyshare">${ic('copy')}Copy text</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}`});
+}
+
+/* ---- Share links: a whole challenge or case travels inside the link itself ---- */
+const APP_URL=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://danchandrr.github.io/Dan-Claude/';
+const b64u={enc:b=>{let s='';for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
+  dec:s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))};
+async function packObj(o){
+  const bytes=new TextEncoder().encode(JSON.stringify(o));
+  if(window.CompressionStream){try{const st=new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));return'z'+b64u.enc(new Uint8Array(await new Response(st).arrayBuffer()))}catch(e){}}
+  return'j'+b64u.enc(bytes);
+}
+async function unpackObj(s){
+  s=String(s||'').trim();const m=s.match(/[#&?](?:c|k|x)=([A-Za-z0-9_-]+)/);if(m)s=m[1];
+  try{
+    let bytes=b64u.dec(s.slice(1));
+    if(s[0]==='z'){const st=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));bytes=new Uint8Array(await new Response(st).arrayBuffer())}
+    else if(s[0]!=='j')return null;
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){return null}
+}
+async function openCode(text,quiet){
+  const o=await unpackObj(text);
+  if(o&&o.t==='c'){chalFromPayload(o);return true}
+  if(o&&o.t==='k'){caseFromPayload(o);return true}
+  if(!quiet)toast('That code could not be read. Check it was copied in full.');
+  return false;
+}
+async function shareLink(url,text,title){
+  try{if(navigator.share){await navigator.share({title,text,url});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text+'\n'+url);toast('Link copied. Paste it to your friend.')}catch(e){S.ui.linkShow=url;render();toast('Copy the link below')}
+}
+const myName=()=>{const s=STORE.active!=null&&STORE.slots[STORE.active];return s?'Dr. '+(fullName(normDoc(s.doctor))||'Reyes'):(window.ZSOnline&&ZSOnline.myName&&ZSOnline.myName())||'A friend'};
+
+/* ---- Challenge a friend: the same five patients for both players ---- */
+const CKEY='zebra-shift.chal',CH_TIERS=[0,1,1,2,3];
+let CHAL={};try{CHAL=JSON.parse(localStorage.getItem(CKEY)||'{}')||{}}catch(e){CHAL={}}
+const saveChal=()=>{try{localStorage.setItem(CKEY,JSON.stringify(CHAL))}catch(e){}};
+const nameTag=n=>hash(n).toString(36);
+// Patients are picked from the seed; the link also carries a tag for each disease so players on
+// different versions of the game still get the same five
+function chalCases(seed,tags){
+  const R=seeded('zebra-chal-'+seed),used=new Set();
+  return CH_TIERS.map((t,k)=>{
+    let di=tags&&tags[k]!=null?D.findIndex(d=>nameTag(d.n)===tags[k]):-1;
+    const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&!used.has(i)),fallback=pool[Math.floor(R()*pool.length)];
+    if(di<0)di=fallback;used.add(di);const d=D[di];
+    const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1)),fs=sex==='M'?FIRST_M:FIRST_F;
+    return{di,sex,age,name:fs[Math.floor(R()*fs.length)]+' '+LAST[Math.floor(R()*LAST.length)]};
+  });
+}
+function chalNew(){
+  const seed=Math.random().toString(36).slice(2,10),cases=chalCases(seed);
+  CHAL[seed]={id:seed,cases,tags:cases.map(c=>nameTag(D[c.di].n)),me:[],idx:0,from:null,reply:null,at:Date.now(),started:false};
+  saveChal();return seed;
+}
+const chalScores=rec=>rec.cases.map((c,i)=>rec.me[i]&&rec.me[i].done?rec.me[i].score:0);
+const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
+function chalFromPayload(o,online){
+  const seed=String(o.s||'').replace(/[^a-z0-9]/gi,'').slice(0,16);if(!seed){toast('That challenge link is broken.');return}
+  const clean=p=>p&&{n:String(p.n||'A friend').slice(0,40),sc:(Array.isArray(p.sc)?p.sc:[]).slice(0,5).map(v=>Math.max(0,Math.min(1000,Math.round(+v||0))))};
+  let rec=CHAL[seed];
+  if(!rec){const tags=Array.isArray(o.cs)?o.cs.slice(0,5).map(String):null;rec=CHAL[seed]={id:seed,cases:chalCases(seed,tags),tags:null,me:[],idx:0,from:clean(o),reply:o.r?clean(o.r):null,at:Date.now(),started:false};rec.tags=rec.cases.map(c=>nameTag(D[c.di].n))}
+  else if(!rec.from&&o.r){rec.reply=clean(o.r);toast(rec.reply.n+' answered your challenge')}
+  else if(rec.from&&o.r&&o.r.n!==myName())rec.reply=clean(o.r);
+  if(online)rec.online=online;
+  saveChal();S.ui.ch=seed;S.screen='chal';render();window.scrollTo({top:0});
+}
+function chalCtx(){
+  const rec=CHAL[S.ui.ch];if(!rec||!rec.started||rec.idx>=rec.cases.length)return null;
+  const c=rec.cases[rec.idx],st=rec.me[rec.idx]=rec.me[rec.idx]||pzFresh();
+  return{kind:'chal',d:D[c.di],pt:c,st,save:saveChal,done:st=>{if(st.won)creditCasebook(D[c.di].n);saveChal()}};
+}
+function chalNext(){
+  const rec=CHAL[S.ui.ch];if(!rec)return;rec.idx++;
+  if(rec.idx>=rec.cases.length){rec.done=true;rec.finished=Date.now();const mine=sum(chalScores(rec)),them=rec.from?sum(rec.from.sc):null;
+    achEvent('chal',{res:them==null?'solo':mine>them?'won':mine<them?'lost':'tie'});
+    if(rec.online&&window.ZSOnline)ZSOnline.answerChallenge(rec.online,chalScores(rec));
+    if(rec.target&&!rec.from&&window.ZSOnline)ZSOnline.sendChallenge(rec.target,rec);}
+  saveChal();render();window.scrollTo({top:0});
+}
+async function chalPayload(rec){const mine={n:myName(),sc:chalScores(rec)};return packObj(rec.from?{t:'c',v:1,s:rec.id,cs:rec.tags,n:rec.from.n,sc:rec.from.sc,r:mine}:{t:'c',v:1,s:rec.id,cs:rec.tags,...mine})}
+async function chalShare(){
+  const rec=CHAL[S.ui.ch];if(!rec)return;const code=await chalPayload(rec),url=APP_URL+'#c='+code,tot=fmt(sum(chalScores(rec)));
+  achEvent('chalsent');
+  shareLink(url,rec.from?`I took your Zebra Shift challenge: ${tot} points. See how we compare.`:`I scored ${tot} on five ER patients in Zebra Shift. Can you beat me? Same patients, same clues.`,'Zebra Shift challenge');
+}
+function renderChal(){
+  const rec=CHAL[S.ui.ch];
+  if(!rec)return renderChalHome();
+  const head=(t,l)=>`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${l}</span><h1>${t}</h1></div><button class="btn" data-act="chalhome">${ic('back')}Challenges</button></div>`;
+  if(!rec.started){
+    const them=rec.from?sum(rec.from.sc):null;
+    return head(rec.from?esc(rec.from.n)+' challenged you':'New challenge','Five patients · the same for both of you')+`<section class="panel chalcard">
+      ${rec.from?`<p class="chalbig"><span class="label">Score to beat</span><b class="mono">${fmt(them)}</b></p>`:''}
+      <ol class="helpl"><li>Five patients, from common to zebra. Your friend gets exactly the same ones.</li><li>Order clues and guess, just like the Case of the day. Fewer clues, more points.</li><li>${rec.from?'When you finish, send your result back so they can see who won.':'When you finish, send the link. Your friend sees your score and tries to beat it.'}</li></ol>
+      <div class="chalpts">${rec.cases.map((c,i)=>`<span class="chip n">${ic('bed')}Patient ${i+1} · ${['Common','Uncommon','Uncommon','Rare','Zebra'][i]}</span>`).join('')}</div>
+      <button class="btn primary big" data-act="chalstart">${ic('play')}Start the first patient</button></section>`;
+  }
+  if(rec.idx<rec.cases.length){
+    const x=chalCtx(),last=rec.idx===rec.cases.length-1;
+    return renderPuzzle(x,{label:`Challenge · patient ${rec.idx+1} of ${rec.cases.length}${rec.from?' · vs '+esc(rec.from.n):''}`,title:'Friend challenge',sub:'Challenge patient '+(rec.idx+1),back:'chalhome',backLabel:'Challenges',
+      after:st=>`<button class="btn primary big" data-act="chalnext" style="margin-top:10px">${ic(last?'trophy':'play')}${last?'See the results':'Next patient'}</button>`});
+  }
+  const mine=chalScores(rec),other=rec.from||rec.reply,os=other?other.sc:null,mt=sum(mine),ot=os?sum(os):null;
+  const verdict=ot==null?'Your score':mt>ot?'You win':mt<ot?(rec.from?esc(rec.from.n)+' wins':esc(other.n)+' wins'):'A draw';
+  const rows=rec.cases.map((c,i)=>{const st=rec.me[i]||{};return`<tr><td>${i+1}</td><td>${esc(D[c.di].n)}<small>${st.won?'solved':'missed'} · ${dailyClues(st.rev?st:pzFresh())} clues</small></td><td class="mono">${fmt(mine[i])}</td>${os?`<td class="mono">${fmt(os[i]||0)}</td>`:''}</tr>`}).join('');
+  const friends=!rec.from&&window.ZSOnline&&ZSOnline.friendsList?ZSOnline.friendsList():[];
+  return head(verdict,`Challenge results${other?' · vs '+esc(other.n):''}`)+`<section class="panel chalcard">
+    <p class="chalbig"><span class="label">Total</span><b class="mono">${fmt(mt)}</b>${ot!=null?`<span class="vs">vs</span><b class="mono">${fmt(ot)}</b>`:''}</p>
+    <table class="chaltab"><thead><tr><th>#</th><th>Patient</th><th>You</th>${os?`<th>${esc(other.n)}</th>`:''}</tr></thead><tbody>${rows}</tbody></table>
+    <p class="hint">${rec.online?'Your result went back to them in the game.':rec.from?'Send your result back so they can see the comparison.':rec.reply?'They answered your challenge.':rec.sentTo&&rec.sentTo.length?'Sent. You will see their score here when they finish.':'Send the link to a friend: they play the same five patients and see your score to beat.'}</p>
+    <div class="rowbtns"><button class="btn primary" data-act="chalshare">${ic('send')}${rec.online?'Share the comparison':rec.from?'Send my result back':'Send the challenge'}</button><button class="btn" data-act="cardshare" data-card="chal">${ic('star')}Share a picture</button><button class="btn" data-act="chalnew">${ic('plus')}New challenge</button></div>
+    ${friends.length?`<div class="chalfr"><span class="label">Or send it straight to a friend in the game</span><div class="rowbtns">${friends.map(f=>`<button class="btn" data-chalto="${esc(f.id)}" ${rec.sentTo&&rec.sentTo.includes(f.id)?'disabled':''}>${ic('user')}@${esc(f.username)}${rec.sentTo&&rec.sentTo.includes(f.id)?' · sent':''}</button>`).join('')}</div></div>`:''}
+    ${S.ui.linkShow?`<textarea class="code" readonly>${esc(S.ui.linkShow)}</textarea>`:''}</section>`;
+}
+function renderChalHome(){
+  const list=Object.values(CHAL).sort((a,b)=>b.at-a.at).slice(0,30),inbox=window.ZSOnline&&ZSOnline.inbox?ZSOnline.inbox():[];
+  const status=r=>!r.started?'Not started':r.idx<r.cases.length?`Patient ${r.idx+1} of ${r.cases.length}`:(()=>{const m=sum(chalScores(r)),o=r.from||r.reply;if(!o)return`${fmt(m)} pts · waiting for a friend`;const t=sum(o.sc);return`${fmt(m)} vs ${fmt(t)} · ${m>t?'won':m<t?'lost':'draw'}`})();
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">Same patients, best score wins</span><h1>Challenge a friend</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+   <div class="twocol"><section class="panel chalcard"><h2>Start a challenge</h2><p class="hint" style="margin-top:4px">You play five patients first, then send the link. Your friend plays the same five and sees your score to beat.</p>
+     <button class="btn primary big" data-act="chalnew" style="margin-top:10px">${ic('plus')}New challenge</button>
+     <h3 style="margin-top:18px">Got a link or code?</h3><form class="gform" data-codeform="1"><input id="codein" placeholder="Paste the link or code" aria-label="Challenge or case link"><button class="btn" type="submit">Open</button></form></section>
+    <section class="panel chalcard"><h2>Your challenges</h2>
+     ${inbox.length?`<span class="label">Waiting for you</span><ul class="grows">${inbox.map(c=>`<li><div class="who"><b>@${esc(c.from)}</b><span>Score to beat ${fmt(sum(c.sc))}</span></div><button class="btn primary" data-chalin="${esc(c.id)}">Play</button></li>`).join('')}</ul>`:''}
+     ${list.length?`<ul class="grows">${list.map(r=>`<li><div class="who"><b>${r.from?'From '+esc(r.from.n):'Your challenge'}</b><span>${status(r)}</span></div><button class="btn" data-chopen="${esc(r.id)}">Open</button></li>`).join('')}</ul>`:'<p class="hint">No challenges yet.</p>'}</section></div>`;
+}
+
+/* ---- Cases players write ---- */
+const KKEY='zebra-shift.cases',SYSTEMS=[...new Set(D.map(d=>d.s))],RHYTHMS=[['sinus','Sinus rhythm'],['afib','Atrial fibrillation'],['stemi','ST elevation'],['peaked','Peaked T waves'],['twinv','T-wave inversion'],['brugada','Brugada pattern'],['osborn','Osborn waves'],['chb','Complete heart block'],['avblock','Dropped beats'],['alternans','Electrical alternans'],['pericarditis','Pericarditis']];
+let CASES={mine:[],got:[],play:{}};try{const c=JSON.parse(localStorage.getItem(KKEY)||'null');if(c)CASES={mine:c.mine||[],got:c.got||[],play:c.play||{}}}catch(e){}
+const saveCases=()=>{try{localStorage.setItem(KKEY,JSON.stringify(CASES))}catch(e){}};
+const caseFind=id=>CASES.mine.find(c=>c.id===id)||CASES.got.find(c=>c.id===id);
+// Everything that arrives in a link is untrusted: clamp every field before it is stored or shown
+function caseClean(c){
+  if(!c||typeof c!=='object')return null;
+  const str=(v,n)=>String(v==null?'':v).replace(/\s+/g,' ').trim().slice(0,n),num=(v,lo,hi,dflt)=>{v=+v;return isFinite(v)?Math.max(lo,Math.min(hi,v)):dflt};
+  const lines=a=>(Array.isArray(a)?a:[]).map(x=>str(x,220)).filter(Boolean).slice(0,8);
+  const v=Array.isArray(c.v)?c.v:[];
+  const o={id:str(c.id,16).replace(/[^a-z0-9]/gi,'')||Math.random().toString(36).slice(2,10),au:str(c.au,40),n:str(c.n,80),al:(Array.isArray(c.al)?c.al:[]).map(x=>str(x,60)).filter(Boolean).slice(0,6),
+    s:SYSTEMS.includes(c.s)?c.s:'Infectious',t:Math.round(num(c.t,0,4,1)),x:c.x==='M'?'M':'F',age:Math.round(num(c.age,0,110,40)),nm:str(c.nm,40),cc:str(c.cc,200),
+    v:[Math.round(num(v[0],20,250,88)),/^\d{2,3}\/\d{2,3}$/.test(String(v[1]))?String(v[1]):'120/80',Math.round(num(v[2],4,60,16)),Math.round(num(v[3],50,100,98)),+num(v[4],28,44,37).toFixed(1)],
+    ecg:RHYTHMS.some(r=>r[0]===c.ecg)?c.ecg:'sinus',h:lines(c.h),e:lines(c.e),l:lines(c.l),i:lines(c.i),tx:str(c.tx,160),p:str(c.p,400),at:+c.at||Date.now()};
+  o.rd=(Array.isArray(c.rd)?c.rd:[]).filter(r=>Array.isArray(r)&&['l','i'].includes(r[0])&&READS[r[2]]&&o[r[0]][+r[1]]!=null).map(r=>[r[0],+r[1],r[2]]).slice(0,4);
+  if(!o.n||!o.cc||!(o.h.length+o.e.length+o.l.length+o.i.length))return null;
+  return o;
+}
+const caseD=c=>({n:c.n,al:c.al,s:c.s,t:c.t,cc:c.cc,v:c.v,h:c.h,e:c.e,l:c.l,i:c.i,rd:c.rd,tx:c.tx,p:c.p,ecg:c.ecg,custom:true});
+function customCtx(){
+  const c=caseFind(S.ui.cc);if(!c)return null;
+  const st=CASES.play[c.id]=CASES.play[c.id]||pzFresh();st.rd=st.rd||{};
+  return{kind:'custom',d:caseD(c),pt:{name:c.nm||'Your patient',sex:c.x,age:c.age},st,save:saveCases,done:st=>achEvent('customplay',{won:st.won,mine:CASES.mine.some(m=>m.id===c.id)})};
+}
+function renderCustom(){
+  const x=customCtx();if(!x){S.screen='cases';return renderCases()}
+  const c=caseFind(S.ui.cc),mine=CASES.mine.some(m=>m.id===c.id);
+  return renderPuzzle(x,{label:mine?'Your case':`A case by ${esc(c.au||'a friend')}`,title:'Written case',sub:mine?'Your case':'Case by '+(c.au||'a friend'),back:'cases',backLabel:'Cases',
+    after:st=>`${c.p?`<div class="pearlbox"><span class="label">Teaching point${c.au&&!mine?' from '+esc(c.au):''}</span><p>${esc(c.p)}</p></div>`:''}
+      <div class="rowbtns" style="margin-top:10px"><button class="btn" data-act="caseretry">${ic('swap')}Play again</button><button class="btn" data-act="cases">${ic('back')}All cases</button></div>`});
+}
+const blankDraft=()=>({id:'',n:'',al:'',s:'Cardiovascular',t:'1',x:'F',age:'45',nm:'',cc:'',hr:'92',bp:'124/78',rr:'18',sp:'97',tp:'37.0',ecg:'sinus',h:'',e:'',l:'',i:'',rdk:[],tx:'',p:''});
+function caseToDraft(c){
+  // pictures were added as their own lines; pull them back out so editing does not duplicate them
+  const strip=(cat)=>c[cat].filter((x,k)=>!c.rd.some(r=>r[0]===cat&&r[1]===k)).join('\n');
+  return{id:c.id,n:c.n,al:c.al.join(', '),s:c.s,t:String(c.t),x:c.x,age:String(c.age),nm:c.nm,cc:c.cc,hr:String(c.v[0]),bp:c.v[1],rr:String(c.v[2]),sp:String(c.v[3]),tp:String(c.v[4]),ecg:c.ecg,h:c.h.join('\n'),e:c.e.join('\n'),l:strip('l'),i:strip('i'),rdk:c.rd.map(r=>r[2]),tx:c.tx,p:c.p};
+}
+function draftToCase(f){
+  const ls=s=>String(s||'').split('\n').map(x=>x.trim()).filter(Boolean),c={id:f.id||Math.random().toString(36).slice(2,10),au:myName(),n:f.n,al:String(f.al||'').split(',').map(x=>x.trim()).filter(Boolean),s:f.s,t:+f.t,x:f.x,age:+f.age,nm:f.nm,cc:f.cc,
+    v:[+f.hr,f.bp,+f.rr,+f.sp,+f.tp],ecg:f.ecg,h:ls(f.h),e:ls(f.e),l:ls(f.l),i:ls(f.i),tx:f.tx,p:f.p,rd:[],at:Date.now()};
+  // each attached picture becomes its own clue, reported in the words of the right answer
+  for(const key of f.rdk||[]){const cat=READS[key].k==='xr'?'i':'l';c[cat].push(READS[key].o[0]);c.rd.push([cat,c[cat].length-1,key])}
+  return caseClean(c);
+}
+function caseSave(play){
+  const c=draftToCase(S.ui.ed||{});
+  if(!c){toast('Add the diagnosis, the complaint and at least one clue.');return}
+  const i=CASES.mine.findIndex(m=>m.id===c.id);if(i>=0)CASES.mine[i]=c;else{CASES.mine.unshift(c);achEvent('casewrite')}
+  delete CASES.play[c.id];saveCases();S.ui.ed=null;
+  if(play){S.ui.cc=c.id;S.screen='custom'}else{S.screen='cases';toast('Case saved')}
+  render();window.scrollTo({top:0});
+}
+async function caseShare(id){
+  const c=caseFind(id);if(!c)return;const code=await packObj({t:'k',v:1,...c}),url=APP_URL+'#k='+code;
+  achEvent('caseshare');
+  shareLink(url,`Can you diagnose my patient? "${c.cc}" A Zebra Shift case.`,'Zebra Shift case');
+}
+function caseFromPayload(o){
+  const c=caseClean(o);if(!c){toast('That case link is broken.');return}
+  if(!CASES.mine.some(m=>m.id===c.id)){const i=CASES.got.findIndex(g=>g.id===c.id);if(i>=0)CASES.got[i]=c;else CASES.got.unshift(c);CASES.got=CASES.got.slice(0,40)}
+  saveCases();S.ui.cc=c.id;S.screen='custom';render();window.scrollTo({top:0});
+}
+function renderCases(){
+  const row=(c,mine)=>`<li><div class="who"><b>${esc(c.cc)}</b><span>${mine?'Answer: '+esc(c.n):'By '+esc(c.au||'a friend')}${CASES.play[c.id]&&CASES.play[c.id].done?` · ${CASES.play[c.id].won?'solved':'missed'} · ${fmt(CASES.play[c.id].score)} pts`:''}</span></div>
+    <span class="rowbtns"><button class="btn primary" data-cplay="${c.id}">Play</button>${mine?`<button class="btn" data-cedit="${c.id}">Edit</button><button class="btn" data-cshare="${c.id}">${ic('send')}Share</button>`:''}<button class="btn danger" data-cdel="${c.id}">${S.ui.cdel===c.id?'Tap again':ic('trash')}</button></span></li>`;
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">Write a patient, send it to friends</span><h1>Cases</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+   <div class="twocol"><section class="panel chalcard"><h2>Write a case</h2><p class="hint" style="margin-top:4px">Set the complaint, vitals and clues, add an ECG, X-ray, blood gas or slide, then share it. Friends play it like the Case of the day.</p>
+     <button class="btn primary big" data-act="casenew" style="margin-top:10px">${ic('plus')}New case</button>
+     <h3 style="margin-top:18px">Got a link or code?</h3><form class="gform" data-codeform="1"><input id="codein" placeholder="Paste the link or code" aria-label="Case link"><button class="btn" type="submit">Open</button></form>
+     ${S.ui.linkShow?`<textarea class="code" readonly style="margin-top:10px">${esc(S.ui.linkShow)}</textarea>`:''}</section>
+    <section class="panel chalcard"><h2>Your cases</h2>${CASES.mine.length?`<ul class="grows">${CASES.mine.map(c=>row(c,true)).join('')}</ul>`:'<p class="hint">You have not written a case yet.</p>'}
+     <h2 style="margin-top:16px">From friends</h2>${CASES.got.length?`<ul class="grows">${CASES.got.map(c=>row(c,false)).join('')}</ul>`:'<p class="hint">Cases friends send you appear here.</p>'}</section></div>`;
+}
+function renderEditor(){
+  const f=S.ui.ed||(S.ui.ed=blankDraft());
+  const inp=(k,l,o={})=>`<label class="edf ${o.cls||''}"><span>${l}</span><input data-ed="${k}" value="${esc(f[k])}" ${o.attr||''} placeholder="${esc(o.ph||'')}"></label>`;
+  const sel=(k,l,opts)=>`<label class="edf"><span>${l}</span><select data-ed="${k}">${opts.map(([v,t])=>`<option value="${esc(v)}" ${String(f[k])===String(v)?'selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
+  const ta=(k,l,ph)=>`<label class="edf wide"><span>${l} <small>one clue per line</small></span><textarea data-ed="${k}" rows="3" placeholder="${esc(ph)}">${esc(f[k])}</textarea></label>`;
+  const groups={ecg:'ECG',abg:'Blood gas',xr:'X-ray',mic:'Microscopy'};
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${f.id?'Editing your case':'A new case'}</span><h1>Case editor</h1></div><button class="btn" data-act="cases">${ic('back')}Cases</button></div>
+   <div class="panel edcard"><datalist id="dxnames">${NAMES.map(x=>`<option value="${esc(x.n)}">`).join('')}</datalist>
+    <h3>The answer</h3><div class="edgrid">${inp('n','Diagnosis',{attr:'list="dxnames" maxlength="80"',ph:'Pick from the list or type your own',cls:'wide'})}${inp('al','Also accept (optional)',{ph:'Other names, separated by commas',cls:'wide'})}
+     ${sel('s','Organ system',SYSTEMS.map(s=>[s,s]))}${sel('t','Rarity',TIERS.map((t,i)=>[i,t.k]))}</div>
+    <h3>The patient</h3><div class="edgrid">${inp('nm','Name (optional)',{ph:'A random-looking name'})}${sel('x','Sex',[['F','Female'],['M','Male']])}${inp('age','Age',{attr:'inputmode="numeric" maxlength="3"'})}
+     ${inp('cc','Presenting complaint',{attr:'maxlength="200"',ph:'In the patient’s own words',cls:'wide'})}</div>
+    <h3>Vital signs</h3><div class="edgrid vit">${inp('hr','Heart rate',{attr:'inputmode="numeric"'})}${inp('bp','Blood pressure',{ph:'120/80'})}${inp('rr','Resp rate',{attr:'inputmode="numeric"'})}${inp('sp','SpO₂ %',{attr:'inputmode="numeric"'})}${inp('tp','Temp °C',{attr:'inputmode="decimal"'})}${sel('ecg','Monitor rhythm',RHYTHMS)}</div>
+    <h3>Clues</h3><div class="edgrid">${ta('h','History','Pain started two hours ago…')}${ta('e','Examination','Tender in the right iliac fossa…')}${ta('l','Tests','WBC 14.2 with neutrophilia…')}${ta('i','Imaging','CT abdomen: …')}</div>
+    <h3>Pictures to read <small class="hint">(optional, up to 4)</small></h3>
+    <div class="edrd">${(f.rdk||[]).map((k,i)=>`<span class="chip y">${ic(RD_KIND[READS[k].k][1])}${groups[READS[k].k]}: ${esc(READS[k].o[0])}<button class="chipx" data-edrdrm="${i}" aria-label="Remove">${ic('x')}</button></span>`).join('')||'<span class="hint">None yet. Each picture becomes a clue the player has to read.</span>'}</div>
+    ${(f.rdk||[]).length<4?`<div class="gform" style="margin-top:8px"><select id="edrdsel" aria-label="Picture to add">${Object.entries(groups).map(([g,l])=>`<optgroup label="${l}">${READ_KEYS.filter(k=>READS[k].k===g).map(k=>`<option value="${k}">${esc(READS[k].o[0])}</option>`).join('')}</optgroup>`).join('')}</select><button class="btn" data-act="edrdadd">${ic('plus')}Add picture</button><button class="btn" data-act="edrdview">${ic('search')}Preview</button></div>`:''}
+    <h3>After they answer</h3><div class="edgrid">${inp('tx','Treatment (optional)',{attr:'maxlength="160"',cls:'wide'})}<label class="edf wide"><span>Teaching point (optional)</span><textarea data-ed="p" rows="3" maxlength="400">${esc(f.p)}</textarea></label></div>
+    <div class="rowbtns" style="margin-top:14px"><button class="btn primary" data-act="edplay">${ic('play')}Save and play</button><button class="btn" data-act="edsave">${ic('check')}Save</button><button class="btn" data-act="cases">Cancel</button></div>
+    <p class="hint">Shared cases travel inside the link itself. Keep real patient details out of them.</p></div>`;
+}
+
+/* ---- Reading room: practise any picture, nothing at stake ---- */
+function renderReads(){
+  const n=k=>READ_KEYS.filter(x=>READS[x].k===k).length,c=ACH.c||{};
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">Practise without a patient waiting</span><h1>Reading room</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+   <p class="hint" style="margin:0 0 12px">You have read ${c.reads||0} picture${c.reads===1?'':'s'} correctly so far. Every one of these also turns up during shifts.</p>
+   <div class="readgrid">${Object.entries(RD_KIND).map(([k,[l,icn]])=>`<button class="panel readtile" data-drill="${k}">${ic(icn)}<b>${l}s</b><small>${n(k)} to practise · ${c['read_'+k]||0} read right</small></button>`).join('')}
+    <button class="panel readtile" data-drill="any">${ic('dice')}<b>Mixed</b><small>Any of the ${READ_KEYS.length}</small></button></div>`;
+}
+
+/* ===================== READINGS ===================== */
+// Some results arrive as a picture to interpret: a 12-lead ECG, a blood gas printout, an X-ray or a slide.
+// The player reads it before the written report appears. A right read steadies the patient; a misread costs a little.
+const RD_KIND={ecg:['12-lead ECG','monitor'],abg:['Blood gas','flask'],xr:['X-ray','imaging'],mic:['Microscopy','microbe']};
+const READS={
+ // ---- ECGs: drawn from a beat model, so every trace is a real 12-lead layout at 25 mm/s
+ antstemi:{k:'ecg',o:['Anterior ST elevation in V1–V4: anterior STEMI','Inferior ST elevation: inferior STEMI','Widespread saddle-shaped ST elevation: pericarditis','Normal ECG'],x:'ST elevation across V1–V4 with reciprocal inferior depression is an anterior STEMI, usually the LAD. Call the cath lab.',
+  e:{hr:92,m:{V1:{st:.2,q:-.15,r:.08},V2:{st:.4,t:.75,r:.2},V3:{st:.45,t:.8,r:.45},V4:{st:.3,t:.6},I:{st:.05},aVL:{st:.05},II:{st:-.08},III:{st:-.12},aVF:{st:-.1}}}},
+ hyperk:{k:'ecg',o:['Tall peaked T waves, wide QRS, flat P waves: hyperkalaemia','Hyperacute T waves of an anterior STEMI','Hypokalaemia with U waves','Benign early repolarisation'],x:'Narrow, tented T waves in many leads with a broadening QRS and fading P waves is hyperkalaemia until proven otherwise. Give IV calcium now.',
+  e:{hr:52,w:1.9,pf:.25,tf:2.6,tw:.04}},
+ pericarditis:{k:'ecg',o:['Widespread concave ST elevation with PR depression: pericarditis','Anterior STEMI','Brugada pattern','Wellens pattern'],x:'Saddle-shaped ST elevation in most leads, PR depression, and the opposite (ST depression, PR elevation) in aVR. It does not follow one coronary territory.',
+  e:{hr:104,all:{st:.13,pr:-.06},m:{aVR:{st:-.1,pr:.07},V1:{st:0,pr:0}}}},
+ brugada:{k:'ecg',o:['Coved ST elevation in V1–V2 with T inversion: Brugada type 1','Right bundle branch block only','Anterior STEMI','Wellens pattern'],x:'A coved ST segment of 2 mm or more that slopes down into an inverted T wave in V1–V2 is the type 1 Brugada pattern: a risk of sudden death.',
+  e:{hr:74,m:{V1:{cove:.5,t:-.3,r:.35},V2:{cove:.42,t:-.28}}}},
+ wellens:{k:'ecg',o:['Deep symmetrical T inversion in V2–V3: Wellens (critical LAD)','Normal juvenile T waves','Posterior MI','Hypokalaemia'],x:'Deep, symmetrical T-wave inversion in V2–V3 in a pain-free patient is Wellens syndrome: a tight proximal LAD stenosis. Do not stress test.',
+  e:{hr:70,tw:.06,m:{V1:{t:-.2},V2:{t:-.6},V3:{t:-.55},V4:{t:-.3}}}},
+ af:{k:'ecg',o:['Irregularly irregular with no P waves: AF with a fast rate','Sinus tachycardia','Atrial flutter with 2:1 block','AV nodal re-entry tachycardia'],x:'No organised P waves, a wavy baseline and completely irregular R–R intervals: atrial fibrillation.',
+  e:{hr:148,rh:'af',pf:0}},
+ s1q3t3:{k:'ecg',o:['Sinus tachycardia, S1Q3T3, right heart strain: think PE','Inferior STEMI','Left bundle branch block','Normal sinus rhythm'],x:'A deep S in I, a Q and inverted T in III, and T inversion in V1–V3 with a tachycardia suggest right heart strain. Sinus tachycardia is still the commonest PE finding.',
+  e:{hr:118,m:{I:{s:-.4},III:{q:-.3,t:-.25},V1:{t:-.25},V2:{t:-.2},V3:{t:-.12}}}},
+ digoxin:{k:'ecg',o:['Slow AF with scooped "reverse tick" ST depression: digoxin effect','Lateral STEMI','Hyperkalaemia','Complete heart block'],x:'Sagging, scooped ST depression that rises into a small T wave (the reverse tick) with a slow ventricular rate fits digoxin. Toxicity is clinical plus the level and potassium.',
+  e:{hr:54,rh:'af',pf:0,fa:.35,m:{I:{scoop:-.28,t:.06},II:{scoop:-.32,t:.06},III:{scoop:-.15},aVF:{scoop:-.26,t:.05},aVL:{scoop:-.15},V4:{scoop:-.34,t:.08},V5:{scoop:-.34,t:.08},V6:{scoop:-.3,t:.06},V3:{scoop:-.18}}}},
+ osborn:{k:'ecg',o:['Bradycardia with J (Osborn) waves: hypothermia','Brugada pattern','Hyperkalaemia','Delta waves of WPW'],x:'A positive hump at the J point after the QRS, a slow rate and shivering artefact: Osborn waves of hypothermia. They shrink as the patient warms.',
+  e:{hr:40,shiver:.02,all:{j:.48},m:{I:{j:.25},aVL:{j:.2},aVR:{j:-.2},V1:{j:.08}}}},
+ chb:{k:'ecg',o:['Complete heart block: P waves and QRS complexes dissociated','Mobitz I (Wenckebach)','Sinus bradycardia','Mobitz II'],x:'P waves march through at their own rate with no fixed relation to the slow, regular QRS complexes: third-degree (complete) heart block.',
+  e:{hr:36,rh:'chb',ahr:84,w:1.35,pf:1.5}},
+ alternans:{k:'ecg',o:['Low voltage with electrical alternans: think tamponade','Atrial fibrillation','Pericarditis without effusion','Normal ECG with lead artefact'],x:'Small complexes whose height alternates beat to beat, with a tachycardia: the heart is swinging in a large effusion.',
+  e:{hr:116,v:.52,tf:.4,alt:true}},
+ // ---- Blood gases: [label, value, unit, low, high]
+ dka:{k:'abg',o:['High anion gap metabolic acidosis with respiratory compensation','Normal anion gap metabolic acidosis','Acute respiratory acidosis','Metabolic alkalosis'],x:'pH low, bicarbonate very low, CO₂ blown off. Anion gap = 134 − (101 + 7) = 26: a raised gap, here from ketones.',
+  g:{src:'Venous',fio2:.21,r:[['pH',7.08,'',7.35,7.45],['pCO₂',2.4,'kPa',4.7,6.0],['pO₂',5.2,'kPa',null,null],['HCO₃⁻',7,'mmol/L',22,26],['Base excess',-21,'mmol/L',-2,2],['Na⁺',134,'mmol/L',135,145],['K⁺',5.6,'mmol/L',3.5,5.0],['Cl⁻',101,'mmol/L',98,107],['Glucose',32.0,'mmol/L',4,7.8],['Lactate',1.9,'mmol/L',.5,2.0]]}},
+ copd:{k:'abg',o:['Acute-on-chronic respiratory acidosis (raised bicarbonate)','Acute respiratory acidosis, uncompensated','Metabolic acidosis','Respiratory alkalosis'],x:'High CO₂ with a low pH is respiratory acidosis. The bicarbonate is already high, so the kidneys have been compensating for a long time: acute on chronic. Target saturations 88–92%.',
+  g:{src:'Arterial',fio2:.21,r:[['pH',7.31,'',7.35,7.45],['pCO₂',7.9,'kPa',4.7,6.0],['pO₂',7.4,'kPa',11,13],['HCO₃⁻',32,'mmol/L',22,26],['Base excess',6,'mmol/L',-2,2],['Na⁺',139,'mmol/L',135,145],['K⁺',4.2,'mmol/L',3.5,5.0],['Cl⁻',98,'mmol/L',98,107],['Lactate',1.1,'mmol/L',.5,2.0]]}},
+ panic:{k:'abg',o:['Acute respiratory alkalosis','Metabolic alkalosis','Respiratory acidosis','Mixed metabolic acidosis and respiratory alkalosis'],x:'High pH with a low CO₂ and a normal bicarbonate: acute respiratory alkalosis from over-breathing. Normal oxygen helps, but exclude PE and DKA first.',
+  g:{src:'Arterial',fio2:.21,r:[['pH',7.51,'',7.35,7.45],['pCO₂',3.6,'kPa',4.7,6.0],['pO₂',13.9,'kPa',11,13],['HCO₃⁻',23,'mmol/L',22,26],['Base excess',0,'mmol/L',-2,2],['Na⁺',140,'mmol/L',135,145],['K⁺',3.6,'mmol/L',3.5,5.0],['Cl⁻',104,'mmol/L',98,107],['Lactate',1.0,'mmol/L',.5,2.0]]}},
+ opioid:{k:'abg',o:['Acute respiratory acidosis from hypoventilation','Chronic compensated respiratory acidosis','Metabolic acidosis','Normal blood gas'],x:'Very high CO₂, low pH and a near-normal bicarbonate: acute hypoventilation with no time to compensate. Pinpoint pupils complete the picture.',
+  g:{src:'Venous',fio2:.21,r:[['pH',7.21,'',7.35,7.45],['pCO₂',9.8,'kPa',4.7,6.0],['pO₂',4.1,'kPa',null,null],['HCO₃⁻',28,'mmol/L',22,26],['Base excess',1,'mmol/L',-2,2],['Na⁺',141,'mmol/L',135,145],['K⁺',4.4,'mmol/L',3.5,5.0],['Glucose',5.4,'mmol/L',4,7.8],['Lactate',1.6,'mmol/L',.5,2.0]]}},
+ methb:{k:'abg',o:['Normal pO₂ with a saturation gap: methaemoglobinaemia','Type 1 respiratory failure','Carbon monoxide poisoning','Type 2 respiratory failure'],x:'The pO₂ is high on oxygen, yet the pulse oximeter reads about 85%. Co-oximetry shows methaemoglobin 32%. Treat with methylene blue.',
+  g:{src:'Arterial',fio2:.6,ox:85,r:[['pH',7.38,'',7.35,7.45],['pCO₂',4.9,'kPa',4.7,6.0],['pO₂',38.2,'kPa',11,13],['HCO₃⁻',22,'mmol/L',22,26],['O₂Hb',66,'%',94,98],['COHb',1.0,'%',0,3],['MetHb',32,'%',0,1.5],['Lactate',2.1,'mmol/L',.5,2.0]]}},
+ methanol:{k:'abg',o:['High anion gap acidosis with a raised osmolal gap: toxic alcohol','Diabetic ketoacidosis','Lactic acidosis from shock','Normal anion gap acidosis'],x:'Anion gap = 141 − (104 + 5) = 32. Calculated osmolality 2×141 + 5.2 + 6.1 ≈ 293, so the osmolal gap is about 38. Glucose and lactate do not explain it: methanol or ethylene glycol.',
+  g:{src:'Arterial',fio2:.21,r:[['pH',7.05,'',7.35,7.45],['pCO₂',2.1,'kPa',4.7,6.0],['pO₂',14.1,'kPa',11,13],['HCO₃⁻',5,'mmol/L',22,26],['Base excess',-24,'mmol/L',-2,2],['Na⁺',141,'mmol/L',135,145],['Cl⁻',104,'mmol/L',98,107],['Urea',5.2,'mmol/L',2.5,7.8],['Glucose',6.1,'mmol/L',4,7.8],['Lactate',2.4,'mmol/L',.5,2.0],['Osmolality',331,'mOsm/kg',275,295]]}},
+ cholera:{k:'abg',o:['Normal anion gap metabolic acidosis with hypokalaemia','High anion gap metabolic acidosis','Metabolic alkalosis from vomiting','Respiratory acidosis'],x:'Anion gap = 136 − (114 + 13) = 9, which is normal, with a high chloride and low potassium: bicarbonate lost in stool.',
+  g:{src:'Venous',fio2:.21,r:[['pH',7.24,'',7.35,7.45],['pCO₂',3.5,'kPa',4.7,6.0],['pO₂',5.5,'kPa',null,null],['HCO₃⁻',13,'mmol/L',22,26],['Base excess',-12,'mmol/L',-2,2],['Na⁺',136,'mmol/L',135,145],['K⁺',2.8,'mmol/L',3.5,5.0],['Cl⁻',114,'mmol/L',98,107],['Lactate',1.8,'mmol/L',.5,2.0]]}},
+ // ---- X-rays
+ rll:{k:'xr',o:['Right lower lobe consolidation with air bronchograms','Right pleural effusion','Right pneumothorax','Normal chest film'],x:'A fluffy white opacity in the right lower zone with dark branching air bronchograms inside it, and the right heart border still visible: lower lobe, not middle lobe.',x2:'Chest X-ray (PA)'},
+ apo:{k:'xr',o:['Pulmonary oedema: big heart, bat-wing shadowing, effusions','Bilateral pneumonia','Normal chest film','Miliary tuberculosis'],x:'Cardiomegaly, perihilar bat-wing haze, short horizontal Kerley B lines at the bases and blunted costophrenic angles: fluid overload.',x2:'Chest X-ray (AP, portable)'},
+ cavity:{k:'xr',o:['Right upper lobe cavity','Right upper lobe collapse','Pancoast tumour at the apex','Normal chest film'],x:'A thick-walled ring with a dark centre and patchy shadowing around it in the right upper zone: a cavity. In this story, tuberculosis.',x2:'Chest X-ray (PA)'},
+ medi:{k:'xr',o:['Widened mediastinum with pleural effusions','Cardiomegaly','Normal chest film','Bilateral hilar lymphadenopathy only'],x:'The upper mediastinum is much wider than it should be, with fluid at both bases. In a sick patient: haemorrhagic mediastinitis or a dissection.',x2:'Chest X-ray (PA)'},
+ ptx:{k:'xr',o:['Left pneumothorax: a visible lung edge with no markings beyond it','Bullous emphysema','Normal chest film','Left pleural effusion'],x:'A thin white pleural line runs parallel to the chest wall, and outside it there are no lung markings at all. The trachea is central, so it is not under tension.',x2:'Chest X-ray (PA)'},
+ freeair:{k:'xr',o:['Free gas under the right hemidiaphragm (pneumoperitoneum)','Chilaiditi sign (bowel between liver and diaphragm)','Normal gastric bubble only','Right lower lobe pneumonia'],x:'A smooth dark crescent separating the right hemidiaphragm from the liver on an erect film: free intraperitoneal gas from a perforated viscus.',x2:'Erect chest X-ray'},
+ sbo:{k:'xr',o:['Dilated central small-bowel loops with valvulae conniventes','Large bowel obstruction with haustra','Sigmoid volvulus (coffee-bean sign)','Normal bowel gas pattern'],x:'Several dilated, centrally placed loops stacked like a ladder, crossed by thin lines that go all the way across (valvulae conniventes): small bowel, not colon.',x2:'Abdominal X-ray (supine)'},
+ // ---- Microscopy
+ malaria:{k:'mic',o:['Ring forms inside red cells, some doubled: P. falciparum','Howell–Jolly bodies','Normal blood film','Babesia (Maltese cross)'],x:'Delicate rings with one or two chromatin dots, several cells infected and some with two rings, plus a banana-shaped gametocyte: falciparum malaria.',x2:'Thin blood film, Giemsa ×100'},
+ schisto:{k:'mic',o:['Schistocytes (fragmented red cells) with very few platelets','Spherocytes','Target cells','Normal blood film'],x:'Helmet and triangle-shaped red cell fragments and almost no platelets: a microangiopathic haemolytic anaemia, such as TTP.',x2:'Blood film, Wright stain ×100'},
+ atypical:{k:'mic',o:['Large atypical (reactive) lymphocytes','Myeloblasts with Auer rods','Hypersegmented neutrophils','Normal blood film'],x:'Big lymphocytes with plenty of pale blue cytoplasm that hugs the neighbouring red cells: reactive (Downey) cells, typical of EBV.',x2:'Blood film, Wright stain ×100'},
+ tryp:{k:'mic',o:['Trypanosomes: wavy flagellated parasites between red cells','Microfilariae','Spirochaetes (Borrelia)','Malaria gametocytes'],x:'Slender, wavy extracellular parasites with an undulating membrane, a central nucleus and a free flagellum: trypomastigotes.',x2:'Thin blood film, Giemsa ×100'},
+ sickle:{k:'mic',o:['Sickle cells with target cells and Howell–Jolly bodies','Schistocytes','Spherocytes','Normal blood film'],x:'Crescent-shaped cells, target cells and small nuclear remnants (a sign of a non-working spleen): sickle cell disease.',x2:'Blood film, Wright stain ×100'},
+ gramneg:{k:'mic',o:['Gram-negative diplococci inside neutrophils','Gram-positive diplococci','Gram-positive rods','Yeasts (Cryptococcus)'],x:'Pink, kidney-bean pairs of cocci, many inside neutrophils: Neisseria meningitidis in CSF.',x2:'CSF Gram stain ×100'},
+ grampos:{k:'mic',o:['Gram-positive lancet-shaped diplococci','Gram-negative diplococci','Gram-positive cocci in clusters','Gram-negative rods'],x:'Purple, pointed pairs of cocci among pus cells: Streptococcus pneumoniae.',x2:'Sputum Gram stain ×100'},
+ afb:{k:'mic',o:['Acid-fast bacilli: red rods on a blue background','Gram-positive cocci in chains','Fungal hyphae','No organisms seen'],x:'Slender, slightly beaded red rods on a blue counterstain in a Ziehl–Neelsen stain: mycobacteria.',x2:'Sputum Ziehl–Neelsen stain ×100'},
+ ldbodies:{k:'mic',o:['Macrophage packed with Leishman–Donovan bodies','Megaloblastic changes','Gaucher cell','Histoplasma yeasts'],x:'A macrophage stuffed with tiny oval bodies, each with a nucleus and a small rod-like kinetoplast: Leishmania amastigotes. Histoplasma has no kinetoplast.',x2:'Bone marrow aspirate, Giemsa ×100'},
+ vibrio:{k:'mic',o:['Darting comma-shaped bacteria (Vibrio)','Spirochaetes','Motile Giardia trophozoites','No organisms seen'],x:'Bright, curved comma-shaped rods shooting across a dark-field slide: Vibrio cholerae.',x2:'Stool dark-field microscopy'},
+ boxcar:{k:'mic',o:['Large gram-positive rods in chains ("boxcars")','Gram-positive cocci in chains','Gram-negative rods','Branching gram-positive filaments'],x:'Big, square-ended purple rods lined up end to end like railway carriages: Bacillus anthracis.',x2:'Blood culture Gram stain ×100'},
+ bipolar:{k:'mic',o:['Bipolar "safety-pin" coccobacilli','Gram-positive diplococci','Spirochaetes','Yeast cells'],x:'Small rods stained darker at both ends, like a closed safety pin: Yersinia pestis on a Wayson or Giemsa stain.',x2:'Node aspirate, Wayson stain ×100'}
+};
+// Which clue in each case is shown as a picture first: [category, index, reading]
+const READ_AT={
+ 'ST-Elevation Myocardial Infarction':[['l',0,'antstemi']],'Hyperkalaemia':[['l',1,'hyperk']],'Acute Pericarditis':[['l',0,'pericarditis']],'Brugada Syndrome':[['l',0,'brugada']],
+ 'Wellens Syndrome':[['l',0,'wellens']],'Atrial Fibrillation with Fast Ventricular Rate':[['l',0,'af']],'Pulmonary Embolism':[['l',1,'s1q3t3']],'Digoxin Toxicity':[['l',1,'digoxin']],
+ 'Accidental Hypothermia':[['l',0,'osborn']],'Lyme Carditis':[['l',0,'chb']],'Cardiac Tamponade':[['l',0,'alternans']],
+ 'Diabetic Ketoacidosis':[['l',1,'dka']],'COPD Exacerbation':[['l',0,'copd']],'Panic Attack':[['l',1,'panic']],'Opioid Overdose':[['l',0,'opioid']],'Methaemoglobinaemia':[['l',0,'methb']],
+ 'Methanol Poisoning':[['l',0,'methanol']],'Cholera':[['l',0,'cholera'],['l',1,'vibrio']],
+ 'Community-Acquired Pneumonia':[['l',1,'grampos'],['i',0,'rll']],'Acute Pulmonary Oedema':[['i',0,'apo']],'Pulmonary Tuberculosis':[['l',0,'afb'],['i',0,'cavity']],'Inhalational Anthrax':[['l',0,'boxcar'],['i',0,'medi']],
+ 'Primary Spontaneous Pneumothorax':[['i',0,'ptx']],'Perforated Peptic Ulcer':[['i',0,'freeair']],'Small Bowel Obstruction':[['i',0,'sbo']],
+ 'Falciparum Malaria':[['l',0,'malaria']],'Thrombotic Thrombocytopenic Purpura':[['l',0,'schisto']],'Infectious Mononucleosis':[['l',0,'atypical']],'African Trypanosomiasis':[['l',0,'tryp']],
+ 'Sickle Cell Pain Crisis':[['l',0,'sickle']],'Meningococcal Meningitis':[['l',1,'gramneg']],'Visceral Leishmaniasis':[['l',1,'ldbodies']],'Bubonic Plague':[['l',0,'bipolar']]
+};
+const readKey=(d,c,k)=>{const a=(d&&(d.rd||READ_AT[d.n]))||[];const r=a.find(x=>x[0]===c&&x[1]===+k);return r&&READS[r[2]]?r[2]:null};
+const readTitle=key=>READS[key].x2||RD_KIND[READS[key].k][0];
+
+/* ---- ECG drawing ---- */
+const ECG_LEADS=['I','II','III','aVR','aVL','aVF','V1','V2','V3','V4','V5','V6'];
+// Typical amplitudes in mV for each lead: P, Q, R, S, T
+const ECG_BASE={I:[.1,-.04,.75,-.1,.25],II:[.15,-.05,1.1,-.15,.35],III:[.06,-.06,.45,-.2,.1],aVR:[-.12,0,.12,-.85,-.3],aVL:[.04,-.05,.45,-.25,.1],aVF:[.1,-.05,.75,-.15,.2],
+ V1:[.07,0,.25,-1,-.05],V2:[.08,0,.45,-1.3,.45],V3:[.08,0,.8,-.8,.5],V4:[.08,-.04,1.3,-.4,.45],V5:[.08,-.07,1.3,-.2,.35],V6:[.08,-.07,1,-.1,.25]};
+function ecgLead(name,e){
+  const [p,q,r,s,t]=ECG_BASE[name],L=Object.assign({p:p*(e.pf==null?1:e.pf),q,r,s,t:t*(e.tf||1)},e.all||{},(e.m||{})[name]||{});
+  if(e.v){L.q*=e.v;L.r*=e.v;L.s*=e.v}
+  return L;
+}
+function ecgBeats(e,R){
+  const out=[],ps=[];let t=.25+R()*.3,i=0;
+  if(e.rh==='chb'){for(let a=.1;a<10.5;a+=60/e.ahr)ps.push(a);}
+  while(t<10.6){
+    out.push({t,k:e.alt&&i%2?.5:1});
+    if(e.rh!=='af'&&e.rh!=='chb')ps.push(t-.16);
+    t+=e.rh==='af'?60/e.hr*(.62+R()*.76):60/e.hr;i++;
+  }
+  return{beats:out,ps};
+}
+function ecgAt(t,L,e,B,li){
+  const w=e.w||1,G=(u,c,s,a)=>a*Math.exp(-(((u-c)/s)**2));
+  let v=.02*Math.sin(t*1.9+li);
+  for(const b of B.beats){const u=t-b.t;if(u<-.12||u>.62)continue;
+    v+=b.k*(G(u,-.03*w,.009*w,L.q)+G(u,0,.011*w,L.r)+G(u,.03*w,.011*w,L.s));
+    v+=G(u,.26+.05*(w-1),e.tw||.05,L.t);
+    if(L.st)v+=L.st*Math.exp(-(((u-(.06*w+.07))/.075)**4));
+    if(L.cove&&u>.025*w)v+=L.cove*Math.exp(-(u-.025*w)/.1)*Math.min(1,(u-.025*w)/.012);
+    if(L.scoop&&u>.04&&u<.27)v+=L.scoop*Math.sin((u-.04)/.23*Math.PI);
+    if(L.j)v+=G(u,.05*w,.016,L.j);
+  }
+  for(const pt of B.ps){const u=t-pt;if(u<-.08||u>.2)continue;v+=G(u,0,.022,L.p);if(L.pr)v+=L.pr*Math.exp(-(((u-.075)/.035)**4))}
+  if(e.rh==='af'){const a=(['V1','II','III','aVF'].includes(L.name)?.05:.025)*(e.fa||1);v+=a*(Math.sin(2*Math.PI*6.1*t+li)+.7*Math.sin(2*Math.PI*8.7*t+1.3)+.5*Math.sin(2*Math.PI*4.9*t+.4))}
+  if(e.shiver)v+=e.shiver*(Math.sin(2*Math.PI*23*t+li)+Math.sin(2*Math.PI*31*t))*(.6+.4*Math.sin(t*3));
+  return v;
+}
+function ecgSVG(key){
+  const e=READS[key].e,R=seeded('ecg-'+key),B=ecgBeats(e,R),mm=4,px=25*mm,mv=10*mm,X0=24,rowH=120,W=X0+10*px+8,H=rowH*4+16;
+  const layout=[['I','aVR','V1','V4'],['II','aVL','V2','V5'],['III','aVF','V3','V6']];
+  const path=(name,t0,t1,x,y)=>{const L=ecgLead(name,e);L.name=name;const li=ECG_LEADS.indexOf(name);let d='';
+    for(let t=t0;t<=t1+1e-9;t+=.004){d+=(d?'L':'M')+(x+(t-t0)*px).toFixed(1)+' '+(y-ecgAt(t,L,e,B,li)*mv).toFixed(1)}return d};
+  let g='';
+  for(let row=0;row<4;row++){
+    const y=rowH*row+70;
+    g+=`<path d="M4 ${y}h4v-${mv}h10v${mv}h4" class="cal"/>`;
+    if(row<3)layout[row].forEach((n,col)=>{const x=X0+col*2.5*px;g+=`<path d="${path(n,col*2.5,col*2.5+2.5,x,y)}"/><text x="${x+4}" y="${y-44}">${n}</text>`;if(col)g+=`<path d="M${x} ${y-12}v24" class="sep"/>`});
+    else g+=`<path d="${path('II',0,10,X0,y)}"/><text x="${X0+4}" y="${y-44}">II</text>`;
+  }
+  return`<svg class="ecgsheet" viewBox="0 0 ${W} ${H}" role="img" aria-label="12-lead ECG"><defs><pattern id="eg1" width="${mm}" height="${mm}" patternUnits="userSpaceOnUse"><path d="M${mm} 0V${mm}H0" fill="none" stroke="#f3c4c0" stroke-width=".5"/></pattern><pattern id="eg5" width="${5*mm}" height="${5*mm}" patternUnits="userSpaceOnUse"><rect width="${5*mm}" height="${5*mm}" fill="url(#eg1)"/><path d="M${5*mm} 0V${5*mm}H0" fill="none" stroke="#e59a93" stroke-width="1"/></pattern></defs>
+   <rect width="${W}" height="${H}" fill="#fff7f4"/><rect width="${W}" height="${H}" fill="url(#eg5)"/>
+   <g fill="none" stroke="#1d1b1b" stroke-width="1.3" stroke-linejoin="round">${g}</g>
+   <text x="${W-8}" y="${H-6}" text-anchor="end" class="foot">25 mm/s · 10 mm/mV</text></svg>`;
+}
+
+/* ---- Blood gas printout ---- */
+function abgHTML(key){
+  const g=READS[key].g,f=(v,lo,hi)=>lo==null?'':v<lo?'L':v>hi?'H':'';
+  const num=(l,v)=>l==='pH'?v.toFixed(2):String(v);
+  return`<div class="abg"><div class="abgh"><b>BLOOD GAS ANALYSER</b><span>${g.src} sample · FiO₂ ${g.fio2.toFixed(2)}${g.ox?` · pulse oximeter ${g.ox}%`:''}</span></div>
+   <table><tbody>${g.r.map(([l,v,u,lo,hi])=>{const fl=f(v,lo,hi);return`<tr class="${fl?'fl':''}"><th>${l}</th><td>${num(l,v)}</td><td>${u}</td><td class="flag">${fl}</td><td class="rng">${lo==null?'':`${lo}–${hi}`}</td></tr>`}).join('')}</tbody></table>
+   <p class="abgf">Anion gap = Na⁺ − (Cl⁻ + HCO₃⁻)${g.r.some(r=>r[0]==='Osmolality')?' · Calculated osmolality = 2 × Na⁺ + urea + glucose':''}</p></div>`;
+}
+
+/* ---- X-ray drawing ---- */
+function xrSVG(key){
+  const R=seeded('xr-'+key),blur=(id,s)=>`<filter id="${id}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="${s}"/></filter>`;
+  const defs=`<defs>${blur('xb1',1.2)}${blur('xb3',3)}${blur('xb8',8)}${blur('xb16',16)}<radialGradient id="xvig" cx="50%" cy="45%" r="65%"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></radialGradient></defs>`;
+  if(key==='sbo')return axrSVG(R,defs);
+  const wideHeart=key==='apo',ptx=key==='ptx',medi=key==='medi';
+  // lung shapes: patient's right lung is on the viewer's left
+  const lungR='M180 78C152 50 112 56 92 92C70 140 62 232 66 330C100 316 140 310 178 322Z';
+  const lungL='M220 78C248 50 288 56 308 92C330 140 338 232 334 336C300 328 262 324 222 328Z';
+  // vessel markings branch out from each hilum
+  const vessels=(hx,hy,dir)=>{let s='';for(let i=0;i<24;i++){const a=(-80+i*7+R()*6)*Math.PI/180,len=40+R()*80;let x=hx,y=hy,ang=a;let d=`M${x} ${y}`;
+      for(let k=0;k<4;k++){ang+=(R()-.5)*.6;x+=dir*Math.cos(ang)*len/4;y+=Math.sin(ang)*len/4;d+=`L${x.toFixed(1)} ${y.toFixed(1)}`}
+      s+=`<path d="${d}" stroke-width="${(2-i%3*.5).toFixed(1)}" opacity="${(.32-R()*.14).toFixed(2)}"/>`}return s};
+  const ribs=side=>{let s='';for(let i=0;i<10;i++){const y=66+i*27,x2=side<0?70:330;
+      s+=`<path d="M${200+side*14} ${y}C${200+side*60} ${y-14} ${200+side*120} ${y-6} ${x2+side*-4} ${y+22}" stroke-width="8"/>`;
+      if(i<6)s+=`<path d="M${x2+side*-6} ${y+30}C${200+side*110} ${y+50} ${200+side*60} ${y+60} ${200+side*22} ${y+70}" stroke-width="6" opacity=".45"/>`}return s};
+  let heart=wideHeart?'M178 196C168 262 172 330 196 344L332 344C340 300 322 236 268 206C240 192 204 190 178 196Z':'M180 206C174 262 180 322 200 336L298 336C304 298 290 250 252 216C232 202 206 200 180 206Z';
+  const mediast=medi?'M146 58C140 120 142 170 160 214L246 214C262 170 262 116 254 58Z':'M182 52C178 110 178 160 182 210L222 210C228 160 228 110 222 52Z';
+  let path='';
+  if(key==='rll')path=`<g filter="url(#xb8)" fill="#8d9191"><ellipse cx="112" cy="282" rx="44" ry="38" opacity=".85"/><ellipse cx="136" cy="300" rx="34" ry="22" opacity=".7"/></g>
+    <g stroke="#1a1c1d" stroke-width="3" fill="none" filter="url(#xb1)" opacity=".8"><path d="M150 252L126 270L104 290M126 270L120 300M136 262L108 262"/></g>`;
+  if(key==='apo')path=`<g filter="url(#xb16)" fill="#7d8181"><ellipse cx="140" cy="200" rx="52" ry="62" opacity=".9"/><ellipse cx="262" cy="204" rx="54" ry="64" opacity=".9"/></g>
+    <g stroke="#a9adad" stroke-width="1.6" opacity=".7">${[0,1,2,3].map(i=>`<path d="M70 ${284+i*9}h16M330 ${290+i*9}h-16"/>`).join('')}</g>
+    <g fill="#b8bcbc" filter="url(#xb3)"><path d="M64 300C80 312 92 326 96 336L62 340Z"/><path d="M336 304C322 316 310 330 306 342L340 344Z"/></g>`;
+  if(key==='cavity')path=`<g filter="url(#xb8)" fill="#8a8e8e"><ellipse cx="124" cy="118" rx="40" ry="30" opacity=".8"/><ellipse cx="146" cy="150" rx="22" ry="16" opacity=".5"/></g>
+    <g filter="url(#xb1)"><path d="M104 112C106 96 128 92 140 104C150 116 144 136 126 140C108 142 102 126 104 112Z" fill="#141617" stroke="#aeb2b2" stroke-width="8" filter="url(#xb1)"/></g>`;
+  if(key==='medi')path=`<g fill="#b8bcbc" filter="url(#xb3)"><path d="M62 286C84 300 100 322 106 340L60 344Z"/><path d="M338 292C318 306 302 326 296 344L342 346Z"/></g>`;
+  const ptxMask=ptx?`<path d="M232 64C268 56 300 70 318 104C334 150 340 240 338 338L330 338C326 250 300 170 280 130C262 98 246 82 232 64Z" fill="#050607"/><path d="M280 130C300 170 326 250 330 338" stroke="#c3c7c7" stroke-width="1.6" fill="none" filter="url(#xb1)"/><path d="M232 64C246 82 262 98 280 130" stroke="#c3c7c7" stroke-width="1.6" fill="none" filter="url(#xb1)"/>`:'';
+  const freeAir=key==='freeair'?`<path d="M70 334C98 314 138 310 176 322C140 318 102 324 70 344Z" fill="#050607" filter="url(#xb1)"/>`:'';
+  return`<svg class="xray" viewBox="0 0 400 440" role="img" aria-label="${READS[key].x2}">${defs}
+   <rect width="400" height="440" fill="#050607"/>
+   <path d="M30 60C80 30 140 26 200 30C260 26 320 30 370 60L392 440H8Z" fill="#3a3d3f" filter="url(#xb8)"/>
+   <g filter="url(#xb3)"><path d="${lungR}" fill="#111314"/><path d="${lungL}" fill="#111314"/></g>
+   <g stroke="#9ca0a0" fill="none" stroke-linecap="round" filter="url(#xb1)">${vessels(168,196,-1)}${vessels(234,200,1)}</g>
+   ${ptxMask}
+   <g stroke="#a7abab" fill="none" opacity=".42" filter="url(#xb1)">${ribs(-1)}${ribs(1)}</g>
+   <g stroke="#c4c8c8" stroke-width="11" stroke-linecap="round" opacity=".6" filter="url(#xb3)"><path d="M188 66C150 52 112 46 72 52"/><path d="M212 66C250 52 288 46 328 52"/></g>
+   <g filter="url(#xb3)"><path d="${mediast}" fill="#a3a7a7"/><path d="${heart}" fill="#a9adad"/><circle cx="${medi?250:232}" cy="${medi?110:118}" r="${medi?22:15}" fill="#a9adad"/></g>
+   <g opacity=".22" fill="#e6e9e9">${Array.from({length:11},(_,i)=>`<rect x="191" y="${52+i*27}" width="18" height="20" rx="3"/>`).join('')}</g>
+   <path d="M60 330C96 312 140 306 180 320C194 326 208 326 222 330C262 322 302 326 340 338L362 440H38Z" fill="#b2b6b6" filter="url(#xb3)"/>
+   <ellipse cx="276" cy="356" rx="22" ry="12" fill="#1a1c1d" filter="url(#xb3)" opacity=".85"/>
+   ${freeAir}${path}
+   <rect width="400" height="440" fill="url(#xvig)"/><text x="22" y="40" class="xrm">R</text></svg>`;
+}
+function axrSVG(R,defs){
+  // supine abdominal film: dilated central loops with valvulae crossing the full width of each loop
+  const loops=[[110,140,290],[120,196,300],[100,252,280],[130,306,270]];
+  let bowel='',valv='';
+  loops.forEach(([x1,y,x2],i)=>{bowel+=`<path d="M${x1} ${y}H${x2}" stroke-width="34"/>`;
+    if(i<loops.length-1){const n=loops[i+1],side=i%2?x1:x2,nx=i%2?n[0]:n[2];bowel+=`<path d="M${side} ${y}C${side+(i%2?-40:40)} ${y} ${nx+(i%2?-40:40)} ${n[1]} ${nx} ${n[1]}" stroke-width="32"/>`}
+    for(let x=x1+8;x<x2-4;x+=9+R()*2)valv+=`<path d="M${x.toFixed(1)} ${y-15}C${(x+2).toFixed(1)} ${y-5} ${(x-2).toFixed(1)} ${y+5} ${x.toFixed(1)} ${y+15}"/>`});
+  return`<svg class="xray" viewBox="0 0 400 440" role="img" aria-label="Abdominal X-ray">${defs}
+   <rect width="400" height="440" fill="#050607"/>
+   <path d="M40 10H360C376 160 380 300 372 440H28C20 300 24 160 40 10Z" fill="#4a4e50" filter="url(#xb8)"/>
+   <path d="M44 20C90 16 150 30 196 70C170 110 110 120 60 112Z" fill="#6c7071" filter="url(#xb8)" opacity=".8"/>
+   <g opacity=".35" fill="#e2e5e5">${Array.from({length:13},(_,i)=>`<rect x="187" y="${8+i*30}" width="26" height="24" rx="4"/>`).join('')}</g>
+   <path d="M90 440C96 380 140 350 200 352C260 350 304 380 310 440" fill="none" stroke="#b4b8b8" stroke-width="14" opacity=".6" filter="url(#xb3)"/>
+   <g fill="none" stroke="#141617" stroke-linecap="round" filter="url(#xb3)">${bowel}</g>
+   <g fill="none" stroke="#7d8282" stroke-width="2" opacity=".85" filter="url(#xb1)">${valv}</g>
+   <rect width="400" height="440" fill="url(#xvig)"/><text x="22" y="40" class="xrm">R</text></svg>`;
+}
+
+/* ---- Microscopy drawing ---- */
+function micSVG(key){
+  const R=seeded('mic-'+key),N=n=>n.toFixed(1),cx=200,cy=200;
+  const stain={gramneg:'gram',grampos:'gram',boxcar:'gram',afb:'zn',vibrio:'dark',ldbodies:'marrow',bipolar:'wayson'}[key]||'film';
+  const bg={film:'#f4e9ec',gram:'#f6eef2',zn:'#c9dbe9',dark:'#030506',marrow:'#efe2ea',wayson:'#eef0f6'}[stain];
+  const spots=[];const place=(r,tries=40)=>{for(let k=0;k<tries;k++){const a=R()*Math.PI*2,d=Math.sqrt(R())*185,x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d;if(spots.every(s=>Math.hypot(s[0]-x,s[1]-y)>s[2]+r-2)){spots.push([x,y,r]);return[x,y]}}return null};
+  let g='';
+  const rbc=(x,y,r=14)=>`<circle cx="${N(x)}" cy="${N(y)}" r="${r}" fill="url(#rbc)"/>`;
+  const cell=(x,y,r,shape)=>shape==='sickle'?`<path d="M${N(x-r)} ${N(y)}A${r} ${r*.55} -20 0 1 ${N(x+r)} ${N(y-3)}A${r*.8} ${r*.3} -20 0 0 ${N(x-r)} ${N(y)}Z" fill="#d97f95" transform="rotate(${N(R()*180)} ${N(x)} ${N(y)})"/>`
+    :shape==='target'?`<circle cx="${N(x)}" cy="${N(y)}" r="${r}" fill="#e5a2b2"/><circle cx="${N(x)}" cy="${N(y)}" r="${r*.62}" fill="#f6dbe2"/><circle cx="${N(x)}" cy="${N(y)}" r="${r*.3}" fill="#d98a9d"/>`
+    :shape==='schisto'?`<path d="M${N(x-r)} ${N(y+2)}A${r} ${r} 0 0 1 ${N(x+r)} ${N(y+2)}L${N(x+r*.2)} ${N(y-r*.1)}Z" fill="#da8aa0" transform="rotate(${N(R()*360)} ${N(x)} ${N(y)})"/>`
+    :shape==='tri'?`<path d="M${N(x)} ${N(y-r*.8)}L${N(x+r*.8)} ${N(y+r*.6)}L${N(x-r*.7)} ${N(y+r*.5)}Z" fill="#da8aa0" transform="rotate(${N(R()*360)} ${N(x)} ${N(y)})"/>`:rbc(x,y,r);
+  const neut=(x,y)=>{let s=`<circle cx="${N(x)}" cy="${N(y)}" r="19" fill="#ead3e4"/>`;for(let i=0;i<3+(R()*2|0);i++){const a=i*1.5+R();s+=`<ellipse cx="${N(x+Math.cos(a)*7)}" cy="${N(y+Math.sin(a)*7)}" rx="6" ry="4.5" fill="#7a3f86" transform="rotate(${N(a*57)} ${N(x+Math.cos(a)*7)} ${N(y+Math.sin(a)*7)})"/>`}return s};
+  const pmn=(x,y,col)=>{let s=`<circle cx="${N(x)}" cy="${N(y)}" r="19" fill="${col[0]}"/>`;for(let i=0;i<3;i++){const a=i*2.1+R();s+=`<ellipse cx="${N(x+Math.cos(a)*7)}" cy="${N(y+Math.sin(a)*7)}" rx="6" ry="4.5" fill="${col[1]}"/>`}return s};
+  if(stain==='film'){
+    const n=key==='schisto'?34:44;
+    for(let i=0;i<n;i++){const p=place(14);if(!p)continue;const[x,y]=p;
+      if(key==='sickle')g+=cell(x,y,15,i%3===0?'sickle':i%5===1?'target':'rbc')+(i%11===4?`<circle cx="${N(x+5)}" cy="${N(y-4)}" r="2.2" fill="#4f2a68"/>`:'');
+      else if(key==='schisto')g+=i%3===0?cell(x,y,11,i%2?'schisto':'tri'):rbc(x,y,13);
+      else{g+=rbc(x,y);
+        if(key==='malaria'&&i%4===0){const ring=(dx,dy)=>`<circle cx="${N(x+dx)}" cy="${N(y+dy)}" r="4.2" fill="none" stroke="#5c3b8f" stroke-width="1.3"/><circle cx="${N(x+dx+3.4)}" cy="${N(y+dy-2.6)}" r="1.5" fill="#3c1f6e"/>${R()<.5?`<circle cx="${N(x+dx+4.2)}" cy="${N(y+dy+1.2)}" r="1.3" fill="#3c1f6e"/>`:''}`;g+=ring(-3,-2)+(i%8===0?ring(4,4):'')}}
+    }
+    if(key==='malaria'){const p=place(20)||[110,300];g+=`<path d="M${N(p[0]-18)} ${N(p[1]+4)}C${N(p[0]-8)} ${N(p[1]-12)} ${N(p[0]+8)} ${N(p[1]-12)} ${N(p[0]+18)} ${N(p[1]+4)}C${N(p[0]+8)} ${N(p[1]-4)} ${N(p[0]-8)} ${N(p[1]-4)} ${N(p[0]-18)} ${N(p[1]+4)}Z" fill="#8c6bb5"/><circle cx="${N(p[0])}" cy="${N(p[1]-4)}" r="2.6" fill="#2f2440"/>`}
+    if(key==='atypical')for(let i=0;i<2;i++){const p=place(30)||[120+i*140,140+i*100];g+=`<path d="M${N(p[0]-30)} ${N(p[1])}C${N(p[0]-28)} ${N(p[1]-30)} ${N(p[0]+20)} ${N(p[1]-34)} ${N(p[0]+32)} ${N(p[1]-6)}C${N(p[0]+40)} ${N(p[1]+16)} ${N(p[0]+12)} ${N(p[1]+20)} ${N(p[0]+4)} ${N(p[1]+32)}C${N(p[0]-14)} ${N(p[1]+30)} ${N(p[0]-34)} ${N(p[1]+20)} ${N(p[0]-30)} ${N(p[1])}Z" fill="#a9c3e6"/><ellipse cx="${N(p[0]-4)}" cy="${N(p[1]-2)}" rx="14" ry="12" fill="#5d3f8f"/>`}
+    if(key==='tryp')for(let i=0;i<3;i++){const x=80+i*110+R()*20,y=90+R()*220;let d=`M${N(x)} ${N(y)}`;for(let k=1;k<=10;k++)d+=`L${N(x+k*6)} ${N(y+Math.sin(k*1.2+i)*6)}`;
+      g+=`<path d="${d}" stroke="#7c4fa6" stroke-width="5" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#c7a8e2" stroke-width="1.5" fill="none" transform="translate(0 -4)"/><circle cx="${N(x+30)}" cy="${N(y+Math.sin(5*1.2+i)*6)}" r="2.6" fill="#3b1f5c"/><circle cx="${N(x+4)}" cy="${N(y+1)}" r="1.6" fill="#2a1442"/><path d="M${N(x+60)} ${N(y+Math.sin(12+i)*6)}q8 -6 16 0" stroke="#7c4fa6" stroke-width="1.6" fill="none"/>`}
+    if(key!=='schisto')for(let i=0;i<5;i++){const p=place(3,15);if(p)g+=`<circle cx="${N(p[0])}" cy="${N(p[1])}" r="2.4" fill="#8a5aa8"/>`}
+    if(key==='sickle'||key==='malaria'){const p=place(19);if(p)g+=neut(p[0],p[1])}
+  }else if(stain==='gram'||stain==='wayson'){
+    const cols=stain==='gram'?['#f0cfdc','#c45a86']:['#e6e7f2','#5a5f9e'];
+    for(let i=0;i<7;i++){const p=place(19);if(p)g+=pmn(p[0],p[1],cols)}
+    const bug=(x,y)=>{const a=R()*180;
+      if(key==='gramneg')return`<g transform="rotate(${N(a)} ${N(x)} ${N(y)})" fill="#d23a63"><ellipse cx="${N(x-2.4)}" cy="${N(y)}" rx="2.4" ry="3"/><ellipse cx="${N(x+2.4)}" cy="${N(y)}" rx="2.4" ry="3"/></g>`;
+      if(key==='grampos')return`<g transform="rotate(${N(a)} ${N(x)} ${N(y)})" fill="#3d2678"><path d="M${N(x-6)} ${N(y)}Q${N(x-3)} ${N(y-3.4)} ${N(x)} ${N(y)}Q${N(x-3)} ${N(y+3.4)} ${N(x-6)} ${N(y)}Z M${N(x+6)} ${N(y)}Q${N(x+3)} ${N(y-3.4)} ${N(x)} ${N(y)}Q${N(x+3)} ${N(y+3.4)} ${N(x+6)} ${N(y)}Z"/></g>`;
+      if(key==='boxcar'){let s='';for(let k=0;k<4;k++)s+=`<rect x="${N(x+k*13)}" y="${N(y-3)}" width="12" height="6" rx="1" fill="#3d2678"/>`;return`<g transform="rotate(${N(a)} ${N(x)} ${N(y)})">${s}</g>`}
+      return`<g transform="rotate(${N(a)} ${N(x)} ${N(y)})"><rect x="${N(x-4)}" y="${N(y-2.4)}" width="8" height="4.8" rx="2.4" fill="#c9cbe6"/><circle cx="${N(x-2.6)}" cy="${N(y)}" r="2" fill="#2c3170"/><circle cx="${N(x+2.6)}" cy="${N(y)}" r="2" fill="#2c3170"/></g>`};
+    for(let i=0;i<(key==='boxcar'?9:36);i++){const a=R()*Math.PI*2,d=Math.sqrt(R())*175;g+=bug(cx+Math.cos(a)*d,cy+Math.sin(a)*d)}
+    if(key==='gramneg')spots.slice(0,4).forEach(([x,y])=>{for(let k=0;k<3;k++)g+=bug(x-8+R()*16,y-8+R()*16)});
+  }else if(stain==='zn'){
+    for(let i=0;i<9;i++){const p=place(18);if(p)g+=`<circle cx="${N(p[0])}" cy="${N(p[1])}" r="16" fill="#9cb8d6"/><ellipse cx="${N(p[0])}" cy="${N(p[1])}" rx="8" ry="6" fill="#3f5f96"/>`}
+    for(let i=0;i<22;i++){const a=R()*Math.PI*2,d=Math.sqrt(R())*170,x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d,r=R()*180,len=9+R()*5;
+      g+=`<g transform="rotate(${N(r)} ${N(x)} ${N(y)})"><path d="M${N(x-len/2)} ${N(y)}q${N(len/2)} ${N(R()*3-1.5)} ${N(len)} 0" stroke="#d01f4c" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="2.6 1" fill="none"/></g>`}
+  }else if(stain==='dark'){
+    for(let i=0;i<26;i++){const x=20+R()*360,y=20+R()*360,r=R()*360;g+=`<g transform="rotate(${N(r)} ${N(x)} ${N(y)})"><path d="M${N(x-6)} ${N(y)}q6 -5 12 0" stroke="#d9f4ff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M${N(x-14)} ${N(y+3)}q8 -5 14 -3" stroke="#d9f4ff" stroke-width="2" opacity=".25" fill="none"/></g>`}
+    for(let i=0;i<5;i++){const x=40+R()*320,y=40+R()*320;g+=`<circle cx="${N(x)}" cy="${N(y)}" r="${N(4+R()*6)}" fill="none" stroke="#9fb4bd" stroke-width="1" opacity=".5"/>`}
+  }else{
+    for(let i=0;i<16;i++){const p=place(14);if(p)g+=`<circle cx="${N(p[0])}" cy="${N(p[1])}" r="13" fill="#e2b0bf"/>`}
+    g+=`<path d="M110 150C120 96 210 86 262 118C312 150 304 226 262 262C222 296 140 290 116 250C100 222 104 180 110 150Z" fill="#c9b6d9"/><ellipse cx="236" cy="148" rx="30" ry="24" fill="#5b3c86"/>`;
+    for(let i=0;i<46;i++){const a=R()*Math.PI*2,d=Math.sqrt(R())*72,x=190+Math.cos(a)*d*1.3,y=196+Math.sin(a)*d;if(Math.hypot(x-236,y-148)<30)continue;
+      g+=`<ellipse cx="${N(x)}" cy="${N(y)}" rx="4.2" ry="3" fill="#a982c9"/><circle cx="${N(x-1)}" cy="${N(y)}" r="1.5" fill="#4a2675"/><rect x="${N(x+1.3)}" y="${N(y-.5)}" width="2.4" height="1" fill="#2a1442"/>`}
+  }
+  return`<svg class="micro" viewBox="0 0 400 400" role="img" aria-label="${READS[key].x2}"><defs><clipPath id="mfov"><circle cx="200" cy="200" r="194"/></clipPath>
+   <radialGradient id="rbc"><stop offset=".25" stop-color="#f7dde4"/><stop offset=".7" stop-color="#e7a7b6"/><stop offset="1" stop-color="#d98a9d"/></radialGradient>
+   <radialGradient id="mvig" cx="50%" cy="50%" r="50%"><stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient></defs>
+   <rect width="400" height="400" fill="#000"/><g clip-path="url(#mfov)"><rect width="400" height="400" fill="${bg}"/>${g}<rect width="400" height="400" fill="url(#mvig)"/></g></svg>`;
+}
+let rdUid=0;
+// Give every drawn picture its own ids so two on one page never borrow each other's gradients
+const rdIds=(s,u)=>s.replace(/id="([^"]+)"/g,`id="$1-${u}"`).replace(/url\(#([^)]+)\)/g,`url(#$1-${u})`);
+function readImage(key){const k=READS[key].k,u='r'+(rdUid++);return rdIds(readImageRaw(key,k),u)}
+function readImageRaw(key,k){return k==='ecg'?`<div class="rdscroll">${ecgSVG(key)}</div><button class="btn rdzoom" data-act="rdzoom">${ic('search')}Zoom in</button>`:k==='abg'?abgHTML(key):k==='xr'?`<div class="rdpic">${xrSVG(key)}</div>`:`<div class="rdpic">${micSVG(key)}</div>`}
+
+/* ---- Reading a picture during play ---- */
+// A clue that has a picture stays hidden behind a "read it yourself" button until the player reads or skips it
+function clueLi(d,c,k,rd,isNew){
+  const key=readKey(d,c,k),res=rd&&rd[c+k];
+  if(key&&!res)return`<li class="rdwait ${isNew?'new':''}"><button class="rdbtn" data-read="${c}${k}">${ic(RD_KIND[READS[key].k][1])}<span><b>${esc(readTitle(key))} ready</b><small>Read it yourself before the report</small></span></button></li>`;
+  const chip=key&&res?`<button class="rdchip ${res}" data-study="${key}" title="Look at it again">${ic(RD_KIND[READS[key].k][1])}${res==='ok'?'read it':res==='bad'?'misread':'report only'}</button>`:'';
+  return`<li class="${isNew?'new':''}">${esc(d[c][k])}${chip}</li>`;
+}
+// The pinned "New:" line on phones should not give the report away before it is read
+const clueText=(d,c,k,rd)=>{const key=readKey(d,c,k);return key&&!(rd&&rd[c+k])?readTitle(key)+' ready to read':d[c][k]};
+function rdHost(){let el=document.getElementById('readov');if(!el){el=document.createElement('div');el.id='readov';document.body.appendChild(el)}return el}
+// where: 'bed' (a patient on the floor), 'pz' (a puzzle case), 'study' (look again), 'drill' (Reading room)
+function openRead(where,c,k,key){
+  let d=null;
+  if(where==='bed'){const p=curP();if(!p)return;d=D[p.d];key=readKey(d,c,k);S.read={where,c,k,key,pid:p.id}}
+  else if(where==='pz'){const x=pzCtx();if(!x)return;d=x.d;key=readKey(d,c,k);S.read={where,c,k,key}}
+  else S.read={where,key};
+  if(!key||!READS[S.read.key]){S.read=null;return}
+  const r=READS[S.read.key],R=seeded('opts-'+S.read.key+(S.read.pid||'')+Date.now());
+  S.read.opts=r.o.map((t,i)=>({t,i})).sort(()=>R()-.5);S.read.pick=null;
+  sfx(r.k==='ecg'?'beep':r.k==='xr'?'xray':'lab');renderRead();
+}
+function renderRead(){
+  const el=rdHost(),o=S.read;if(!o){el.innerHTML='';return}
+  const r=READS[o.key],[kind,icn]=RD_KIND[r.k],done=o.pick!=null,ok=done&&o.pick===0,study=o.where==='study';
+  const ctx=o.where==='bed'?'Right: +1 stability · wrong: −1 stability':o.where==='pz'?'Right: +60 points · wrong: −40 points':o.where==='drill'?'Practice: nothing at stake':'';
+  const opts=o.opts.map(({t,i})=>`<button data-rdpick="${i}" class="${done?(i===0?'right':i===o.pick?'wrong':''):''}" ${done?'disabled':''}>${esc(t)}</button>`).join('');
+  const report=o.where==='bed'||o.where==='pz'?(()=>{const d=o.where==='bed'?D[(curP()||{}).d]:(pzCtx()||{}).d;return d&&d[o.c]?`<p class="rdrep"><b>Report:</b> ${esc(d[o.c][o.k])}</p>`:''})():'';
+  el.innerHTML=`<div class="emov minov rdov" role="dialog" aria-modal="true" aria-label="${esc(readTitle(o.key))}"><div class="panel minicard rdcard">
+   <div class="minihead">${ic(icn)}<div><span class="label">${study?'Look again':o.where==='drill'?'Reading room':'Read it yourself'} · ${kind}</span><h2>${esc(readTitle(o.key))}</h2></div><button class="iconbtn rdx" data-act="rdclose" aria-label="Close">${ic('x')}</button></div>
+   ${readImage(o.key)}
+   <p class="rdq"><b>${r.k==='ecg'?'What does this ECG show?':r.k==='abg'?'How would you interpret this gas?':r.k==='xr'?'What is the main finding?':'What do you see?'}</b>${ctx&&!done?` <span class="hint">${ctx}</span>`:''}</p>
+   <div class="rdopts">${opts}</div>
+   ${done?`<div class="minimsg ${ok||o.pick<0?'good':''}">${ok?'Right read.':o.pick<0?'Answer: '+esc(r.o[0])+'.':'Not quite.'} ${esc(r.x)}</div>${report}`:''}
+   <div class="rdfoot">${done?`<button class="btn primary" data-act="${o.where==='drill'?'rdnext':'rdclose'}">${o.where==='drill'?ic('play')+'Next one':ic('check')+'Done'}</button>${o.where==='drill'?`<button class="btn" data-act="rdclose">Stop</button>`:''}`
+     :o.where==='bed'||o.where==='pz'?`<button class="btn" data-act="rdskip">Skip and read the report</button>`:`<button class="btn" data-act="rdreveal">Show the answer</button>`}</div>
+  </div></div>`;
+}
+function readPick(i){
+  const o=S.read;if(!o||o.pick!=null)return;
+  o.pick=+i;const ok=o.pick===0,kind=READS[o.key].k;
+  sfx(ok?'right':'wrong');
+  if(o.where==='bed'){const p=curP();if(p&&p.id===o.pid){p.rd=p.rd||{};p.rd[o.c+o.k]=ok?'ok':'bad';if(ok)p.stab=Math.min(p.max,p.stab+1);else p.stab--;save()}}
+  else if(o.where==='pz'){const x=pzCtx();if(x){x.st.rd=x.st.rd||{};x.st.rd[o.c+o.k]=ok?'ok':'bad';x.st.rb=(x.st.rb||0)+(ok?60:-40);x.save()}}
+  achEvent('read',{ok,kind,key:o.key,where:o.where});
+  renderRead();
+}
+function readClose(skip){
+  const o=S.read;if(!o)return;
+  if(skip&&o.pick==null){
+    if(o.where==='bed'){const p=curP();if(p&&p.id===o.pid){p.rd=p.rd||{};p.rd[o.c+o.k]='skip';save()}}
+    else if(o.where==='pz'){const x=pzCtx();if(x){x.st.rd=x.st.rd||{};x.st.rd[o.c+o.k]='skip';x.save()}}
+  }
+  S.read=null;renderRead();
+  if(o.where==='bed'){const p=curP();if(p&&p.stab<=0&&p.phase!=='arrest')arrest(S.sel);save()}
+  render();
+}
+const READ_KEYS=Object.keys(READS);
+function drillNext(kind){
+  const pool=READ_KEYS.filter(k=>!kind||READS[k].k===kind),last=S.read&&S.read.key;
+  let key=pick(pool);if(pool.length>1)while(key===last)key=pick(pool);
+  S.ui.drill=kind||'';openRead('drill',null,null,key);
+}
+
+/* ===================== ACHIEVEMENTS ===================== */
+// Kept outside the career slots, so they follow the player across careers and modes
+const AKEY='zebra-shift.ach';
+let ACH={u:{},c:{}};try{const a=JSON.parse(localStorage.getItem(AKEY)||'null');if(a&&a.u)ACH={u:a.u,c:a.c||{}}}catch(e){}
+const saveAch=()=>{try{localStorage.setItem(AKEY,JSON.stringify(ACH))}catch(e){}};
+// k: r regular · f fun · s secret (hidden until earned). c/g: a counter and the goal for a progress bar
+const ACHS=[
+ {id:'dx1',k:'r',ic:'check',n:'First diagnosis',d:'Diagnose your first patient on a shift.',c:'dx',g:1},
+ {id:'dx50',k:'r',ic:'clipboard',n:'Half a hundred',d:'Diagnose 50 patients on shifts.',c:'dx',g:50},
+ {id:'dx250',k:'r',ic:'badge',n:'Department legend',d:'Diagnose 250 patients on shifts.',c:'dx',g:250},
+ {id:'zebra1',k:'r',ic:'search',n:'Zebra spotter',d:'Diagnose a Zebra or a Unicorn.',c:'zebras',g:1},
+ {id:'zebra10',k:'r',ic:'dna',n:'A herd of zebras',d:'Diagnose 10 Zebras or Unicorns.',c:'zebras',g:10},
+ {id:'unicorn',k:'r',ic:'crown',n:'Unicorn hunter',d:'Diagnose a Unicorn.',c:'unicorns',g:1},
+ {id:'book25',k:'r',ic:'book',n:'Well read',d:'Have 25 diseases in one Casebook.',c:'book',g:25},
+ {id:'book50',k:'r',ic:'book',n:'Walking textbook',d:'Have 50 diseases in one Casebook.',c:'book',g:50},
+ {id:'book100',k:'r',ic:'book',n:'Encyclopaedic',d:'Have 100 diseases in one Casebook.',c:'book',g:100},
+ {id:'common',k:'r',ic:'apple',n:'Bread and butter',d:'Diagnose every Common disease at least once in one career.'},
+ {id:'shift3',k:'r',ic:'clock',n:'Survived the night',d:'Reach shift 3 in a run.'},
+ {id:'shift5',k:'r',ic:'clock',n:'Graveyard regular',d:'Reach shift 5 in a run.'},
+ {id:'shift8',k:'r',ic:'shield',n:'Iron registrar',d:'Reach shift 8 in a run.'},
+ {id:'score10k',k:'r',ic:'coin',n:'Five figures',d:'Score 10,000 points in one run.'},
+ {id:'score50k',k:'r',ic:'coin',n:'Big numbers',d:'Score 50,000 points in one run.'},
+ {id:'clean',k:'r',ic:'shield',n:'Untouchable',d:'Finish a shift with no deaths and no cardiac arrests.'},
+ {id:'rosc1',k:'r',ic:'heart',n:'Lazarus',d:'Get a pulse back with CPR.',c:'rosc',g:1},
+ {id:'rosc10',k:'r',ic:'defib',n:'Code team captain',d:'Get a pulse back 10 times.',c:'rosc',g:10},
+ {id:'em1',k:'r',ic:'siren',n:'First responder',d:'Win an emergency.',c:'ems',g:1},
+ {id:'em10',k:'r',ic:'rrt',n:'Resus room regular',d:'Win 10 emergencies.',c:'ems',g:10},
+ {id:'procs',k:'r',ic:'scalpel',n:'Steady hands',d:'Complete 20 bedside procedures.',c:'procs',g:20},
+ {id:'caught',k:'r',ic:'eye',n:'Not on my watch',d:'Catch a trick case before it turns.',c:'caught',g:1},
+ {id:'cameo5',k:'r',ic:'star',n:'Star-studded',d:'Diagnose 5 different special guests.',c:'cameos',g:5},
+ {id:'read1',k:'r',ic:'monitor',n:'First read',d:'Read an ECG, X-ray, blood gas or slide correctly.',c:'reads',g:1},
+ {id:'read25',k:'r',ic:'imaging',n:'Radiology would be proud',d:'Read 25 pictures correctly.',c:'reads',g:25},
+ {id:'ecg10',k:'r',ic:'monitor',n:'ECG nerd',d:'Read 10 ECGs correctly.',c:'read_ecg',g:10},
+ {id:'eagle',k:'r',ic:'eye',n:'Eagle eye',d:'Read 5 pictures in a row without a mistake.',c:'readBest',g:5},
+ {id:'allkinds',k:'r',ic:'microbe',n:'Full work-up',d:'Read at least one ECG, blood gas, X-ray and slide correctly.'},
+ {id:'daily1',k:'r',ic:'star',n:'Daily habit',d:'Solve a Case of the day.',c:'dailyWins',g:1},
+ {id:'streak7',k:'r',ic:'flame',n:'Seven-day streak',d:'Solve the Case of the day seven days running.',c:'streak',g:7},
+ {id:'textbook',k:'r',ic:'check',n:'Textbook',d:'Solve the Case of the day with no wrong guesses and 3 clues or fewer.'},
+ {id:'chalsent',k:'r',ic:'send',n:'Challenger',d:'Send a friend a challenge.'},
+ {id:'champ',k:'r',ic:'trophy',n:'Champion',d:'Win a challenge against a friend.',c:'chalWins',g:1},
+ {id:'author',k:'r',ic:'doc',n:'Author',d:'Write your own case.',c:'cases',g:1},
+ {id:'publish',k:'r',ic:'send',n:'Published',d:'Share a case you wrote.'},
+ {id:'friend',k:'r',ic:'people',n:'On call together',d:'Add a friend online.'},
+ {id:'pull10',k:'r',ic:'cabinet',n:'Requisition form',d:'Requisition 10 items.',c:'pulls',g:10},
+ {id:'legend',k:'r',ic:'crown',n:'Legendary',d:'Pull a Legendary item.'},
+ {id:'chat20',k:'r',ic:'chat',n:'Break room regular',d:'Send 20 messages in the Staff Room.',c:'chats',g:20},
+ {id:'coffee',k:'r',ic:'coffee',n:'Coffee run',d:'Bring a co-worker a coffee.',c:'gifts',g:1},
+ {id:'remind',k:'r',ic:'pager',n:'Punctual',d:'Set a daily reminder.'},
+ {id:'share',k:'r',ic:'copy',n:'Show-off',d:'Share a picture of one of your results.'},
+ // fun
+ {id:'hoofbeats',k:'f',ic:'search',n:'Hoofbeats',d:'Guess a Zebra or Unicorn for a patient with a Common disease. Think horses.'},
+ {id:'firstloss',k:'f',ic:'x',n:'We did everything we could',d:'Lose your first patient.'},
+ {id:'revolving',k:'f',ic:'swap',n:'Revolving door',d:'Send three patients home unsafely in one shift.'},
+ {id:'badday',k:'f',ic:'alert',n:'Rough first day',d:'Have a run end during shift 1.'},
+ {id:'stubborn',k:'f',ic:'clipboard',n:'A very broad differential',d:'Get a diagnosis right after four or more wrong guesses.'},
+ {id:'gracious',k:'f',ic:'people',n:'Gracious loser',d:'Lose a challenge.'},
+ {id:'silence',k:'f',ic:'musicoff',n:'Silence of the labs',d:'Turn off the lobby music.'},
+ {id:'caffeine',k:'f',ic:'coffee',n:'Running on caffeine',d:'Bring co-workers 10 coffees.',c:'gifts',g:10},
+ {id:'misread3',k:'f',ic:'eye',n:'Optometry referral',d:'Misread three pictures in a row.',c:'missRun',g:3},
+ // secret
+ {id:'hollywood',k:'s',ic:'bolt',n:'Hollywood defib',d:'Shock a flatline. It never works outside the movies.'},
+ {id:'poke',k:'s',ic:'dna',n:'Stop poking the zebra',d:'Tap the zebra logo ten times.'},
+ {id:'psychic',k:'s',ic:'eye',n:'Psychic',d:'Solve the Case of the day without ordering a single clue.'},
+ {id:'doorway',k:'s',ic:'eye',n:'From the doorway',d:'Diagnose a shift patient without ordering anything or guessing wrong.'},
+ {id:'nightowl',k:'s',ic:'clock',n:'Night owl',d:'Finish a shift between midnight and 5 am, your time.'},
+ {id:'kiss',k:'s',ic:'heart',n:'The kissing disease',d:'Diagnose infectious mononucleosis.'},
+ {id:'honey',k:'s',ic:'drop',n:'Sweet and deadly',d:'Diagnose mad honey poisoning.'},
+ {id:'choc',k:'s',ic:'drop',n:'Chocolate blood',d:'Diagnose methaemoglobinaemia.'},
+ {id:'vampire',k:'s',ic:'flame',n:'Creature of the night',d:'Diagnose acute intermittent porphyria.'},
+ {id:'lupus',k:'s',ic:'cane',n:'It is never lupus',d:'Talk to Dr. Greg Hoof in the Staff Room.'}
+];
+const ACH_BY=Object.fromEntries(ACHS.map(a=>[a.id,a]));
+const ACH_DX={'Infectious Mononucleosis':'kiss','Grayanotoxin (Mad Honey) Poisoning':'honey','Methaemoglobinaemia':'choc','Acute Intermittent Porphyria':'vampire'};
+const achCount=()=>Object.keys(ACH.u).filter(id=>ACH_BY[id]).length;
+let achQ=[],achT=null;
+function achGive(id){
+  if(ACH.u[id]||!ACH_BY[id])return;
+  ACH.u[id]=Date.now();saveAch();achQ.push(ACH_BY[id]);if(!achT)achShowNext();
+  if(window.ZSOnline&&ZSOnline.onAch)ZSOnline.onAch(achCount());
+}
+function achShowNext(){
+  let el=document.getElementById('achtoast');if(!el){el=document.createElement('div');el.id='achtoast';el.setAttribute('role','status');document.body.appendChild(el)}
+  const a=achQ.shift();if(!a){el.className='';achT=null;return}
+  el.innerHTML=`<span class="ai">${ic(a.ic)}</span><span><small>${a.k==='s'?'Secret achievement':'Achievement unlocked'}</small><b>${esc(a.n)}</b></span>`;
+  el.className='on '+a.k;sfx('jingle',a.k==='s'?3:2);
+  achT=setTimeout(()=>{el.className='';achT=setTimeout(achShowNext,350)},3200);
+}
+const achSet=(name,v)=>{ACH.c[name]=Math.max(ACH.c[name]||0,v)};
+function achCheck(){for(const a of ACHS)if(a.c&&(ACH.c[a.c]||0)>=a.g)achGive(a.id);saveAch()}
+function achBook(){
+  if(!S.meta)return;const found=Object.keys(S.meta.book).filter(n=>IDX[n]!=null);
+  achSet('book',found.length);
+  if(D.filter(d=>d.t===0).every(d=>S.meta.book[d.n]))achGive('common');
+}
+function achEvent(type,x={}){
+  try{
+    const c=ACH.c,bump=(k,n=1)=>{c[k]=(c[k]||0)+n};
+    switch(type){
+      case'dx':{bump('dx');const d=x.d,p=x.p;if(d.t>=3)bump('zebras');if(d.t===4)bump('unicorns');
+        if(p.cam){c.camSeen=c.camSeen||'';if(!c.camSeen.split(',').includes(p.cam)){c.camSeen+=(c.camSeen?',':'')+p.cam;bump('cameos')}}
+        if(p.caught)bump('caught');if(!p.ordered&&!x.wrong)achGive('doorway');if(x.wrong>=4)achGive('stubborn');if(ACH_DX[d.n])achGive(ACH_DX[d.n]);achBook();break}
+      case'wrong':if(x.d.t===0&&x.g.t>=3)achGive('hoofbeats');break;
+      case'dispo':if(x.unsafe&&S.run){S.run.unsafe=(S.run.unsafe||0)+1;if(S.run.unsafe>=3)achGive('revolving')}break;
+      case'death':achGive('firstloss');break;
+      case'rosc':bump('rosc');break;
+      case'hollywood':achGive('hollywood');break;
+      case'em':if(x.ok)bump('ems');break;
+      case'proc':if(x.ok)bump('procs');break;
+      case'shiftend':{const r=x.r;if(!r.deaths&&!r.crashes)achGive('clean');const h=new Date().getHours();if(h<5)achGive('nightowl');if(S.run)S.run.unsafe=0;break}
+      case'reach':if(x.shift>=3)achGive('shift3');if(x.shift>=5)achGive('shift5');if(x.shift>=8)achGive('shift8');break;
+      case'runend':if(x.shift===1)achGive('badday');if(x.score>=1e4)achGive('score10k');if(x.score>=5e4)achGive('score50k');break;
+      case'pull':bump('pulls',x.n);if(x.best===3)achGive('legend');break;
+      case'chat':bump('chats');if(x.id==='hoof')achGive('lupus');break;
+      case'gift':bump('gifts');break;
+      case'music':if(!x.on)achGive('silence');break;
+      case'poke':bump('pokes');if(c.pokes>=10)achGive('poke');break;
+      case'daily':if(x.won){bump('dailyWins');achSet('streak',x.streak);if(!x.clues)achGive('psychic');if(!x.wrong&&x.clues<=3)achGive('textbook')}break;
+      case'read':if(x.where==='study')break;
+        if(x.ok){bump('reads');bump('read_'+x.kind);c.readRun=(c.readRun||0)+1;c.missRun=0;achSet('readBest',c.readRun);if(['ecg','abg','xr','mic'].every(k=>c['read_'+k]))achGive('allkinds')}
+        else{c.readRun=0;bump('missRun')}break;
+      case'chal':if(x.res==='won')bump('chalWins');if(x.res==='lost')achGive('gracious');break;
+      case'chalsent':achGive('chalsent');break;
+      case'casewrite':bump('cases');break;
+      case'caseshare':achGive('publish');break;
+      case'friend':achGive('friend');break;
+      case'remind':achGive('remind');break;
+      case'share':achGive('share');break;
+    }
+    achCheck();
+  }catch(e){console.error(e)}
+}
+function renderAch(){
+  const f=S.ui.achf||'all',got=achCount();
+  const list=ACHS.filter(a=>f==='all'||a.k===f[0]);
+  const card=a=>{const on=ACH.u[a.id],hide=a.k==='s'&&!on,prog=a.c&&!on?Math.min(1,(ACH.c[a.c]||0)/a.g):null;
+    return`<article class="achcard ${on?'on':''} k${a.k}"><span class="ai">${ic(hide?'help':a.ic)}</span><div><b>${hide?'Secret achievement':esc(a.n)}</b><small>${hide?'Keep playing to find out.':esc(a.d)}</small>
+      ${prog!=null?`<span class="achbar"><i style="width:${Math.round(prog*100)}%"></i></span><small class="mono">${fmt(Math.min(ACH.c[a.c]||0,a.g))}/${fmt(a.g)}</small>`:''}
+      ${on?`<small class="achwhen">${new Date(on).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})} <button class="linkbtn" data-act="cardshare" data-card="ach:${a.id}">Share</button></small>`:''}</div></article>`};
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${got} of ${ACHS.length} unlocked</span><h1>Achievements</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+   <div class="achbar big"><i style="width:${Math.round(got/ACHS.length*100)}%"></i></div>
+   <nav class="tabs" style="margin:12px 0;display:inline-flex" aria-label="Filter">${[['all','All'],['reg','Regular'],['fun','Fun'],['sec','Secret']].map(([k,l])=>`<button data-achf="${k}" aria-pressed="${f===k}">${l}</button>`).join('')}</nav>
+   <div class="achgrid">${list.map(card).join('')}</div>`;
+}
+
+/* ===================== SHARE CARDS ===================== */
+// Results become a portrait image (1080×1350, the size social apps like) drawn on a canvas
+const svgImg=svg=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);
+  im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '))});
+function cardSpec(kind){
+  const doc=STORE.active!=null&&STORE.slots[STORE.active]?normDoc(STORE.slots[STORE.active].doctor):null;
+  const base={doc,who:doc?'Dr. '+fullName(doc):''};
+  if(kind==='daily'){const c=dailyCase(todayStr()),st=dailyState(c.date);return{...base,label:'Case of the day · '+dateLabel(c.date),head:st.won?'Solved':'Missed',big:st.won?fmt(st.score)+' pts':'',
+    quote:D[c.di].cc,tiles:st.guesses.map(g=>g.ok?'ok':g.sys?'sys':'no'),stats:[['Clues used',dailyClues(st)],['Wrong guesses',dailyWrong(st)],['Streak',dailyStreak()+' day'+(dailyStreak()===1?'':'s')]],
+    text:dailyShare(c,st),file:'case-of-the-day'}}
+  if(kind==='chal'){const rec=CHAL[S.ui.ch],mine=chalScores(rec),o=rec.from||rec.reply,mt=sum(mine),ot=o?sum(o.sc):null;
+    return{...base,label:'Friend challenge · 5 patients',head:ot==null?'Can you beat this?':mt>ot?'I won':mt<ot?'So close':'A draw',big:ot==null?fmt(mt)+' pts':fmt(mt)+' vs '+fmt(ot),
+      rows:rec.cases.map((c,i)=>[`Patient ${i+1}`,fmt(mine[i])+(o?' · '+fmt(o.sc[i]||0):'')]),text:`Zebra Shift challenge: ${fmt(mt)} points${ot!=null?' vs '+fmt(ot):''}`,file:'challenge'}}
+  if(kind==='run'){const r=S.run;return{...base,label:'Night shift report',head:r.newBest?'New best score':'Shift over',big:fmt(r.score)+' pts',
+    stats:[['Shifts survived',Math.max(0,r.shift-1)],['Patients treated',r.treated],['Rarest diagnosis',r.rarestName||'—'],['Emergencies won',r.emWins||0]],text:`I scored ${fmt(r.score)} on a Zebra Shift night in the ER.`,file:'shift-report'}}
+  if(kind.startsWith('ach:')){const a=ACH_BY[kind.slice(4)];return{...base,label:a.k==='s'?'Secret achievement':'Achievement unlocked',head:a.n,sub:a.d,icon:a.ic,text:`Achievement unlocked in Zebra Shift: ${a.n}`,file:'achievement'}}
+  return null;
+}
+function cardWrap(g,text,x,y,maxW,lh,maxLines=4){
+  const words=String(text).split(' ');let line='',n=0;
+  for(const w of words){const t=line?line+' '+w:w;if(g.measureText(t).width>maxW&&line){g.fillText(line,x,y);y+=lh;line=w;if(++n>=maxLines-1){line=words.slice(words.indexOf(w)).join(' ');while(g.measureText(line+'…').width>maxW)line=line.slice(0,-1);g.fillText(line+(line.length<text.length?'…':''),x,y);return y+lh}}else line=t}
+  if(line){g.fillText(line,x,y);y+=lh}return y;
+}
+async function cardBlob(sp){
+  const W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  try{await Promise.race([Promise.all(['800 80px "Bricolage Grotesque"','700 34px "Atkinson Hyperlegible"','700 30px "JetBrains Mono"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))])}catch(e){}
+  const DF='"Bricolage Grotesque","Segoe UI",system-ui,sans-serif',BF='"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif',MF='"JetBrains Mono",ui-monospace,monospace';
+  const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#155A63');bg.addColorStop(1,'#0A2328');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  // faint icon pattern, like the game background
+  g.save();g.globalAlpha=.06;g.strokeStyle='#fff';g.lineWidth=5;for(let y=60;y<H;y+=180)for(let x=(y/180%2)*90;x<W;x+=180){g.beginPath();g.moveTo(x-18,y);g.lineTo(x+18,y);g.moveTo(x,y-18);g.lineTo(x,y+18);g.stroke()}g.restore();
+  // zebra stripes top and bottom
+  const stripes=y=>{g.save();g.beginPath();g.rect(0,y,W,28);g.clip();g.fillStyle='#F4F4F4';g.fillRect(0,y,W,28);g.fillStyle='#111';for(let x=-40;x<W+40;x+=40){g.beginPath();g.moveTo(x,y+28);g.lineTo(x+20,y+28);g.lineTo(x+48,y);g.lineTo(x+28,y);g.fill()}g.restore()};
+  stripes(0);stripes(H-28);
+  g.fillStyle='#fff';g.font=`800 64px ${DF}`;g.fillText('ZEBRA SHIFT',72,140);
+  g.fillStyle='#9FD6DC';g.font=`700 30px ${BF}`;g.fillText(sp.label.toUpperCase(),72,192);
+  if(sp.doc){const im=await svgImg(portrait(docLook(sp.doc),{label:'Doctor'}).replace('class="avatar"','width="200" height="200"'));
+    if(im){g.save();g.beginPath();g.arc(W-150,140,78,0,Math.PI*2);g.fillStyle='#E8EEED';g.fill();g.clip();g.drawImage(im,W-228,62,156,156);g.restore()}}
+  let y=330;
+  if(sp.icon){const im=await svgImg(`<svg viewBox="0 0 24 24" width="220" height="220" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[sp.icon]||''}</svg>`);
+    g.beginPath();g.arc(W/2,y+110,150,0,Math.PI*2);g.fillStyle='rgba(255,255,255,.1)';g.fill();if(im)g.drawImage(im,W/2-110,y,220,220);y+=320;
+    g.textAlign='center';g.fillStyle='#fff';g.font=`800 84px ${DF}`;y=cardWrap(g,sp.head,W/2,y+40,W-160,94,2);
+    g.fillStyle='#CFE7EA';g.font=`700 38px ${BF}`;y=cardWrap(g,sp.sub,W/2,y+20,W-200,52,4);g.textAlign='left';}
+  else{
+    g.fillStyle='#fff';g.font=`800 104px ${DF}`;y=cardWrap(g,sp.head,72,y,W-144,110,2);
+    if(sp.big){g.fillStyle='#7EE0A8';g.font=`800 92px ${MF}`;g.fillText(sp.big,72,y+30);y+=130}
+    if(sp.quote){g.fillStyle='rgba(255,255,255,.08)';const qy=y;g.fillRect(72,qy,W-144,10);g.fillStyle='#E7F3F4';g.font=`italic 700 40px ${BF}`;y=cardWrap(g,'“'+sp.quote+'”',96,qy+70,W-200,54,3)+10}
+    if(sp.tiles&&sp.tiles.length){const s=86;sp.tiles.forEach((t,i)=>{g.fillStyle=t==='ok'?'#3FB56C':t==='sys'?'#D9A92A':'#4C5A5E';g.beginPath();g.roundRect?g.roundRect(72+i*(s+18),y+10,s,s,16):g.rect(72+i*(s+18),y+10,s,s);g.fill()});y+=s+50}
+    for(const [l,v] of (sp.stats||sp.rows||[])){g.fillStyle='#9FD6DC';g.font=`700 34px ${BF}`;g.fillText(l,72,y+40);g.fillStyle='#fff';g.font=`700 36px ${MF}`;g.textAlign='right';
+      let vv=String(v);while(g.measureText(vv).width>520&&vv.length>4)vv=vv.slice(0,-2);g.fillText(vv===String(v)?vv:vv+'…',W-72,y+40);g.textAlign='left';
+      g.fillStyle='rgba(255,255,255,.12)';g.fillRect(72,y+62,W-144,2);y+=78}
+  }
+  g.fillStyle='#fff';g.font=`700 34px ${BF}`;g.fillText(sp.who||'An ER roguelike for clinicians',72,H-126);
+  g.fillStyle='#9FD6DC';g.font=`700 30px ${MF}`;g.fillText(APP_URL.replace(/^https?:\/\//,'').replace(/\/$/,''),72,H-78);
+  return new Promise(r=>cv.toBlob(r,'image/png'));
+}
+let cardURL=null;
+async function shareCard(kind){
+  const sp=cardSpec(kind);if(!sp)return;
+  toast('Making the picture…');
+  const blob=await cardBlob(sp);if(!blob){toast('The picture could not be made on this device.');return}
+  achEvent('share');
+  const file=new File([blob],`zebra-shift-${sp.file}.png`,{type:'image/png'});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:sp.text+'\n'+APP_URL});return}}
+  catch(e){if(e&&e.name==='AbortError')return}
+  // No share sheet (desktop, or inside another app): show the picture to save or copy
+  if(cardURL)URL.revokeObjectURL(cardURL);cardURL=URL.createObjectURL(blob);
+  const el=rdHost();
+  el.innerHTML=`<div class="emov minov" role="dialog" aria-modal="true" aria-label="Share picture"><div class="panel minicard cardov">
+    <div class="minihead">${ic('send')}<div><span class="label">Share</span><h2>Your picture</h2></div><button class="iconbtn rdx" data-act="cardclose" aria-label="Close">${ic('x')}</button></div>
+    <img src="${cardURL}" alt="${esc(sp.head)}"><p class="hint">On a phone, press and hold the picture to save or share it.</p>
+    <div class="rowbtns"><a class="btn primary" href="${cardURL}" download="${file.name}">${ic('copy')}Download</a><button class="btn" data-act="cardcopy">${ic('copy')}Copy text</button><button class="btn" data-act="cardclose">Close</button></div></div></div>`;
+  el.dataset.text=sp.text+'\n'+APP_URL;
+}
+
+/* ---- Daily reminder: a phone notification through the online service, or a repeating calendar event ---- */
+const REMKEY='zebra-shift.remind';
+let REM={};try{REM=JSON.parse(localStorage.getItem(REMKEY)||'{}')||{}}catch(e){REM={}}
+const saveRem=()=>{try{localStorage.setItem(REMKEY,JSON.stringify(REM))}catch(e){}};
+const remHour=()=>{const s=document.getElementById('remhour');const h=s?+s.value:REM.hour;return Number.isInteger(h)?h:19};
+const hourLabel=h=>new Date(2000,0,1,h).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+function remNextStart(h){const t=new Date();t.setHours(h,0,0,0);if(t<=new Date())t.setDate(t.getDate()+1);return t}
+const icsStamp=t=>t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0')+'T'+String(t.getHours()).padStart(2,'0')+'0000';
+function remIcs(){
+  const h=remHour(),t=remNextStart(h),now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  // a floating local time, so the reminder follows the phone's own time zone
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Zebra Shift//Daily reminder//EN','BEGIN:VEVENT','UID:zebra-daily-'+Date.now()+'@zebra-shift','DTSTAMP:'+now,'DTSTART:'+icsStamp(t),'DURATION:PT10M','RRULE:FREQ=DAILY',
+    'SUMMARY:Zebra Shift: Case of the day','DESCRIPTION:A new patient is waiting. '+APP_URL,'URL:'+APP_URL,'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Case of the day','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='zebra-shift-reminder.ics';document.body.appendChild(a);a.click();a.remove();
+  REM.hour=h;REM.cal=true;saveRem();achEvent('remind');toast('Open the downloaded file to add the reminder to your calendar');
+}
+function remGoogle(){
+  const h=remHour(),t=remNextStart(h),e=new Date(t.getTime()+6e5);REM.hour=h;REM.cal=true;saveRem();achEvent('remind');
+  return'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Zebra Shift: Case of the day')+'&details='+encodeURIComponent('A new patient is waiting. '+APP_URL)+'&recur='+encodeURIComponent('RRULE:FREQ=DAILY')+'&dates='+icsStamp(t)+'/'+icsStamp(e);
+}
+function renderRemind(){
+  const h=REM.hour==null?19:REM.hour,p=window.ZSOnline&&ZSOnline.pushInfo?ZSOnline.pushInfo():null;
+  let push;
+  if(!p)push=`<p class="hint">Phone notifications work in the app version of Zebra Shift. Here, use a calendar reminder.</p>`;
+  else if(!p.supported)push=`<p class="hint">${p.ios?'On iPhone and iPad, notifications only work once Zebra Shift is on your Home Screen: tap Share, then Add to Home Screen, and open it from there.':'This browser cannot show notifications from web apps. Use a calendar reminder instead.'}</p>`;
+  else if(!p.signedIn)push=`<p class="hint">Sign in under Friends &amp; leaderboards first, so the reminder knows where to find you.</p><button class="btn" data-act="online">${ic('people')}Sign in</button>`;
+  else if(p.denied)push=`<p class="hint">Notifications are blocked for Zebra Shift. Allow them in your phone or browser settings, then come back.</p>`;
+  else if(p.on)push=`<p><b>${ic('check')} On.</b> You get a reminder at about ${hourLabel(p.hour)} each day, unless you have already played.</p><div class="rowbtns"><button class="btn" data-act="remon">${ic('pager')}Change the time</button><button class="btn danger" data-act="remoff">Turn off</button></div>`;
+  else push=`<p class="hint">A notification on this device when the new Case of the day is ready. It skips days you have already played.</p><button class="btn primary" data-act="remon"${p.busy?' disabled':''}>${ic('pager')}${p.busy?'Turning on…':'Turn on notifications'}</button>`;
+  return`<div class="pagehead" style="margin-top:10px"><div><span class="label">Never miss a patient</span><h1>Daily reminder</h1></div><button class="btn" data-menu="main">Back</button></div>
+   <section class="panel chalcard remcard" style="margin-top:14px"><label class="edf"><span>Remind me at</span></label>
+    <div class="gform" style="margin-top:4px"><select id="remhour" aria-label="Reminder time">${Array.from({length:24},(_,i)=>`<option value="${i}" ${i===h?'selected':''}>${hourLabel(i)}</option>`).join('')}</select></div>
+    <h3 style="margin-top:16px">Notification</h3>${push}
+    <h3 style="margin-top:16px">Calendar reminder</h3><p class="hint">Works on any phone or computer: a repeating event with an alert.</p>
+    <div class="rowbtns" style="margin-top:8px"><button class="btn" data-act="remgcal">${ic('clock')}Google Calendar</button><button class="btn" data-act="remics">${ic('clock')}Apple or Outlook calendar</button></div></section>`;
+}
+
+function menuGrid(){
+  const inb=window.ZSOnline&&ZSOnline.inbox?ZSOnline.inbox().length:0;
+  return`<div class="menugrid">
+   <button class="btn" data-act="chal">${ic('trophy')}Challenge a friend<small>${inb?`<span class="dot">${inb}</span> waiting for you`:'Same patients, best score'}</small></button>
+   <button class="btn" data-act="cases">${ic('doc')}Write a case<small>${CASES.mine.length?CASES.mine.length+' written':'Share it with friends'}</small></button>
+   <button class="btn" data-act="reads">${ic('monitor')}Reading room<small>ECGs, X-rays, gases, slides</small></button>
+   <button class="btn" data-act="ach">${ic('badge')}Achievements<small>${achCount()} of ${ACHS.length}</small></button>
+   <button class="btn" data-menu="remind">${ic('pager')}Daily reminder<small>${REM.on||REM.cal?'Set':'Off'}</small></button></div>`;
+}
+async function bootHash(){
+  const h=location.hash||'';let done=false;
+  if(/^#(c|k)=/.test(h))done=await openCode(h,false);
+  else if(h==='#daily'){S.screen='daily';render();done=true}
+  if(done)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 }
 
 /* ---- Menu, creator ---- */
@@ -3747,6 +4710,7 @@ function renderMenu(){
   const dStatus=dst&&dst.done?(dst.won?`Solved · ${fmt(dst.score)} pts`:'Missed today'):'New patient today';
   if(v==='load')return renderSlots();
   if(v==='transfer')return renderTransfer();
+  if(v==='remind')return renderRemind();
   if(v==='help')return`<div class="panel center"><span class="label">How to play</span><h1>A night in the ER</h1>
    <ol class="helpl" style="margin-top:14px">
     <li>Patients arrive through the shift and fill your bays. The last one each shift is a Grand Rounds case, always rarer.</li>
@@ -3761,6 +4725,10 @@ function renderMenu(){
     <li>Pick a specialty: specialists see more of their own patients and handle them more easily. Generalists get a little help with everyone.</li>
     <li>Try the Case of the day from the main menu: one patient, the same for everyone, scored on how few clues you need.</li>
     <li>Special guests sometimes arrive by ambulance. They score 25% more.</li>
+    <li>Some results arrive as a picture: a 12-lead ECG, a blood gas, an X-ray or a slide. Read it yourself before the report appears. A right read steadies the patient; a misread costs a little. Practise any time in the Reading room.</li>
+    <li>Challenge a friend: you both get the same five patients, and the best total wins. Send it as a link, or straight to an online friend.</li>
+    <li>Write your own case, add pictures to read, and share it as a link. Friends play it like the Case of the day.</li>
+    <li>Achievements come in three kinds: regular, fun and secret. Secret ones stay hidden until you stumble on them.</li>
    </ol>${DISCLAIMER}<p style="margin-top:16px"><button class="btn" data-menu="main">Back</button></p></div>`;
   return`<div class="menu">
    <div><p class="label">An ER roguelike</p><h1 class="logo">Zebra<br><span>Shift</span></h1>
@@ -3775,7 +4743,7 @@ function renderMenu(){
      ${window.ZSOnline?`<button class="btn" data-act="online">${ic('people')}Friends &amp; leaderboards<small>${esc(ZSOnline.label())}</small></button>`:''}
      <button class="btn" data-menu="help">${ic('help')}How to play</button>
      <button class="btn" data-act="music" aria-pressed="${AUD.pref.music}">${ic(AUD.pref.music?'music':'musicoff')}Lobby music<small>${AUD.pref.music?'On':'Off'}</small></button>
-    </div>${DISCLAIMER}</div>
+    </div>${menuGrid()}${DISCLAIMER}</div>
    <div><section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section>${MENU_ART}${act?`<div class="panel slotcard" style="margin-top:14px">${slotHeader(act,STORE.active)}</div>`:''}</div></div>`;
 }
 function slotHeader(s,i){
@@ -3854,6 +4822,8 @@ function renderInner(refocus){
   if(S.screen==='menu'){$('#main').innerHTML=renderMenu();$('#emer').innerHTML='';return}
   if(S.screen==='create'){$('#main').innerHTML=renderCreate();$('#emer').innerHTML='';return}
   if(S.screen==='daily'){setHudH();$('#main').innerHTML=renderDaily();$('#emer').innerHTML='';return}
+  const XS={chal:renderChal,custom:renderCustom,cases:renderCases,editor:renderEditor,reads:renderReads,ach:renderAch};
+  if(XS[S.screen]){setHudH();$('#main').innerHTML=XS[S.screen]();$('#emer').innerHTML='';return}
   if(S.screen==='online'&&window.ZSOnline){setHudH();$('#main').innerHTML=ZSOnline.render();$('#emer').innerHTML='';return}
   if(!TABS[S.tab])S.tab='shift';
   if(!runValid(S.run)){startRun();fixRun(S.run);save()}
@@ -3875,11 +4845,11 @@ let acSel=0,acItems=[];
 const NAMES=D.map(d=>({n:d.n,al:d.al||[]})).sort((a,b)=>a.n.localeCompare(b.n));
 function acUpdate(){
   const inp=$('#dxin'),list=$('#dxlist');if(!inp||!list)return;
-  const q=inp.value.trim().toLowerCase(),p=S.screen==='daily'?dailyAc():curP();if(!p)return;
+  const q=inp.value.trim().toLowerCase(),p=pzMode()?pzAc():curP();if(!p)return;
   if(!q){list.hidden=true;inp.setAttribute('aria-expanded','false');return}
   // Differential Engine Lv3+ puts the patient's organ system first; Lv5 offers only that system
-  const eng=S.screen==='daily'?0:mods().engine,sys=D[p.d].s,inSys=n=>D[IDX[n]].s===sys;
-  acItems=NAMES.filter(x=>!p.guesses.some(g=>g.n===x.n)&&(eng<2||inSys(x.n))).map(x=>{
+  const eng=pzMode()?0:mods().engine,sys=eng?D[p.d].s:null,inSys=n=>IDX[n]!=null&&D[IDX[n]].s===sys;
+  acItems=(pzMode()?pzNames():NAMES).filter(x=>!p.guesses.some(g=>g.n===x.n)&&(eng<2||inSys(x.n))).map(x=>{
     if(x.n.toLowerCase().includes(q))return{n:x.n,via:''};
     const a=x.al.find(a=>a.toLowerCase().includes(q));return a?{n:x.n,via:a}:null;
   }).filter(Boolean);
@@ -3893,11 +4863,11 @@ function acSubmit(){
   const inp=$('#dxin');if(!inp)return;
   const q=inp.value.trim().toLowerCase();
   let name=null;
-  const exact=NAMES.find(x=>x.n.toLowerCase()===q||x.al.some(a=>a.toLowerCase()===q));
+  const exact=(pzMode()?pzNames():NAMES).find(x=>x.n.toLowerCase()===q||x.al.some(a=>a.toLowerCase()===q));
   if(acItems.length&&!$('#dxlist').hidden)name=acItems[acSel].n;
   else if(exact)name=exact.n;
   if(!name){toast('Pick a diagnosis from the list');return}
-  acSel=0;(S.screen==='daily'?dailyGuess:guess)(name);
+  acSel=0;(pzMode()?pzGuess:guess)(name);
 }
 
 /* ===================== EVENTS ===================== */
@@ -3927,11 +4897,24 @@ document.addEventListener('click',e=>{
   if(ds.dispo){dispo(ds.dispo);return}
   if(ds.proc){if(ds.pctx==='em')openMini(ds.proc,{kind:'em'});else if(S.sel!=null)openMini(ds.proc,{kind:'bed',bed:S.sel});return}
   if(ds.tool){cvcTool(ds.tool);return}
-  if(ds.cpr){const c=S.cpr;if(c&&c.stage==='check'&&performance.now()>=(c.unlock||0)){if(ds.cpr==='shock'){sfx('charge');setTimeout(()=>sfx('zap'),1050)}else sfx('push');c.choice=ds.cpr;c.cycle=2;c.stage='cpr';c.t=0;c.taps=[];renderCPR()}return}
+  if(ds.cpr){const c=S.cpr;if(c&&c.stage==='check'&&performance.now()>=(c.unlock||0)){if(ds.cpr==='shock'){const cp=S.run.beds[c.bed];if(cp&&cp.rhythm==='asystole')achEvent('hollywood');sfx('charge');setTimeout(()=>sfx('zap'),1050)}else sfx('push');c.choice=ds.cpr;c.cycle=2;c.stage='cpr';c.t=0;c.taps=[];renderCPR()}return}
   if(ds.buy){buyUpg(ds.buy);return}
   if(ds.ord){order(ds.ord);return}
-  if(ds.ac){acSel=0;(S.screen==='daily'?dailyGuess:guess)(ds.ac);return}
-  if(ds.dord){dailyOrder(ds.dord);return}
+  if(ds.ac){acSel=0;(pzMode()?pzGuess:guess)(ds.ac);return}
+  if(ds.dord){pzOrder(ds.dord);return}
+  if(ds.read){openRead(pzMode()?'pz':'bed',ds.read[0],+ds.read.slice(1));return}
+  if(ds.study){openRead('study',null,null,ds.study);return}
+  if(ds.rdpick!=null&&S.read){readPick(ds.rdpick);return}
+  if(ds.drill){drillNext(ds.drill==='any'?'':ds.drill);return}
+  if(ds.achf){S.ui.achf=ds.achf;render();return}
+  if(ds.chopen){S.ui.ch=ds.chopen;S.ui.linkShow=null;render();window.scrollTo({top:0});return}
+  if(ds.chalto){if(window.ZSOnline&&CHAL[S.ui.ch])ZSOnline.sendChallenge(ds.chalto,CHAL[S.ui.ch]);return}
+  if(ds.chalin){if(window.ZSOnline)ZSOnline.playChallenge(ds.chalin);return}
+  if(ds.cplay){S.ui.cc=ds.cplay;S.screen='custom';render();window.scrollTo({top:0});return}
+  if(ds.cedit){const c=caseFind(ds.cedit);if(c){S.ui.ed=caseToDraft(c);S.screen='editor';render();window.scrollTo({top:0})}return}
+  if(ds.cshare){caseShare(ds.cshare);return}
+  if(ds.cdel){if(S.ui.cdel===ds.cdel){CASES.mine=CASES.mine.filter(c=>c.id!==ds.cdel);CASES.got=CASES.got.filter(c=>c.id!==ds.cdel);delete CASES.play[ds.cdel];saveCases();S.ui.cdel=null;toast('Case deleted')}else S.ui.cdel=ds.cdel;render();return}
+  if(ds.edrdrm!=null&&S.ui.ed){S.ui.ed.rdk.splice(+ds.edrdrm,1);render();return}
   if(ds.tx!==undefined){const p=curP();if(p)treat(p.tx[+ds.tx]);return}
   if(ds.perk){takePerk(ds.perk);return}
   if(ds.pull){pull(+ds.pull);return}
@@ -3954,6 +4937,33 @@ document.addEventListener('click',e=>{
     case'aidebrief':aiDebrief();break;
     case'daily':S.screen='daily';render();window.scrollTo({top:0});break;
     case'online':S.screen='online';render();window.scrollTo({top:0});break;
+    case'rdclose':readClose(false);break;
+    case'rdskip':readClose(true);break;
+    case'rdzoom':{const z=document.querySelector('#readov .rdscroll');if(z){const on=z.classList.toggle('zoom');b.innerHTML=ic('search')+(on?'Fit to screen':'Zoom in')}break}
+    case'rdreveal':if(S.read){S.read.pick=-1;renderRead()}break;
+    case'rdnext':drillNext(S.ui.drill);break;
+    case'cardshare':shareCard(ds.card);break;
+    case'cardclose':rdHost().innerHTML='';break;
+    case'cardcopy':{const t=rdHost().dataset.text||'';try{navigator.clipboard.writeText(t).then(()=>toast('Copied'),()=>toast('Could not copy'))}catch(err){toast('Could not copy')}break}
+    case'chal':S.screen='chal';S.ui.ch=null;S.ui.linkShow=null;if(window.ZSOnline&&ZSOnline.refreshChallenges)ZSOnline.refreshChallenges();render();window.scrollTo({top:0});break;
+    case'chalhome':S.ui.ch=null;S.ui.linkShow=null;render();window.scrollTo({top:0});break;
+    case'chalnew':S.ui.ch=chalNew();S.ui.linkShow=null;S.screen='chal';render();window.scrollTo({top:0});break;
+    case'chalstart':{const rec=CHAL[S.ui.ch];if(rec){rec.started=true;saveChal();render();window.scrollTo({top:0})}break}
+    case'chalnext':chalNext();break;
+    case'chalshare':chalShare();break;
+    case'cases':S.screen='cases';S.ui.linkShow=null;S.ui.cdel=null;render();window.scrollTo({top:0});break;
+    case'casenew':S.ui.ed=blankDraft();S.screen='editor';render();window.scrollTo({top:0});break;
+    case'caseretry':delete CASES.play[S.ui.cc];saveCases();render();window.scrollTo({top:0});break;
+    case'edsave':caseSave(false);break;
+    case'edplay':caseSave(true);break;
+    case'edrdadd':{const sl=$('#edrdsel');if(sl&&S.ui.ed&&S.ui.ed.rdk.length<4&&!S.ui.ed.rdk.includes(sl.value)){S.ui.ed.rdk.push(sl.value);render()}break}
+    case'edrdview':{const sl=$('#edrdsel');if(sl)openRead('study',null,null,sl.value);break}
+    case'reads':S.screen='reads';render();window.scrollTo({top:0});break;
+    case'ach':S.screen='ach';render();window.scrollTo({top:0});break;
+    case'remon':if(window.ZSOnline&&ZSOnline.enablePush){REM.hour=remHour();saveRem();ZSOnline.enablePush(REM.hour)}break;
+    case'remoff':if(window.ZSOnline&&ZSOnline.disablePush)ZSOnline.disablePush();break;
+    case'remics':remIcs();break;
+    case'remgcal':window.open(remGoogle(),'_blank','noopener');render();break;
     case'dailyback':S.screen='menu';S.ui.menu='main';render();window.scrollTo({top:0});break;
     case'dailyshare':{const ta=$('#dshare');if(!ta)break;try{navigator.clipboard.writeText(ta.value).then(()=>toast('Result copied'),()=>{ta.select();toast('Press Ctrl+C to copy')})}catch(err){ta.select();toast('Press Ctrl+C to copy')}break}
     case'closechat':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();S.ui.chat=null;render();break;
@@ -3993,19 +5003,22 @@ document.addEventListener('input',e=>{
   else if(e.target.id==='drfirst'||e.target.id==='drlast'){S.draft[e.target.id==='drfirst'?'first':'last']=e.target.value;const pv=$('#pvname');if(pv)pv.innerHTML=drName(S.draft)}
   else if(e.target.id==='chatin')S.ui.chatDraft=e.target.value;
   else if(e.target.id==='impcode'){S.ui.importText=e.target.value;S.ui.confirmImp=null}
+  else if(e.target.dataset&&e.target.dataset.ed&&S.ui.ed)S.ui.ed[e.target.dataset.ed]=e.target.value;
 });
 document.addEventListener('submit',e=>{
   e.preventDefault();
   if(e.target.id==='chatform'){const i=$('#chatin');if(i)chatSend(i.value)}
+  else if(e.target.dataset.codeform){const i=$('#codein');if(i)openCode(i.value)}
   else if(e.target.dataset.onform&&window.ZSOnline)ZSOnline.submit(e.target.dataset.onform);
 });
-document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('#landsvg'))landClick(e);const u=e.target.closest('[data-us]');if(u)cvcUS(u.dataset.us)});
+document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('.logo,.brand'))achEvent('poke');if(e.target.closest('#landsvg'))landClick(e);const u=e.target.closest('[data-us]');if(u)cvcUS(u.dataset.us)});
 // Timing actions fire on press, not release, so the judged moment matches the tap
 document.addEventListener('pointerdown',e=>{
   const b=e.target.closest&&e.target.closest('[data-act="miniact"],[data-act="cprtap"]');if(!b)return;
   e.preventDefault();if(b.dataset.act==='miniact')miniAct();else cprTap();
 });
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&S.read){readClose(false);return}
   if((e.code==='Space'||e.key===' ')&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){
     if(S.cpr&&S.cpr.stage==='cpr'){e.preventDefault();cprTap();return}
     if(S.mini&&(S.mini.type==='timing'||S.mini.type==='pulse')){e.preventDefault();miniAct();return}
@@ -4086,7 +5099,7 @@ function boot(data){
     if(S.meta)S.meta.chats=S.meta.chats||{};
     if(S.run&&S.run.phase){const sel=S.sel,pz=S.paused;fixRun(S.run);S.sel=sel;S.paused=pz}
   }
-  render();
+  S.read=null;render();bootHash();addEventListener('hashchange',bootHash);
   requestAnimationFrame(ecgFrame);
 }
 window.claude?.hot?.snapshot?.(()=>({S:Object.assign({},S,{ui:Object.assign({},S.ui,{chat:null})})}));
