@@ -707,6 +707,15 @@ li.rdwait{list-style:none;padding:0;background:none}
 .achbar.big{height:10px;border-radius:5px}
 .achwhen{color:var(--muted)}.linkbtn{border:0;background:none;padding:0;color:var(--scrub);font-weight:700;text-decoration:underline;font-size:12.5px}
 #repov .emov{z-index:58}
+/* Tutorial coach and one-time tips */
+#coach{position:fixed;z-index:62;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100% - 32px));background:var(--panel);border:2px solid var(--scrub);border-radius:14px;box-shadow:0 16px 36px -14px rgba(0,0,0,.45);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+#coach[hidden]{display:none}#coach p{margin:0;font-size:14.5px;line-height:1.45}
+.coachhead{display:flex;align-items:center;gap:8px;color:var(--scrub)}.coachhead .ic{width:18px;height:18px}.coachhead .label{color:var(--scrub)}
+#coach .rowbtns{justify-content:flex-end}
+.tutpulse{outline:3px solid var(--amber)!important;outline-offset:3px;border-radius:10px;animation:tutpulse 1.3s ease-in-out infinite}
+@keyframes tutpulse{50%{outline-color:transparent}}
+body.coaching .toast{bottom:calc(var(--coachh,0px) + 34px)}
+@media (max-width:720px){#coach{left:12px;right:12px;width:auto}body.ingame #coach{bottom:calc(84px + env(safe-area-inset-bottom,0px))}body.ingame.coaching .toast{bottom:calc(var(--coachh,0px) + 100px)}}
 /* Specialty dropdown */
 .specdd{position:relative;max-width:560px}
 .specsel,.specopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:var(--ink)}
@@ -2628,7 +2637,7 @@ function startRun(){
     shieldUsed:0,treated:0,earned:0,rarest:-1,rarestName:'',crashes:0,deaths:0,lwbs:0,saves:0,chat:{},gift:{},cons:{},vchat:{},buff:{},cameos:[],visitors:pickVisitors(),autoRoscUsed:false,emClock:0,emNext:90+Math.random()*60,em:null,emWins:0,nid:1};
   S.run.rep=maxRep();
   S.meta.runs++;S.sel=null;
-  spawn();spawn();
+  if(tutWanted()){S.run.tut=true;placePatient(tutPatient())}else{spawn();spawn()}
 }
 function spawn(){
   const r=S.run;if(r.arrived>=r.toArrive)return;
@@ -2710,6 +2719,7 @@ function acuity(p){
 }
 const ESI=[null,['Resus','#D8352A'],['Emergent','#E3772B'],['Urgent','#C99A12'],['Standard','#2C9A5A'],['Minor','#3A7BD5']];
 function decayInterval(p){
+  if(p.tut)return 0;
   if(hidden(p)||!['case','treat','proc'].includes(p.phase))return 0;
   const base={1:14,2:24,3:45}[acuity(p)];if(!base)return 0;
   let iv=base;
@@ -3097,7 +3107,7 @@ function worldTick(dt){
   const r=S.run;let changed=false;
   r.clock+=dt;
   while(r.beds.length<bedCount()){r.beds.push(null);changed=true}
-  if(r.arrived<r.toArrive){r.spawnT+=dt;if(r.spawnT>=r.nextGap){r.spawnT=0;r.nextGap=spawnGap(r.shift);spawn();changed=true}}
+  if(r.arrived<r.toArrive&&!r.tut){r.spawnT+=dt;if(r.spawnT>=r.nextGap){r.spawnT=0;r.nextGap=spawnGap(r.shift);spawn();changed=true}}
   r.beds.forEach((p,i)=>{
     if(!p)return;
     if(p.phase==='done'||p.phase==='dead'){p.doneT+=dt;if(p.doneT>(p.phase==='dead'?14:10)&&S.sel!==i){r.beds[i]=null;changed=true}return}
@@ -3587,7 +3597,7 @@ function bedCard(p,i){
 }
 function renderFloor(){
   const r=S.run;
-  const intro=S.meta.intro?`<div class="intro"><p><b>Welcome to the floor.</b> Patients arrive through the shift and fill your bays; extras wait in the waiting room. Click a bay to assess the patient. Order tests, diagnose, treat, do any bedside procedures, then decide: home, ward, ICU or theatre. Sicker patients deteriorate in real time, and some simple-looking visits turn into emergencies. If someone arrests, start CPR fast.</p><button class="x" data-act="hideintro" aria-label="Dismiss">×</button></div>`:'';
+  const intro=S.meta.intro&&!r.tut?`<div class="intro"><p><b>Welcome to the floor.</b> Patients arrive through the shift and fill your bays; extras wait in the waiting room. Click a bay to assess the patient. Order tests, diagnose, treat, do any bedside procedures, then decide: home, ward, ICU or theatre. Sicker patients deteriorate in real time, and some simple-looking visits turn into emergencies. If someone arrests, start CPR fast.</p><button class="x" data-act="hideintro" aria-label="Dismiss">×</button></div>`:'';
   const locked=Array.from({length:Math.max(0,6-r.beds.length)},(_,k)=>`<div class="bedcard locked"><header><b>Bay ${r.beds.length+k+1}</b></header><p>${ic('bed')} Closed. Open it in the Department tab.</p></div>`).join('');
   return`${intro}${floorBar()}
    <div class="beds">${r.beds.map((p,i)=>bedCard(p,i)).join('')}${locked}</div>
@@ -4805,6 +4815,89 @@ async function sendReport(){
   S.rep=null;renderReport();
 }
 
+/* ===================== TUTORIAL ===================== */
+// A guided first patient on a new player's first run, then one-time tips the first time each system turns up
+const TKEY='zebra-shift.tut';
+let TUT=null;try{TUT=JSON.parse(localStorage.getItem(TKEY)||'null')}catch(e){}
+const saveTut=()=>{try{localStorage.setItem(TKEY,JSON.stringify(TUT))}catch(e){}};
+// Players from before the tutorial existed skip the guided patient, and only get tips for newer features
+function tutInit(){
+  if(TUT&&TUT.tips)return;
+  const old=STORE.slots.some(s=>s&&s.meta&&(s.meta.runs||0)>0);
+  TUT={done:old,tips:old?{proc:1,arrest:1,em:1,grand:1,staff:1,req:1,brk:1,daily:1}:{}};saveTut();
+}
+const tutWanted=()=>!!(TUT&&!TUT.done);
+function tutPatient(){
+  const p=makePatient(false);
+  Object.assign(p,{d:IDX['Acute Appendicitis'],name:'Maya Tan',sex:'F',age:24,cam:null,masked:false,turned:false,stab:20,max:20,rev:{h:0,e:0,l:0,i:0},
+    showSys:false,showTier:false,letter:false,dxName:false,procs:[],focus:false,last:null,tut:true});
+  return p;
+}
+function tutFinish(skipped){
+  const r=S.run;TUT.done=true;saveTut();S.meta.intro=false;
+  if(r){for(const p of r.beds.concat(r.queue))if(p)delete p.tut;
+    if(r.tut){r.tut=false;spawn();spawn()}}
+  coachKey=null;S.tipNow=skipped?null:'tutdone';save();render();
+}
+function tutStep(){
+  const r=S.run;if(!r||!r.tut||S.screen!=='game'||r.phase!=='floor')return null;
+  const i=r.beds.findIndex(b=>b&&b.tut);if(i<0)return null;
+  const p=r.beds[i],her=p.sex==='F'?'her':'him';
+  if(S.tab!=='shift')return{k:'back',n:1,t:'Head back to the ER Floor to finish your first patient.',sel:'[data-tab="shift"]'};
+  if(S.sel!==i)return{k:'bed',n:1,t:`Your first patient, ${p.name}, is in Bay ${i+1}. Tap the bay to see ${her}. Nobody else arrives until you are done, and ${her} condition will not slip while you learn.`,sel:`[data-bed="${i}"]`};
+  if(p.phase==='case'){
+    if(!p.rev.h)return{k:'h',n:2,t:'Each order reveals one clue and costs a little stability. Start by taking a History.',sel:'[data-ord="h"]'};
+    if(!p.rev.e)return{k:'e',n:3,t:'Clues land in the chart. Now Examine '+her+'.',sel:'[data-ord="e"]'};
+    if(!p.rev.l)return{k:'l',n:4,t:'Order a Test. Some results come as an ECG, X-ray, blood gas or slide that you read yourself.',sel:'[data-ord="l"]'};
+    return{k:'dx',n:5,t:'Enough to go on? Type the diagnosis, pick it from the list and press Submit. A wrong guess costs stability, but tells you whether you were in the right organ system.',sel:'.dx .combo'};
+  }
+  if(p.phase==='treat')return{k:'tx',n:6,t:'Right diagnosis. Now choose the treatment. Wrong choices cost stability.',sel:'.tx'};
+  if(p.phase==='dispo')return{k:'dispo',n:7,t:'Treated. Now decide where '+(p.sex==='F'?'she goes':'he goes')+'. Sending home someone who needed a bed costs reputation, and they come back worse.',sel:'.dispo'};
+  if(p.phase==='done')return{k:'clear',n:8,t:'Points become grant money for items in the Requisition cabinet. Clear the bay to make room for the next patient.',sel:'[data-act="clear"]'};
+  if(p.phase==='arrest')return{k:'arr',n:6,t:'Cardiac arrest. Press Start CPR, tap in rhythm, then call the rhythm at the check.',sel:'[data-act="cpr"]'};
+  return null;
+}
+const inGame=()=>S.screen==='game'&&S.run;
+const TIPS={
+ read:{t:'This result is a picture. Read it yourself before the report: a right read gives +1 stability, a misread costs 1. You can also skip to the report.',sel:'.rdbtn',when:()=>inGame()&&!!document.querySelector('.rdbtn')},
+ proc:{t:'This treatment needs a bedside procedure. Each one is a short timing game, and a failed attempt costs 2 stability.',when:()=>{const p=inGame()&&curP();return!!p&&p.phase==='proc'}},
+ arrest:{t:'Cardiac arrest! Open that bay and press Start CPR before the timer runs out. Tap in rhythm, then call shock or no shock at the rhythm check.',when:()=>inGame()&&S.run.beds.some(b=>b&&b.phase==='arrest')},
+ em:{t:'Emergency! A timed patient. Read the findings, pick the diagnosis from six options, then treat. Saving them restores reputation.',when:()=>inGame()&&!!S.run.em},
+ grand:{t:'Grand Rounds: the last patient of every shift is always rarer, and scores ×1.5.',when:()=>inGame()&&S.run.beds.some(b=>b&&b.grand)},
+ staff:{t:'The Staff Room. Talking to a co-worker earns a heart; at 2 hearts they offer a consult during cases. Visitors give a perk the first time you talk. The floor pauses while you chat.',when:()=>inGame()&&S.tab==='staff'},
+ req:{t:'Spend grant money here on items. A duplicate levels an item up, and higher levels help more.',when:()=>inGame()&&S.tab==='req'},
+ brk:{t:'Shift over. A colleague debriefs you on what went wrong; then pick one perk for the next shift.',when:()=>inGame()&&S.run.phase==='break'},
+ daily:{t:'Case of the day: one patient, the same for everyone. Each clue costs 60 points and each wrong guess 150.',when:()=>S.screen==='daily'},
+ tutdone:{t:'That is the basics. More patients are arriving now, and a tip will pop up the first time something new happens. Good luck tonight.',when:()=>inGame()}
+};
+let coachKey=null,coachTarget=null;
+function coachHost(){let el=document.getElementById('coach');if(!el){el=document.createElement('div');el.id='coach';el.setAttribute('role','status');el.hidden=true;document.body.appendChild(el)}return el}
+// Runs after every render: shows the current tutorial step or tip, and highlights what to press
+function tutAfterRender(){
+  if(!TUT)return;
+  const el=coachHost();
+  document.querySelectorAll('.tutpulse').forEach(x=>x.classList.remove('tutpulse'));
+  const r=S.run;
+  if(inGame()&&r.tut&&!r.beds.some(b=>b&&b.tut)){setTimeout(()=>tutFinish(false),0);return}
+  const busy=S.mini||S.cpr||S.read||S.rep;
+  let step=busy?null:tutStep(),tip=null;
+  if(!step&&!busy&&!(r&&r.tut)){
+    if(S.tipNow&&TIPS[S.tipNow]&&TIPS[S.tipNow].when())tip=S.tipNow;
+    else{S.tipNow=null;for(const k in TIPS)if(k!=='tutdone'&&!TUT.tips[k]&&TIPS[k].when()){tip=k;TUT.tips[k]=1;saveTut();S.tipNow=k;break}}
+  }
+  const key=step?'step:'+step.k:tip?'tip:'+tip:null,sel=step?step.sel:tip&&TIPS[tip].sel;
+  if(!key){el.hidden=true;coachKey=null;document.body.classList.remove('coaching');return}
+  if(key!==coachKey){
+    coachKey=key;el.hidden=false;
+    el.innerHTML=`<div class="coachhead">${ic(step?'help':'star')}<span class="label">${step?`First patient · step ${step.n} of 8`:'Tip'}</span></div><p>${esc(step?step.t:TIPS[tip].t)}</p>
+      <div class="rowbtns">${step?`<button class="linkbtn" data-act="tutskip">Skip the tutorial</button>`:`<button class="btn primary" data-act="tipok">Got it</button>`}</div>`;
+    document.body.classList.add('coaching');document.documentElement.style.setProperty('--coachh',el.offsetHeight+'px');
+  }
+  // highlight the first visible match, and bring it into view when the step changes
+  const t=sel&&[...document.querySelectorAll(sel)].find(x=>x.offsetParent!==null);
+  if(t){t.classList.add('tutpulse');if(coachTarget!==key){coachTarget=key;if(step)t.scrollIntoView({block:'center',behavior:'smooth'})}}
+}
+
 /* ===================== SHARE CARDS ===================== */
 // Results become a portrait image (1080×1350, the size social apps like) drawn on a canvas
 const svgImg=svg=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);
@@ -4951,7 +5044,7 @@ function renderMenu(){
     <li>Challenge a friend: you both get the same five patients, and the best total wins. Send it as a link, or straight to an online friend.</li>
     <li>Write your own case, add pictures to read, and share it as a link. Friends play it like the Case of the day.</li>
     <li>Achievements come in three kinds: regular, fun and secret. Secret ones stay hidden until you stumble on them.</li>
-   </ol>${DISCLAIMER}<p style="margin-top:16px"><button class="btn" data-menu="main">Back</button></p></div>`;
+   </ol>${DISCLAIMER}<p style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-menu="main">Back</button><button class="btn" data-act="tutreplay">${ic('help')}Replay the tutorial</button></p></div>`;
   const on=window.ZSOnline,inb=on&&ZSOnline.inbox?ZSOnline.inbox().length:0,roles=Object.keys(SPECS).filter(roleOpen).length;
   const tile=(attr,icn,label,sub,dot='')=>`<button class="btn mtile" ${attr}>${ic(icn)}<span><b>${label}${dot}</b><small>${sub}</small></span></button>`;
   // Two main actions, then everything else as small tiles; on phones the ambulance sits right under the logo
@@ -5046,6 +5139,7 @@ function render(refocus){
   renderInner(refocus);
   if(keep&&pid!=null&&pid===lastPid&&!refocus){const i=document.getElementById('dxin');if(i&&keep.v){i.value=keep.v;if(keep.f){i.focus();acUpdate()}}else if(i&&keep.f)i.focus()}
   lastPid=pid;
+  tutAfterRender();
 }
 function renderInner(refocus){
   $('#hudwrap').hidden=S.screen!=='game';$('#bnav').hidden=S.screen!=='game';
@@ -5170,6 +5264,9 @@ document.addEventListener('click',e=>{
     case'daily':S.screen='daily';render();window.scrollTo({top:0});break;
     case'online':S.screen='online';render();window.scrollTo({top:0});break;
     case'specdd':S.ui.specOpen=!S.ui.specOpen;render();break;
+    case'tutskip':tutFinish(true);break;
+    case'tipok':S.tipNow=null;coachKey=null;coachHost().hidden=true;document.body.classList.remove('coaching');break;
+    case'tutreplay':TUT={done:false,tips:{}};saveTut();toast('The tutorial starts with your next new run.');break;
     case'rpclose':S.rep=null;renderReport();break;
     case'rpsend':sendReport();break;
     case'rdclose':readClose(false);break;
@@ -5328,7 +5425,7 @@ function ecgFrame(ts){
 
 /* ===================== BOOT ===================== */
 function boot(data){
-  loadStore();roleGrandfather();
+  loadStore();roleGrandfather();tutInit();
   if(data&&data.S&&data.S.v===2){
     S=data.S;S.ui=Object.assign({menu:'main',chat:null,chatDraft:'',confirmDel:null,exportSlot:null,importText:'',confirmImp:null},S.ui||{});S.ui.chat=null;
     if(S.screen==='game'&&!S.meta)S.screen='menu';
