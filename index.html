@@ -2036,7 +2036,7 @@ const SPECS={
  obgyn:{n:'Obstetrics & Gynaecology',d:'More obstetric and gynaecological cases. They arrive with +2 stability, a clue charted and their organ system shown; one extra wrong treatment is removed.',focus:d=>d.s==='Obstetric'||['Ovarian Torsion','Toxic Shock Syndrome','Uncomplicated Cystitis','Acute Pyelonephritis'].includes(d.n),bonus:{stab:2,clues:1,elim:1},fx:()=>{}},
  cardio:{n:'Cardiology',d:'More heart cases, which arrive with +2 stability, a clue charted and their organ system shown. +15% chance of a pulse back after CPR.',focus:d=>d.s==='Cardiovascular',bonus:{stab:2,clues:1},fx:m=>{m.rosc+=.15}},
  neuro:{n:'Neurology',d:'More brain and nerve cases, which arrive with +2 stability, 2 clues charted and their organ system shown.',focus:d=>d.s==='Neuro',bonus:{stab:2,clues:2},fx:()=>{}},
- diag:{n:'Diagnostician',d:'Everybody lies. Wrong guesses tell you whether the answer is rarer or more common, your first wrong guess on each patient is free, and Zebras and Unicorns score ×1.4. Your bedside manner costs every patient 1 stability.',fx:m=>{m.cane=Math.max(m.cane,1);m.zebra*=1.4;m.freeWrong++;m.stab--}},
+ diag:{n:'Diagnostician',d:'Everybody lies, and you can tell: trick cases are flagged when they arrive. Wrong guesses say rarer or more common, the first one on each patient is free, and after two the organ system is shown. Your guess list puts the right system first. Grand Rounds patients arrive with 2 clues charted, right picture reads give +2 stability, Zebras and Unicorns score ×1.5, and Dr. Hoof visits every shift. Your bedside manner costs every patient 1 stability.',fx:m=>{m.cane=Math.max(m.cane,1);m.zebra*=1.5;m.freeWrong++;m.engine=Math.max(m.engine,1);m.stab--}},
  tox:{n:'Toxicology',d:'More poisonings, which arrive with +2 stability, a clue charted and their organ system shown. Wrong treatments cost 1 less stability for everyone.',focus:d=>d.s==='Toxicology',bonus:{stab:2,clues:1,elim:1},fx:m=>{m.txPen++}}
 };
 const DIFFS={
@@ -2344,7 +2344,29 @@ function portrait(L,o={}){
     ${L.hat&&!L.cap?hatSvg(L.hat,L.hatc||'#24292C',cx,cy,r):''}
     ${o.sweat?`<path d="M${40+r-3} ${cy-9}c-2 3-2 5 0 5.5s2-2.5 0-5.5z" fill="#6EC3EE" stroke="#3D93C2" stroke-width=".8"/>`:''}
     ${L.steth?'<path d="M29 57c0 10 4 15 11 15s11-5 11-15" fill="none" stroke="#3a3f42" stroke-width="2.2"/><circle cx="40" cy="73" r="3.2" fill="#9aa4a9" stroke="#3a3f42" stroke-width="1.5"/>':''}
+    ${L.spec&&!o.gown?specGear(L.spec,cy):''}
    </g></svg>`;
+}
+// Each specialty carries something of its trade: in the chest pocket, as a pin, or in hand
+const POCKET='<path d="M48.5 64.5h10v8.5h-10z" fill="rgba(255,255,255,.18)" stroke="rgba(0,0,0,.28)" stroke-width=".8"/>';
+const PIN=(inner,bg)=>`<circle cx="27" cy="67" r="4.6" fill="${bg}" stroke="rgba(0,0,0,.3)" stroke-width=".8"/>${inner}`;
+function specGear(k,cy){
+  switch(k){
+    case'em':return`<g stroke="#2b2f31" stroke-width=".7"><path d="M51 66l2.2-6.5 1.4.5-1.6 6z" fill="#cfd6d8"/><circle cx="52.5" cy="59.2" r="1.9" fill="none" stroke="#E2742B" stroke-width="1.6"/><circle cx="55.9" cy="60" r="1.9" fill="none" stroke="#E2742B" stroke-width="1.6"/></g>${POCKET}`;
+    case'gp':return`<path d="M51 66v-7.5" stroke="#b7c0c4" stroke-width="2.4" stroke-linecap="round"/><circle cx="51" cy="58.6" r="1" fill="#FFE27A"/><path d="M55.6 66v-6" stroke="#2C5FA8" stroke-width="1.8" stroke-linecap="round"/>${POCKET}`;
+    case'im':return`<path d="M51 66v-6.5" stroke="#C93A31" stroke-width="1.7" stroke-linecap="round"/><path d="M53.6 66v-7.3" stroke="#2C5FA8" stroke-width="1.7" stroke-linecap="round"/><path d="M56.2 66v-6" stroke="#22272a" stroke-width="1.7" stroke-linecap="round"/>${POCKET}`;
+    case'surg':return`<path d="M53.5 66v-6" stroke="#9aa4a9" stroke-width="2" stroke-linecap="round"/><path d="M53.5 60.2c-1.6-1.3-1.4-3.6.2-4.6.5 1.6.3 3.3-.2 4.6z" fill="#e8eef0" stroke="#7d878c" stroke-width=".6"/>${POCKET}`;
+    case'anaes':return`<path d="M${40-12} ${cy+12}C34 ${cy+11} 46 ${cy+11} ${40+12} ${cy+12}" fill="none" stroke="#e8eef0" stroke-width=".9"/><path d="M32.5 ${cy+15}h15l-1.5 6.5c-4 1.6-8 1.6-12 0z" fill="#8FC6E6" stroke="#5b9ac0" stroke-width=".7"/><path d="M34 ${cy+17}h12M34.5 ${cy+19}h11" stroke="#6fb0d6" stroke-width=".6"/>`;
+    case'id':return PIN(`<circle cx="27" cy="67" r="2" fill="#7FD07F"/><path d="M27 63.6v1.4M27 69v1.4M23.6 67H25M29 67h1.4M24.6 64.6l1 1M28.4 68.4l1 1M29.4 64.6l-1 1M25.6 68.4l-1 1" stroke="#7FD07F" stroke-width=".9"/>`,'#2E5E3A');
+    case'path':return`<circle cx="53.4" cy="60.4" r="2.6" fill="rgba(190,230,245,.7)" stroke="#2b2f31" stroke-width="1"/><path d="M53.4 63v3" stroke="#6b4a2a" stroke-width="1.6" stroke-linecap="round"/>${POCKET}`;
+    case'paeds':return PIN(`<circle cx="24.6" cy="64.7" r="1.4" fill="#B97A45"/><circle cx="29.4" cy="64.7" r="1.4" fill="#B97A45"/><circle cx="27" cy="67.4" r="3" fill="#B97A45"/><circle cx="26" cy="66.8" r=".45" fill="#2b2f31"/><circle cx="28" cy="66.8" r=".45" fill="#2b2f31"/><circle cx="27" cy="68.4" r=".6" fill="#2b2f31"/>`,'#FFD86B');
+    case'obgyn':return PIN(`<ellipse cx="25.6" cy="68" rx="1.1" ry="1.8" fill="#C24D7C"/><ellipse cx="28.4" cy="66.6" rx="1.1" ry="1.8" fill="#C24D7C"/><circle cx="25.2" cy="65.6" r=".45" fill="#C24D7C"/><circle cx="26.2" cy="65.4" r=".45" fill="#C24D7C"/><circle cx="28" cy="64.2" r=".45" fill="#C24D7C"/><circle cx="29" cy="64" r=".45" fill="#C24D7C"/>`,'#FBD3E2');
+    case'cardio':return PIN(`<path d="M27 70.2c-3.3-2.3-4.6-3.8-4.6-5.4a2.2 2.2 0 0 1 4.6-.9 2.2 2.2 0 0 1 4.6.9c0 1.6-1.3 3.1-4.6 5.4z" fill="#E5484D"/>`,'#fff');
+    case'neuro':return`<path d="M52.6 66v-6.5" stroke="#cfd6d8" stroke-width="1.4" stroke-linecap="round"/><path d="M50 58.4l5.2-1.4 1 2.6-5.2 1.4z" fill="#D9534F" stroke="#9e2f2b" stroke-width=".5"/>${POCKET}`;
+    case'tox':return PIN(`<path d="M25.8 63.6h2.4v2l1.8 3.2a1 1 0 0 1-.9 1.5h-4.2a1 1 0 0 1-.9-1.5l1.8-3.2z" fill="#e9f1f2" stroke="#2b2f31" stroke-width=".6"/><path d="M24.6 68.2h4.8l.6 1.1a.6.6 0 0 1-.5.9h-5a.6.6 0 0 1-.5-.9z" fill="#5BCB3D"/>`,'#253238');
+    case'diag':return`<path d="M64 82V55" stroke="#4A2E1C" stroke-width="2.6" stroke-linecap="round"/><path d="M64 55c0-4.5 6-4.5 6 0" fill="none" stroke="#4A2E1C" stroke-width="2.6" stroke-linecap="round"/><path d="M47 62.5l3 6 3-6" fill="none" stroke="#7B2D26" stroke-width="1.5"/>`;
+  }
+  return'';
 }
 function patientLook(p){
   if(p.cam&&CAMEO_PT_BY[p.cam])return CAMEO_PT_BY[p.cam].look;
@@ -2352,7 +2374,7 @@ function patientLook(p){
   const hair=p.sex==='M'&&p.age>=65&&h%3===0?'bald':(p.sex==='F'?F:M)[(h>>2)%4];
   return{skin:SKIN[h%5],hair,hc:p.age>=62?'#C7CCCF':HAIR[(h>>4)%5]};
 }
-function docLook(d){return{skin:DSKIN[d.skin]||DSKIN[0],hair:d.hair,hc:HAIRC[d.hc]||HAIRC[0],scrub:(SCRUBS[d.scrub]||SCRUBS[0])[1],glasses:d.glasses,cap:d.cap,steth:d.steth,facial:d.facial,extra:[d.coat&&'coat',d.earrings&&'earrings'].filter(Boolean)}}
+function docLook(d){return{skin:DSKIN[d.skin]||DSKIN[0],hair:d.hair,hc:HAIRC[d.hc]||HAIRC[0],scrub:(SCRUBS[d.scrub]||SCRUBS[0])[1],glasses:d.glasses,cap:d.cap,steth:d.steth,facial:d.facial,spec:d.spec,extra:[d.coat&&'coat',d.earrings&&'earrings'].filter(Boolean)}}
 
 /* ---- Patient in bed ---- */
 const LYING={h:[92,94],n:[108,99],s:[114,100],e:[148,104],w:[176,102],p:[190,103],k:[250,103],f:[312,103]};
@@ -2635,6 +2657,7 @@ function makePatient(grand){
   for(const bo of m.boost)if(bo.sys.includes(d.s)){for(let k=0;k<bo.n;k++){if(bo.cat?!revealCat(p,bo.cat):(freeClue(p),false))break}if(bo.show)p.showSys=true}
   if(sp&&sp.focus&&sp.focus(d)&&!(sp.kids&&age>=16)){const sb=sp.bonus;p.focus=true;p.stab+=sb.stab;p.max+=sb.stab;for(let k=0;k<sb.clues;k++)freeClue(p);p.showSys=true;p.freeWrongUsed=-1;p.elimBonus=sb.elim||0}
   if(b.clues){for(let k=0;k<b.clues;k++)freeClue(p);b.clues=0}
+  if(grand&&isDiag()){freeClue(p);freeClue(p)}
   if(b.labs){p.rev.l=d.l.length;b.labs=0}
   p.last=null;
   return p;
@@ -2695,6 +2718,7 @@ function guess(name){
   if(pen&&b.freeWrong>0){pen=0;b.freeWrong--;toast('Dr. Hoof: "Wrong. I have seen worse. Not much worse."')}
   p.stab-=pen;sfx('wrong');
   if(m.wrongReveal)freeClue(p);
+  if(isDiag()&&p.guesses.filter(x=>!x.ok).length>=2)p.showSys=true;
   if(m.cane>=3&&p.guesses.filter(x=>!x.ok).length>=2&&!p.dxName){p.dxName=true;toast('The Cane: "It is '+d.n+'. Obviously."')}
   if(p.stab<=0)arrest(S.sel);
   save();render(true);
@@ -3583,7 +3607,7 @@ function renderPatient(i){
   }
   const cc=hidden(p)?MASK[d.n].cc:d.cc,bv=hidden(p)?MASK[d.n].v:d.v,cam=p.cam&&CAMEO_PT_BY[p.cam];
   const flags=[p.focus?`<span class="flag">${ic('star')}Your specialty</span>`:'',p.bounce?`<span class="flag">${ic('alert')}Back after being sent home</span>`:'',p.showSys?`<span class="flag">${ic(SYS_IC[d.s])}System: ${d.s}</span>`:'',
-    p.showTier?`<span class="flag">${ic('star')}Rarity: ${p.showTier===1?rarityRange(d.t,p.id):TIERS[d.t].k}</span>`:'',p.letter?`<span class="flag">${ic('search')}Starts with “${d.n[0]}”</span>`:'',
+    (isDiag()&&hidden(p)&&p.phase==='case')?`<span class="flag">${ic('cane')}Everybody lies: this story does not add up</span>`:'',p.showTier?`<span class="flag">${ic('star')}Rarity: ${p.showTier===1?rarityRange(d.t,p.id):TIERS[d.t].k}</span>`:'',p.letter?`<span class="flag">${ic('search')}Starts with “${d.n[0]}”</span>`:'',
     p.dxName&&p.phase==='case'?`<span class="flag">${ic('crown')}Diagnosis: ${esc(d.n)}</span>`:''].join('');
   // Phone only: a pinned summary so name, vitals and complaint stay in view while scrolling to the orders
   const pv=(l,v,col,a)=>`<span class="${a?'ab':''}" style="color:var(${col})"><small>${l}</small><b>${v}</b></span>`;
@@ -4411,7 +4435,7 @@ function openRead(where,c,k,key){
 function renderRead(){
   const el=rdHost(),o=S.read;if(!o){el.innerHTML='';return}
   const r=READS[o.key],[kind,icn]=RD_KIND[r.k],done=o.pick!=null,ok=done&&o.pick===0,study=o.where==='study';
-  const ctx=o.where==='bed'?'Right: +1 stability · wrong: −1 stability':o.where==='pz'?'Right: +60 points · wrong: −40 points':o.where==='drill'?'Practice: nothing at stake':'';
+  const ctx=o.where==='bed'?`Right: +${isDiag()?2:1} stability · wrong: −1 stability`:o.where==='pz'?'Right: +60 points · wrong: −40 points':o.where==='drill'?'Practice: nothing at stake':'';
   const opts=o.opts.map(({t,i})=>`<button data-rdpick="${i}" class="${done?(i===0?'right':i===o.pick?'wrong':''):''}" ${done?'disabled':''}>${esc(t)}</button>`).join('');
   const report=o.where==='bed'||o.where==='pz'?(()=>{const d=o.where==='bed'?D[(curP()||{}).d]:(pzCtx()||{}).d;return d&&d[o.c]?`<p class="rdrep"><b>Report:</b> ${esc(d[o.c][o.k])}</p>`:''})():'';
   el.innerHTML=`<div class="emov minov rdov" role="dialog" aria-modal="true" aria-label="${esc(readTitle(o.key))}"><div class="panel minicard rdcard">
@@ -4428,7 +4452,7 @@ function readPick(i){
   const o=S.read;if(!o||o.pick!=null)return;
   o.pick=+i;const ok=o.pick===0,kind=READS[o.key].k;
   sfx(ok?'right':'wrong');
-  if(o.where==='bed'){const p=curP();if(p&&p.id===o.pid){p.rd=p.rd||{};p.rd[o.c+o.k]=ok?'ok':'bad';if(ok)p.stab=Math.min(p.max,p.stab+1);else p.stab--;save()}}
+  if(o.where==='bed'){const p=curP();if(p&&p.id===o.pid){p.rd=p.rd||{};p.rd[o.c+o.k]=ok?'ok':'bad';if(ok)p.stab=Math.min(p.max,p.stab+(isDiag()?2:1));else p.stab--;save()}}
   else if(o.where==='pz'){const x=pzCtx();if(x){x.st.rd=x.st.rd||{};x.st.rd[o.c+o.k]=ok?'ok':'bad';x.st.rb=(x.st.rb||0)+(ok?60:-40);x.save()}}
   achEvent('read',{ok,kind,key:o.key,where:o.where});
   renderRead();
@@ -4454,7 +4478,19 @@ function drillNext(kind){
 // Kept outside the career slots, so they follow the player across careers and modes
 const AKEY='zebra-shift.ach';
 let ACH={u:{},c:{},r:{},hq:null};try{const a=JSON.parse(localStorage.getItem(AKEY)||'null');if(a&&a.u)ACH={u:a.u,c:a.c||{},r:a.r||{},hq:a.hq||null}}catch(e){}
-const saveAch=()=>{try{localStorage.setItem(AKEY,JSON.stringify(ACH))}catch(e){}};
+const saveAch=()=>{try{localStorage.setItem(AKEY,JSON.stringify(ACH))}catch(e){}if(window.ZSOnline&&ZSOnline.onStore)ZSOnline.onStore()};
+// Fold in achievements and unlocks from another device: nothing earned anywhere is ever lost
+function achMerge(o){
+  if(!o||typeof o!=='object')return false;let changed=false;
+  for(const k of ['u','r'])for(const id in (o[k]||{})){if(!ACH[k][id]&&o[k][id]){ACH[k][id]=o[k][id];changed=true}}
+  for(const k in (o.c||{})){const v=o.c[k];
+    if(k==='camSeen'){const set=new Set(String(ACH.c.camSeen||'').split(',').concat(String(v||'').split(',')).filter(Boolean));const s2=[...set].join(',');if(s2!==(ACH.c.camSeen||'')){ACH.c.camSeen=s2;ACH.c.cameos=Math.max(ACH.c.cameos||0,set.size);changed=true}}
+    else if(typeof v==='number'&&v>(ACH.c[k]||0)){ACH.c[k]=v;changed=true}}
+  const a=ACH.hq,b=o.hq;
+  if(b&&b.day&&(!a||!a.day||b.day>a.day||(b.day===a.day&&(b.stage>a.stage||(b.stage===a.stage&&b.done&&!a.done))))){ACH.hq=b;changed=true}
+  if(changed){try{localStorage.setItem(AKEY,JSON.stringify(ACH))}catch(e){}roleCheck();achCheck()}
+  return changed;
+}
 // k: r regular · f fun · s secret (hidden until earned). c/g: a counter and the goal for a progress bar
 const ACHS=[
  {id:'dx1',k:'r',ic:'check',n:'First diagnosis',d:'Diagnose your first patient on a shift.',c:'dx',g:1},
@@ -4599,6 +4635,7 @@ function renderAch(){
 // Everyone starts as Emergency Medicine or General Practice. The rest are earned on shift, and the
 // Diagnostician is a secret: Dr. Hoof only offers it to someone who passes his three-day test.
 const ROLE_FREE=['em','gp'];
+const isDiag=()=>!!(S.doctor&&S.doctor.spec==='diag');
 const ROLE_REQ={
  im:{t:'Diagnose 10 patients with hormone, metabolic, kidney or blood disorders.',r:[['Patients diagnosed',c=>(c['sys_Endocrine']||0)+(c['sys_Metabolic']||0)+(c['sys_Renal/GU']||0)+(c['sys_Haematologic']||0),10]]},
  surg:{t:'Send 10 patients who needed an operation to theatre.',r:[['Sent to theatre',c=>c.theatre||0,10]]},
@@ -4679,7 +4716,8 @@ function hoofCheck(type,x){
 function pickVisitors(){
   const q=ACH.hq,want=q&&q.stage>0&&q.day===yesterdayStr()&&!roleOpen('diag');
   const ids=shuffle(CAMEO_DR.map(c=>c.id)).slice(0,2);
-  if(want&&!ids.includes('hoof')&&Math.random()<.6)ids[0]='hoof';
+  if(isDiag()&&!ids.includes('hoof'))ids[0]='hoof';
+  else if(want&&!ids.includes('hoof')&&Math.random()<.6)ids[0]='hoof';
   return ids;
 }
 function hoofPrompt(){

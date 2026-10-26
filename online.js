@@ -41,7 +41,7 @@
   function localStats() {
     const slots = STORE.slots.filter(Boolean), act = STORE.active != null && STORE.slots[STORE.active];
     const d = normDoc((act || slots[0] || {}).doctor);
-    const doctor = { first: d.first, last: d.last, gender: d.gender, skin: d.skin, hair: d.hair, hc: d.hc, scrub: d.scrub, glasses: !!d.glasses, cap: !!d.cap, steth: !!d.steth, coat: !!d.coat, earrings: !!d.earrings, facial: d.facial };
+    const doctor = { first: d.first, last: d.last, gender: d.gender, spec: d.spec, skin: d.skin, hair: d.hair, hc: d.hc, scrub: d.scrub, glasses: !!d.glasses, cap: !!d.cap, steth: !!d.steth, coat: !!d.coat, earrings: !!d.earrings, facial: d.facial };
     const book = m => Object.keys((m && m.book) || {}).filter(n => IDX[n] != null).length;
     return {
       display: ('Dr. ' + (fullName(d) || 'Reyes')).slice(0, 60), doctor, spec: (SPECS[d.spec] || SPECS.em).n,
@@ -82,13 +82,22 @@
     // achievements live in their own column, so an older database without it still syncs everything else
     if (typeof achCount === 'function') sb.from('profiles').update({ ach: achCount() }).eq('id', O.user.id).then(() => {}, () => {});
   }
+  // Achievements and specialty unlocks ride along with the careers. Before writing, fold in whatever
+  // another device saved, so two phones never overwrite each other's unlocks
+  async function pullAch() {
+    const { data } = await sb.from('saves').select('ach:data->ach').eq('user_id', O.user.id).maybeSingle();
+    if (data && data.ach && typeof achMerge === 'function' && achMerge(data.ach)) rr();
+  }
   async function uploadSaves() {
     if (!O.profile) return;
-    const { error } = await sb.from('saves').upsert({ user_id: O.user.id, data: STORE, updated_at: new Date().toISOString() });
+    if (typeof ACH !== 'undefined') await pullAch();
+    const payload = typeof ACH !== 'undefined' ? { ...STORE, ach: ACH } : STORE;
+    const { error } = await sb.from('saves').upsert({ user_id: O.user.id, data: payload, updated_at: new Date().toISOString() });
     if (!error) O.cloud = null;
   }
   async function checkCloud() {
     const { data } = await sb.from('saves').select('data,updated_at').eq('user_id', O.user.id).maybeSingle();
+    if (data && data.data && data.data.ach && typeof achMerge === 'function' && achMerge(data.data.ach)) { toast('Achievements and specialties synced from your account'); rr(); }
     if (!data || !data.data || !Array.isArray(data.data.slots)) { uploadSaves(); return; }
     const cloudNewest = Math.max(0, ...data.data.slots.filter(Boolean).map(s => s.updated || 0));
     if (cloudNewest > newestLocal() + 5000) { O.cloud = { at: cloudNewest, data: data.data }; rr(); }
@@ -334,7 +343,7 @@
     const p = O.profile, s = localStats();
     return `<section class="panel onl-card"><div style="display:flex;gap:12px;align-items:center">${portrait(docLook(normDoc(p.doctor)), { label: 'Your doctor' })}<div><h2>${esc(p.display || p.username)}</h2><p class="onl-small">@${esc(p.username)} · ${esc(p.spec || '')}</p></div></div>
       <div class="dbstats"><span><b>${fmt(p.best)}</b> best score</span><span><b>${typeof achCount === 'function' ? achCount() : 0}</b> achievements</span><span><b>${p.cases}</b> cases diagnosed</span><span><b>${p.runs}</b> runs</span><span><b>${p.ems}</b> emergencies saved</span></div>
-      <p class="onl-small">Signed in as ${esc(O.user.email || '')}. Your careers back up to the cloud automatically while you play, so you can carry on from another device.</p>
+      <p class="onl-small">Signed in as ${esc(O.user.email || '')}. Your careers, achievements and unlocked specialties back up to your account automatically, so you can carry on from another device.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap">${'<button class="btn" data-on="upload">' + ic('swap') + 'Back up now</button>'}<button class="btn" data-on="signout">${ic('door')}Sign out</button></div>
       <button class="btn danger" data-on="delete">${ic('trash')}${O.confirmDel ? 'Tap again to delete your account for good' : 'Delete my account'}</button>
       <p class="onl-small">Deleting removes your profile, scores, friends and cloud saves from the server. Careers saved on this device stay here. Showing on this device: ${esc(s.display)}.</p>${msgs()}</section>`;
