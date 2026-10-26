@@ -2372,7 +2372,7 @@ function loadStore(){
       if(old&&old.meta){STORE.slots[0]={doctor:defaultDoctor(),meta:old.meta,run:null,staff:freshStaff(),updated:Date.now()};STORE.active=0;writeStore()}}catch(e){}
   }
 }
-function writeStore(){try{localStorage.setItem(SKEY,JSON.stringify(STORE))}catch(e){}}
+function writeStore(){try{localStorage.setItem(SKEY,JSON.stringify(STORE))}catch(e){}window.ZSOnline&&ZSOnline.onStore()}
 function save(){
   if(S.slot==null||!S.meta)return;
   STORE.slots[S.slot]={doctor:S.doctor,meta:S.meta,run:S.run,staff:S.staff,updated:Date.now()};
@@ -3693,7 +3693,7 @@ function dailyGuess(name){
   if(st.done||!g||st.guesses.some(x=>x.n===name))return;
   if(g===d){st.guesses.push({n:name,ok:true});st.done=st.won=true;st.score=dailyScore(st);st.credited=creditCasebook(d.n);sfx('right')}
   else{st.guesses.push({n:name,ok:false,sys:g.s===d.s});sfx('wrong');if(dailyWrong(st)>=DAILY_MAX_WRONG){st.done=true;st.won=false;st.score=0;setTimeout(()=>sfx('flat'),300)}}
-  saveDaily();render(true);
+  saveDaily();if(st.done&&window.ZSOnline)ZSOnline.onDaily(c.date,st);render(true);
 }
 function dailyShare(c,st){
   const rows=st.guesses.map(g=>g.ok?'🟩':g.sys?'🟨':'⬛').join('');
@@ -3720,7 +3720,7 @@ function renderDaily(){
        <p style="margin:0 0 10px"><b>Treatment:</b> ${esc(d.tx)}</p>${guesses}
        <p class="hint">${st.won?(st.credited?'Added to your Casebook, where you can read the teaching point.':'Start a career to keep a Casebook with teaching points.'):'Come back tomorrow for a new patient.'} ${dailyStreak()?`Streak: ${dailyStreak()} day${dailyStreak()>1?'s':''}.`:''}</p>
        <textarea class="code" id="dshare" readonly>${esc(dailyShare(c,st))}</textarea>
-       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="dailyshare">${ic('copy')}Copy result</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div></section>`
+       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="dailyshare">${ic('copy')}Copy result</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}</section>`
     :`<section class="panel orders o5"><div class="stab"><span class="label">Score if solved now</span><b class="mono">${fmt(dailyScore(st))}</b></div><div class="ordgrid">${ords}</div><p class="hint">Each clue costs 60 points and each wrong guess 150. ${wrongLeft} wrong guess${wrongLeft===1?'':'es'} left.</p></section>
       <section class="panel dx o6"><h2>Diagnosis</h2>
        <div class="combo"><input id="dxin" type="text" autocomplete="off" placeholder="Start typing a disease…" aria-label="Diagnosis" role="combobox" aria-expanded="false" aria-controls="dxlist"><button class="btn primary" data-act="submit">Submit</button><div class="list" id="dxlist" role="listbox" hidden></div></div>${guesses}</section>`;
@@ -3767,6 +3767,7 @@ function renderMenu(){
      ${act?`<button class="btn" data-act="editdoc">${ic('user')}Edit doctor</button>`:''}
      <button class="btn" data-menu="transfer">${ic('swap')}Back up or import a save</button>
      <button class="btn" data-act="daily">${ic('star')}Case of the day<small>${dStatus}</small></button>
+     ${window.ZSOnline?`<button class="btn" data-act="online">${ic('people')}Friends &amp; leaderboards<small>${esc(ZSOnline.label())}</small></button>`:''}
      <button class="btn" data-menu="help">${ic('help')}How to play</button>
      <button class="btn" data-act="music" aria-pressed="${AUD.pref.music}">${ic(AUD.pref.music?'music':'musicoff')}Lobby music<small>${AUD.pref.music?'On':'Off'}</small></button>
     </div>${DISCLAIMER}</div>
@@ -3848,6 +3849,7 @@ function renderInner(refocus){
   if(S.screen==='menu'){$('#main').innerHTML=renderMenu();$('#emer').innerHTML='';return}
   if(S.screen==='create'){$('#main').innerHTML=renderCreate();$('#emer').innerHTML='';return}
   if(S.screen==='daily'){setHudH();$('#main').innerHTML=renderDaily();$('#emer').innerHTML='';return}
+  if(S.screen==='online'&&window.ZSOnline){setHudH();$('#main').innerHTML=ZSOnline.render();$('#emer').innerHTML='';return}
   if(!TABS[S.tab])S.tab='shift';
   if(!runValid(S.run)){startRun();fixRun(S.run);save()}
   let v;
@@ -3903,6 +3905,7 @@ function openCreate(slot,editing){
 document.addEventListener('click',e=>{
   const b=e.target.closest('button,[data-uneq]');if(!b)return;
   const ds=b.dataset;
+  if(ds.on&&window.ZSOnline){ZSOnline.act(ds.on);return}
   if(ds.tab){S.tab=ds.tab;save();render();window.scrollTo({top:0});return}
   if(ds.menu){S.ui.menu=ds.menu;S.ui.confirmDel=null;S.ui.confirmImp=null;render();return}
   if(ds.load!==undefined){loadSlot(+ds.load);return}
@@ -3945,6 +3948,7 @@ document.addEventListener('click',e=>{
     case'music':toggleMusic();break;
     case'aidebrief':aiDebrief();break;
     case'daily':S.screen='daily';render();window.scrollTo({top:0});break;
+    case'online':S.screen='online';render();window.scrollTo({top:0});break;
     case'dailyback':S.screen='menu';S.ui.menu='main';render();window.scrollTo({top:0});break;
     case'dailyshare':{const ta=$('#dshare');if(!ta)break;try{navigator.clipboard.writeText(ta.value).then(()=>toast('Result copied'),()=>{ta.select();toast('Press Ctrl+C to copy')})}catch(err){ta.select();toast('Press Ctrl+C to copy')}break}
     case'closechat':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();S.ui.chat=null;render();break;
@@ -3988,6 +3992,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('submit',e=>{
   e.preventDefault();
   if(e.target.id==='chatform'){const i=$('#chatin');if(i)chatSend(i.value)}
+  else if(e.target.dataset.onform&&window.ZSOnline)ZSOnline.submit(e.target.dataset.onform);
 });
 document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('#landsvg'))landClick(e);const u=e.target.closest('[data-us]');if(u)cvcUS(u.dataset.us)});
 // Timing actions fire on press, not release, so the judged moment matches the tap

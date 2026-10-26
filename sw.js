@@ -1,10 +1,14 @@
 // Zebra Shift service worker: keeps the game playable offline.
 // Bump VERSION whenever index.html changes so players get the new build.
-const VERSION = 'zebra-shift-v2';
+const VERSION = 'zebra-shift-v3';
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './vendor/supabase.js',
+  './config.js',
+  './online.js',
+  './privacy.html',
   './icons/favicon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -43,6 +47,16 @@ self.addEventListener('fetch', e => {
       const net = fetch(req).then(res => { c.put(req, res.clone()); return res; }).catch(() => hit);
       return hit || net;
     })));
+    return;
+  }
+
+  // Online settings: fetch fresh so a newly filled-in config.js takes effect without a new VERSION
+  if (url.origin === location.origin && url.pathname.endsWith('/config.js')) {
+    e.respondWith(fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(VERSION).then(c => c.put(req, copy));
+      return res;
+    }).catch(() => caches.match(req)));
     return;
   }
 

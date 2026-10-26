@@ -1,0 +1,91 @@
+-- Zebra Shift online features: profiles, friends, leaderboards and cloud saves.
+-- Paste this whole file into Supabase → SQL Editor → New query, then press Run.
+-- It is safe to run more than once.
+
+-- Player profiles. Usernames, doctor portraits and scores are public so leaderboards work;
+-- email addresses stay private inside Supabase Auth and are never stored here.
+create table if not exists public.profiles (
+  id uuid primary key references auth.users on delete cascade,
+  username text not null check (username ~ '^[A-Za-z0-9_]{3,20}$'),
+  display text check (char_length(display) <= 60),
+  doctor jsonb,
+  spec text check (char_length(spec) <= 40),
+  best integer not null default 0 check (best between 0 and 50000000),
+  cases integer not null default 0 check (cases between 0 and 1000),
+  runs integer not null default 0 check (runs >= 0),
+  ems integer not null default 0 check (ems >= 0),
+  updated_at timestamptz not null default now()
+);
+create unique index if not exists profiles_username_lower on public.profiles (lower(username));
+
+-- One row per player per Case of the day
+create table if not exists public.daily_scores (
+  user_id uuid not null references public.profiles on delete cascade,
+  day date not null,
+  score integer not null check (score between 0 and 1000),
+  clues integer not null default 0 check (clues between 0 and 20),
+  wrong integer not null default 0 check (wrong between 0 and 5),
+  won boolean not null default false,
+  primary key (user_id, day)
+);
+
+-- Friend requests; status becomes 'accepted' when the other player agrees
+create table if not exists public.friendships (
+  requester uuid not null references public.profiles on delete cascade,
+  addressee uuid not null references public.profiles on delete cascade,
+  status text not null default 'pending' check (status in ('pending', 'accepted')),
+  created_at timestamptz not null default now(),
+  primary key (requester, addressee),
+  check (requester <> addressee)
+);
+
+-- Each player's careers, so the same save follows them between devices
+create table if not exists public.saves (
+  user_id uuid primary key references auth.users on delete cascade,
+  data jsonb not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+alter table public.daily_scores enable row level security;
+alter table public.friendships enable row level security;
+alter table public.saves enable row level security;
+
+-- Profiles: anyone can read (leaderboards); you can only create and edit your own
+drop policy if exists "profiles read" on public.profiles;
+create policy "profiles read" on public.profiles for select using (true);
+drop policy if exists "profiles insert own" on public.profiles;
+create policy "profiles insert own" on public.profiles for insert with check (id = auth.uid());
+drop policy if exists "profiles update own" on public.profiles;
+create policy "profiles update own" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
+
+-- Daily scores: anyone can read; you write only your own
+drop policy if exists "daily read" on public.daily_scores;
+create policy "daily read" on public.daily_scores for select using (true);
+drop policy if exists "daily insert own" on public.daily_scores;
+create policy "daily insert own" on public.daily_scores for insert with check (user_id = auth.uid());
+drop policy if exists "daily update own" on public.daily_scores;
+create policy "daily update own" on public.daily_scores for update using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- Friendships: only the two people involved can see a request; only the recipient can accept;
+-- either side can remove it
+drop policy if exists "friends read" on public.friendships;
+create policy "friends read" on public.friendships for select using (auth.uid() in (requester, addressee));
+drop policy if exists "friends request" on public.friendships;
+create policy "friends request" on public.friendships for insert with check (requester = auth.uid() and status = 'pending');
+drop policy if exists "friends accept" on public.friendships;
+create policy "friends accept" on public.friendships for update using (addressee = auth.uid()) with check (addressee = auth.uid() and status = 'accepted');
+drop policy if exists "friends remove" on public.friendships;
+create policy "friends remove" on public.friendships for delete using (auth.uid() in (requester, addressee));
+
+-- Saves: private to their owner
+drop policy if exists "saves own" on public.saves;
+create policy "saves own" on public.saves for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- Lets a signed-in player delete their account and everything linked to it
+create or replace function public.delete_me() returns void
+language sql security definer set search_path = public, auth as $$
+  delete from auth.users where id = auth.uid();
+$$;
+revoke all on function public.delete_me() from public, anon;
+grant execute on function public.delete_me() to authenticated;
