@@ -8,6 +8,8 @@
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
   const here = () => location.origin + location.pathname;
+  // Opening the emailed link lands here with the session in the address; show the online screen when it does
+  let fromLink = /access_token|error_description/.test(location.hash + location.search);
   const O = {
     user: null, profile: null, loading: true, tab: 'board', boardScope: 'all',
     email: '', codeSent: false, busy: false, msg: '', err: '',
@@ -55,6 +57,7 @@
     O.loading = true; rr();
     const { data, error } = await sb.from('profiles').select('*').eq('id', O.user.id).maybeSingle();
     O.loading = false;
+    if (fromLink && S.screen === 'menu') { fromLink = false; S.screen = 'online'; }
     if (error) return fail(error, 'Could not load your profile.');
     O.profile = data;
     if (O.profile) { syncStats(); pushTodayDaily(); loadFriends(); checkCloud(); loadBoard(); }
@@ -203,10 +206,10 @@
     return `<section class="panel onl-card"><h2>Sign in to play with friends</h2>
       <p class="onl-small">Signing in gives you a username, puts your best score on the leaderboard, lets you add friends and keeps your careers in sync across your devices. Your email address is never shown to other players.</p>
       ${O.codeSent
-        ? `<p>We emailed a sign-in code to <b>${esc(O.email)}</b>. Enter it here, or tap the link in the email on this device.</p>
+        ? `<p>We emailed a sign-in link to <b>${esc(O.email)}</b>. Open it on this device to sign in. If the email also shows a code, you can type it here instead.</p>
            <form class="onl-form" data-onform="code"><input id="on-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Code from the email" aria-label="Sign-in code"><button class="btn primary" type="submit" ${O.busy ? 'disabled' : ''}>Sign in</button></form>
            <button class="btn" data-on="restart">Use a different email</button>`
-        : `<form class="onl-form" data-onform="email"><input id="on-email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" value="${esc(O.email)}"><button class="btn primary" type="submit" ${O.busy ? 'disabled' : ''}>${O.busy ? 'Sending…' : 'Email me a code'}</button></form>`}
+        : `<form class="onl-form" data-onform="email"><input id="on-email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" value="${esc(O.email)}"><button class="btn primary" type="submit" ${O.busy ? 'disabled' : ''}>${O.busy ? 'Sending…' : 'Email me a sign-in link'}</button></form>`}
       ${C.google ? `<button class="btn" data-on="google">${ic('user')}Continue with Google</button>` : ''}
       ${msgs()}
       <p class="onl-small">By signing in you agree to the <a href="privacy.html" target="_blank" rel="noopener">privacy notice</a>.</p></section>`;
