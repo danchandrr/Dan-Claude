@@ -4,5 +4,5 @@
 window.ZS_CONFIG = {
   supabaseUrl: 'https://yqkxewvkawkjixjjwqxb.supabase.co',
   supabaseKey: 'sb_publishable_p6tnTiBt776LL94SjAG2eg_RTBDJ8zA',   // publishable key (safe to be public)
-  google: false      // true once the Google provider is switched on in Supabase → Authentication
+  google: true       // Google provider is switched on in Supabase → Authentication
 };
