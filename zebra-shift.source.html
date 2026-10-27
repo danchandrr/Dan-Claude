@@ -706,6 +706,50 @@ li.rdwait{list-style:none;padding:0;background:none}
 .achbar{display:block;height:6px;border-radius:3px;background:var(--panel-2);overflow:hidden;margin-top:4px}.achbar i{display:block;height:100%;background:var(--scrub)}
 .achbar.big{height:10px;border-radius:5px}
 .achwhen{color:var(--muted)}.linkbtn{border:0;background:none;padding:0;color:var(--scrub);font-weight:700;text-decoration:underline;font-size:12.5px}
+/* PIXIS MedStation requisition */
+.pyxov{align-items:center;background:rgba(6,14,18,.84)}
+.pyxwrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:min(420px,100%)}
+.pyx{width:100%;background:linear-gradient(#eef2f3,#d3dcdf);border-radius:18px 18px 10px 10px;padding:14px;border:1px solid #b9c4c8;box-shadow:0 30px 60px -20px rgba(0,0,0,.7),inset 0 -6px 0 rgba(0,0,0,.08);color:#13262b}
+.pyxbrand{display:flex;justify-content:space-between;font:800 10.5px var(--f-mono);letter-spacing:.18em;color:#5c6f75;margin-bottom:8px}
+.pyxscreen{background:#0c2233;border:3px solid #2a3b44;border-radius:8px;padding:9px 12px;font:600 13px/1.55 var(--f-mono);color:#7fe3ff;height:124px;overflow:hidden;white-space:pre-wrap;box-shadow:inset 0 0 18px rgba(80,200,255,.25)}
+.pyxscreen .ok{color:#7dffa1}.pyxscreen .gold{color:#ffd85c;animation:blinkg .5s steps(2) 3}
+@keyframes blinkg{50%{opacity:.2}}
+.pyxscan{display:inline-block;width:110px;height:9px;border:1px solid #7fe3ff;vertical-align:middle;position:relative;overflow:hidden}
+.pyxscan i{position:absolute;inset:0;background:#7fe3ff;transform-origin:left;animation:pyxscan .7s linear forwards}
+@keyframes pyxscan{from{transform:scaleX(0)}}
+.pyxkeys{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:10px 0 12px}
+.pyxkeys i{height:9px;border-radius:2px;background:#b7c3c7;box-shadow:0 2px 0 #95a3a8;transition:background .08s}.pyxkeys i.on{background:#7fe3ff;transform:translateY(1px)}
+.pyxgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pyxgrid.n6{grid-template-columns:repeat(3,1fr)}
+.pyxdr{position:relative;height:66px;border-radius:7px;background:#121c20;--rc:#9fb3bd}
+.pyxgrid.n10 .pyxdr{height:48px}
+.pyxdr .tray{position:absolute;inset:0;border-radius:7px;background:radial-gradient(ellipse at 50% 85%,#fff 0,var(--rc) 30%,#0d1518 78%);opacity:0;transition:opacity .25s}
+.pyxdr .front{position:absolute;inset:0;border-radius:7px;background:linear-gradient(#f6f9fa,#cdd7da);border:1px solid #a6b3b7;display:flex;align-items:center;justify-content:center;gap:8px;transform-origin:50% 100%;transition:transform .45s cubic-bezier(.3,1.5,.5,1);z-index:2}
+.pyxdr .front b{font:700 10px var(--f-mono);color:#6b7c81}
+.pyxdr .handle{width:34%;height:6px;border-radius:3px;background:#8d9a9f}
+.pyxdr .led{position:absolute;top:6px;left:7px;width:9px;height:9px;border-radius:50%;background:#55666c;transition:background .1s,box-shadow .1s}
+.pyxdr .led.on{background:var(--led,#fff);box-shadow:0 0 9px 3px var(--led,#fff)}
+.pyxdr.open .front{transform:translateY(22%) scaleY(.32)}
+.pyxgrid.n10{row-gap:12px}.pyxgrid.n10 .pyxdr{height:44px}
+.pyxdr.open .tray{opacity:1}
+.pyxdr .item{position:absolute;left:50%;bottom:4px;width:42px;height:42px;transform:translate(-50%,8px) scale(.3);opacity:0;z-index:3;transition:transform .5s cubic-bezier(.2,1.7,.4,1),opacity .15s;filter:drop-shadow(0 0 5px var(--rc))}
+.pyxgrid.n10 .pyxdr .item{width:32px;height:32px}
+.pyxdr.open .item{transform:translate(-50%,-16px) scale(1);opacity:1}
+.pyxdr .item svg{width:100%;height:100%;display:block}
+.pyxdr.r3.open{animation:pyxlegend .9s ease-in-out infinite alternate}
+.pyxdr.r2.open{box-shadow:0 0 14px 2px color-mix(in srgb,#b06bff 70%,transparent)}
+@keyframes pyxlegend{from{box-shadow:0 0 8px 2px rgba(255,201,60,.5)}to{box-shadow:0 0 26px 8px rgba(255,201,60,.9)}}
+.pyxcap{min-height:62px;text-align:center;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pyxcap b{display:block;font:800 21px/1.2 var(--f-display);margin:2px 0}.pyxcap span{font:700 11.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.pyxbtns{display:flex;gap:8px}
+.pyxfx{position:fixed;inset:0;pointer-events:none;z-index:58}
+.spark{position:absolute;width:7px;height:7px;background:var(--rc);box-shadow:0 0 6px var(--rc);animation:pyxspark 1.1s ease-out forwards}
+@keyframes pyxspark{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+.pyxflash{position:fixed;inset:0;background:radial-gradient(circle,rgba(255,215,90,.55),transparent 65%);animation:pyxflash 1.1s ease-out forwards}
+@keyframes pyxflash{from{opacity:1}to{opacity:0}}
+/* pixel item icons */
+.pix{image-rendering:pixelated}
+.card .tile{width:56px;height:56px}.card .tile .pix{width:42px;height:42px;display:block}
+
 #repov .emov{z-index:58}
 /* Tutorial coach and one-time tips */
 #coach{position:fixed;z-index:62;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100% - 32px));background:var(--panel);border:2px solid var(--scrub);border-radius:14px;box-shadow:0 16px 36px -14px rgba(0,0,0,.45);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
@@ -3140,7 +3184,7 @@ setInterval(()=>{
   const r=S.run;
   if(r.em)emTick(dt);
   // The floor holds still while you are talking in the Staff Room
-  if(S.paused||S.mini||S.cpr||S.read||r.em||r.phase!=='floor'||(S.tab==='staff'&&S.ui.chat))return;
+  if(S.paused||S.mini||S.cpr||S.read||PYX||r.em||r.phase!=='floor'||(S.tab==='staff'&&S.ui.chat))return;
   const changed=worldTick(dt);
   if(r.phase!=='floor'){render();return}
   if(r.arrived>=3||r.shift>1){r.emClock+=dt;if(r.emClock>=r.emNext){r.emClock=0;r.emNext=emGap();triggerEmergency();return}}
@@ -3523,9 +3567,9 @@ function pull(n){
   S.meta.grant-=price;
   const rs=[];for(let i=0;i<n;i++)rs.push(rollRarity());
   if(n===10&&Math.max(...rs)<2)rs[9]=2;
-  S.meta.lastPull=rs.map(grantTool);achEvent('pull',{n,best:Math.max(...rs)});sfx('drawer');sfx('jingle',Math.max(...rs));
-  justPulled=true;save();render();justPulled=false;
-  if(Math.max(...rs)===3)toast('Legendary requisition approved!');
+  S.meta.lastPull=rs.map(grantTool);achEvent('pull',{n,best:Math.max(...rs)});save();render();
+  if(reduced){sfx('drawer');sfx('jingle',Math.max(...rs));if(Math.max(...rs)===3)toast('Legendary requisition approved!')}
+  else pyxPlay(S.meta.lastPull);
 }
 
 /* ===================== RENDER ===================== */
@@ -3799,7 +3843,7 @@ function renderStaff(){
 function toolCard(id,tag,extraCls=''){
   const t=TOOL[id],o=S.meta.owned[id],lv=o?Math.max(1,Math.min(5,o.lv||1)):1;
   const nxt=o&&lv<5&&t.d(lv+1)!==t.d(lv)?`<p class="nextlv">Lv ${lv+1}: ${esc(t.d(lv+1))}</p>`:'';
-  return`<div class="card r${t.r} ${extraCls}">${tag?`<span class="tag">${tag}</span>`:''}<span class="tile">${ic(TOOL_IC[id])}</span><span class="stars">${'★'.repeat(t.r+1)}</span><b>${t.n}</b><p>${esc(t.d(lv))}</p>${nxt}${o?`<p class="label">${RNAME[t.r]} · Lv ${lv}</p>`:`<p class="label">${RNAME[t.r]}</p>`}</div>`;
+  return`<div class="card r${t.r} ${extraCls}">${tag?`<span class="tag">${tag}</span>`:''}<span class="tile">${pixIcon(id)}</span><span class="stars">${'★'.repeat(t.r+1)}</span><b>${t.n}</b><p>${esc(t.d(lv))}</p>${nxt}${o?`<p class="label">${RNAME[t.r]} · Lv ${lv}</p>`:`<p class="label">${RNAME[t.r]}</p>`}</div>`;
 }
 function renderReq(){
   const g=S.meta.grant;
@@ -4901,6 +4945,566 @@ function tutAfterRender(){
   if(t){t.classList.add('tutpulse');if(coachTarget!==key){coachTarget=key;if(step)t.scrollIntoView({block:'center',behavior:'smooth'})}}
 }
 
+/* ---- Pixel-art item icons: 16×16 sprites, one letter per pixel ---- */
+const PIX_PAL={k:'#1b2326',w:'#f4f7f7',g:'#c4cdd0',G:'#8a979b',d:'#4b575b',r:'#d8463c',R:'#962a22',o:'#ee8a2f',y:'#f6d24e',Y:'#c9951a',b:'#3f7fd8',B:'#24427e',c:'#8fe0f0',t:'#1f9aa6',T:'#13636b',n:'#9a6332',N:'#5c3a1c',p:'#9a6ae0',P:'#5a3796',l:'#9ad65a',L:'#3c9a52',s:'#f0c39b',S:'#c98d63',h:'#3a2a20',m:'#f29bb5',e:'#f3ead2',z:'#ffffff'};
+const PIX={
+penlight:[
+'................',
+'.............y.y',
+'............yyy.',
+'...........kyyyy',
+'..........kGk.y.',
+'.........kGgk...',
+'........kGgk....',
+'.......kGgk.....',
+'......kGgk......',
+'.....kbbk.......',
+'....kbBk........',
+'...kbBk.........',
+'..kGgk..........',
+'..kGk...........',
+'...k............',
+'................'],
+coffee:[
+'................',
+'.....c...c......',
+'......c...c.....',
+'.....c...c......',
+'..kkkkkkkkkk....',
+'.kGGGGGGGGGGk...',
+'..kwwwwwwwwkkk..',
+'..kwwwwwwwwk.k..',
+'..knnnnnnnnk.k..',
+'..knNtNNNNnkkk..',
+'..knnnnnnnnk....',
+'..kwwwwwwwwk....',
+'...kwwwwwwk.....',
+'...kwwwwwwk.....',
+'....kkkkkk......',
+'................'],
+clipboard:[
+'................',
+'......kkkk......',
+'..kkkkgGGgkkkk..',
+'.knnnkkkkkknnnk.',
+'.knwwwwwwwwwwnk.',
+'.knwGGGGGGwwwnk.',
+'.knwwwwwwwwwwnk.',
+'.knwGGGGGGGGwnk.',
+'.knwwwwwwwwwwnk.',
+'.knwGGGGGwwwwnk.',
+'.knwwwwwwwwwwnk.',
+'.knwrwGGGGGGwnk.',
+'.knwwwwwwwwwwnk.',
+'.knnnnnnnnnnnnk.',
+'..kkkkkkkkkkkk..',
+'................'],
+guide:[
+'................',
+'...kkkkkkkkkk...',
+'..kLLLLLLLLLwk..',
+'..kLLLLLLLLLwk..',
+'..kLLLkkkkLLwk..',
+'..kLLkrrwwkLwk..',
+'..kLLkrrwwkLwk..',
+'..kLLLkkkkLLwk..',
+'..kLLLLLLLLLwk..',
+'..kLyyyyyyyLwk..',
+'..kLLLLLLLLLwk..',
+'..kLLLLLLLLLwk..',
+'..kLLLLLLLLLwk..',
+'..kkkkkkkkkkwk..',
+'...kkkkkkkkkk...',
+'................'],
+steth:[
+'................',
+'..kk......kk....',
+'..kG......Gk....',
+'...kd....dk.....',
+'...kd....dk.....',
+'...kd....dk.....',
+'....kd..dk......',
+'.....kddk.......',
+'......kdk.......',
+'......kdk.......',
+'......kdk...kk..',
+'......kdkkkkGGk.',
+'.......kdddkGrGk',
+'........kkkkGGk.',
+'............kk..',
+'................'],
+gloves:[
+'................',
+'.....k.k.k......',
+'....kbkbkbk.....',
+'....kbkbkbk.k...',
+'....kbkbkbkkbk..',
+'....kbbbbbbkbk..',
+'....kbbbbbbbbk..',
+'.kk.kbbbbbbbbk..',
+'.kbkkbbbbbbbbk..',
+'..kbbbbbbbbbk...',
+'...kbbbbbbbbk...',
+'....kbbbbbbk....',
+'....kccccccck...',
+'....kbbbbbbk....',
+'....kkkkkkkk....',
+'................'],
+lanyard:[
+'.....kk..kk.....',
+'....kr....rk....',
+'....kr....rk....',
+'.....kr..rk.....',
+'......kGGk......',
+'......kggk......',
+'...kkkkkkkkkk...',
+'...kwwwwwwwwk...',
+'...kwhhkwwwwk...',
+'...kwsskwGGwk...',
+'...kwsskwwwwk...',
+'...kwttkwGGwk...',
+'...kwwwwwwwwk...',
+'...kttttttttk...',
+'...kkkkkkkkkk...',
+'................'],
+thermo:[
+'................',
+'................',
+'..........kk....',
+'.........kbbk...',
+'...kkkkkkkwwk...',
+'..kwwwwwwwwgk...',
+'..kwkkkkkwwwk...',
+'..kwkcccckwkk...',
+'..kwkkkkkwk.....',
+'..kwwwwwwwk.....',
+'...kkkkwwwk.....',
+'......kwwk......',
+'......kwgk......',
+'......kwwk......',
+'......kkkk......',
+'................'],
+tourniquet:[
+'................',
+'................',
+'..kkkkkkkkkkk...',
+'.kbbbbbbbbbbbk..',
+'.kbBBBBBBBBBbk..',
+'.kbbbbbbbbbbbkk.',
+'..kkkkkkkkkkbbk.',
+'..........kbbk..',
+'.........kbbk...',
+'..kkkkkkkkbbk...',
+'.kGGgkbbbbbk....',
+'.kGgGkBBBBk.....',
+'.kGGgkkkkk......',
+'..kkk...........',
+'................',
+'................'],
+pocus:[
+'................',
+'.kkkkkkkkkkkkkk.',
+'.kddddddddddddk.',
+'.kdkkkkkkkkkkdk.',
+'.kdkkkkGGkkkkdk.',
+'.kdkkkGgGGkkkdk.',
+'.kdkkGGgwGGkkdk.',
+'.kdkGGgGGgGGkdk.',
+'.kdkkkkkkkkkkdk.',
+'.kddddddddddddk.',
+'.kkkkkkkkkkkkkk.',
+'......kddk......',
+'.....kGGGGk.....',
+'....kGgggGGk....',
+'....kkkkkkkk....',
+'................'],
+istat:[
+'................',
+'....kkkkkkkk....',
+'...kwwwwwwwwk...',
+'...kwkkkkkkwk...',
+'...kwkclclkwk...',
+'...kwkkkkkkwk...',
+'...kwwwwwwwwk...',
+'...kwGwGwGwwk...',
+'...kwwwwwwwwk...',
+'...kwGwGwGwwk...',
+'...kwwwwwwwwk...',
+'...kwwkrrkwwk...',
+'...kwwkrrkwwk...',
+'....kkkkkkkk....',
+'................',
+'................'],
+charge:[
+'................',
+'....kkkkkkkk....',
+'...kwwwwwwwwk...',
+'..kwwwwrwwwwwk..',
+'..kwwwrrrwwwwk..',
+'..kwwwwrwwwwwk..',
+'..kkkkkkkkkkkk..',
+'...khhsssshhk...',
+'...khsksskshk...',
+'...ksssssssk....',
+'....kssmmssk....',
+'.....kssssk.....',
+'...kkkttttkkk...',
+'..kttttwwttttk..',
+'..kttttwwttttk..',
+'................'],
+pharm:[
+'................',
+'.....kkkkkk.....',
+'....kwwwwwwk....',
+'....kwgwgwgk....',
+'....kkkkkkkk....',
+'....koooooook...',
+'...koooooooook..',
+'...kowwwwwwwok..',
+'...kowrwrwwwok..',
+'...kowwwwwwwok..',
+'...kowGGGGwwok..',
+'...kowwwwwwwok..',
+'...koooooooook..',
+'...koooooooook..',
+'....kkkkkkkkk...',
+'................'],
+writer:[
+'................',
+'..kkkkkkkkk.....',
+'..kwwwwwwwkk....',
+'..kwGGGGwwkwk...',
+'..kwwwwwwwkkkk..',
+'..kwGGGGGGwwwk..',
+'..kwwwwwwwwwwk..',
+'..kwGGGGGkkkkkk.',
+'..kwwwwwkyyyyyyk',
+'..kwGGGkyYYyyYyk',
+'..kwwwwkyyYYyyyk',
+'..kwwwwkyYYyyYyk',
+'..kkkkkkyyyyyyk.',
+'.........kkkkk..',
+'................',
+'................'],
+trolley:[
+'................',
+'..kkkkkkkkkkkk..',
+'..kGGGGGGGGGGk..',
+'..kkkkkkkkkkkk..',
+'..krrrrrrrrrrk..',
+'..krRRRggRRRrk..',
+'..kkkkkkkkkkkk..',
+'..krrrrrrrrrrk..',
+'..krRRRggRRRrk..',
+'..kkkkkkkkkkkk..',
+'..krrrrrrrrrrk..',
+'..krRRRggRRRrk..',
+'..kkkkkkkkkkkk..',
+'...kGk....kGk...',
+'...kk......kk...',
+'................'],
+pads:[
+'................',
+'.kkkkkk..kkkkkk.',
+'.kwwwwk..kwwwwk.',
+'.kwGGwk..kwGGwk.',
+'.kwGGwk..kwGGwk.',
+'.kwwwwk..kwwwwk.',
+'.kkkkkk..kkkkkk.',
+'...kk......kk...',
+'...kr......kr...',
+'....kr.yy.kr....',
+'.....kryyyk.....',
+'......yyyk......',
+'.....yyyk.......',
+'.....yyk........',
+'.....yk.........',
+'................'],
+pager:[
+'................',
+'................',
+'..kkkkkkkkkkkk..',
+'.kddddddddddddk.',
+'.kdkkkkkkkkkkdk.',
+'.kdklllLlllLkdk.',
+'.kdkLlllLlllkdk.',
+'.kdkkkkkkkkkkdk.',
+'.kddddddddddddk.',
+'.kddGdGdGddrrdk.',
+'.kddddddddddddk.',
+'..kkkkkkkkkkkk..',
+'....kGk.........',
+'....kkk.........',
+'................',
+'................'],
+idfellow:[
+'................',
+'.......L........',
+'...L...L...L....',
+'....L.kkk.L.....',
+'.....kllLk......',
+'....kllllLk.....',
+'.LLkllLlllLkLL..',
+'...kllllLllk....',
+'...klLllllLk....',
+'....kllLllk.....',
+'.....kLllk......',
+'....L.kkk.L.....',
+'...L...L...L....',
+'.......L........',
+'................',
+'................'],
+engine:[
+'................',
+'......kkkk......',
+'......kppk......',
+'......kkkk......',
+'.......kk.......',
+'....kkkkkkkk....',
+'....k......k....',
+'..kkkk....kkkk..',
+'..kbbk....kyyk..',
+'..kkkk....kkkk..',
+'...kk......kk...',
+'.kkkkkk..kkkkkk.',
+'.kllllk..krrrrk.',
+'.kkkkkk..kkkkkk.',
+'................',
+'................'],
+cover:[
+'................',
+'...kkkkkkkkkk...',
+'..kbbbbbbbbbbk..',
+'..kbBBBBBBBBbk..',
+'..kbBBBBBBBwbk..',
+'..kbBBBBBBwwbk..',
+'..kbBwBBBwwBbk..',
+'..kbBwwBwwBBbk..',
+'..kbBBwwwBBBbk..',
+'...kbBBwBBBbk...',
+'...kbBBBBBBbk...',
+'....kbBBBBbk....',
+'.....kbBBbk.....',
+'......kbbk......',
+'.......kk.......',
+'................'],
+atlas:[
+'................',
+'..kkkkkkkkkkk...',
+'.kwkwkwkwkwkwk..',
+'.kwkwkwkwkwkwk..',
+'.kkwkwkwkwkwkk..',
+'.kwkwkwkwkwkwk..',
+'.kwkwkkkkwkwkk..',
+'.kkwkkYYkkwkwk..',
+'.kwkwkkkkkwkwk..',
+'.kwkwkwkwkwkwk..',
+'.kkwkwkwkwkwkk..',
+'.kwkwkwkwkwkwk..',
+'.kkkkkkkkkkkkkk.',
+'.kgggggggggggggk',
+'..kkkkkkkkkkkkk.',
+'................'],
+swarm:[
+'................',
+'................',
+'.kkk..kkk..kkk..',
+'khhhkkhhhkkhhhk.',
+'ksssskssskssssk.',
+'kskskkskskksksk.',
+'ksssskssskssssk.',
+'.kkk..kkk..kkk..',
+'ktttkktttkktttk.',
+'ktwtkktwtkktwtk.',
+'ktttkktttkktttk.',
+'ktttkktttkktttk.',
+'kkkkkkkkkkkkkkk.',
+'................',
+'................',
+'................'],
+rrt:[
+'................',
+'.....r....r.....',
+'..r...kkkk...r..',
+'.....krrrrk.....',
+'....krrwrrrk....',
+'...krrwrrrrrk...',
+'...krrwrrrrrk...',
+'.r.krrrrrrrrk.r.',
+'...krrrrrrrrk...',
+'..kkkkkkkkkkkk..',
+'..kGGGGGGGGGGk..',
+'..kddddddddddk..',
+'..kkkkkkkkkkkk..',
+'................',
+'................',
+'................'],
+bedmgr:[
+'................',
+'................',
+'.kk.............',
+'.kGk............',
+'.kGk.....kkkkk..',
+'.kGkkkkkkwwwwwk.',
+'.kGkwwwkcccccck.',
+'.kGkwwwkcccccck.',
+'.kGkkkkkkkkkkkk.',
+'.kGGGGGGGGGGGGk.',
+'.kGkkkkkkkkkkGk.',
+'.kGk........kGk.',
+'.kkk........kkk.',
+'..k..........k..',
+'................',
+'................'],
+dx:[
+'................',
+'.....kkkkk......',
+'....kYYYYYk.....',
+'...kYcccccYk....',
+'..kYcczccccYk...',
+'..kYczcccccYk...',
+'..kYcccccccYk...',
+'..kYcccccccYk...',
+'..kYcccccccYk...',
+'...kYcccccYk....',
+'....kYYYYYYk....',
+'.....kkkkkYYk...',
+'..........kYYk..',
+'...........kYYk.',
+'............kkk.',
+'................'],
+genome:[
+'................',
+'...kbk....kpk...',
+'....kbk..kpk....',
+'.....kbkkpk.....',
+'......kbpk......',
+'.....kpkkbk.....',
+'....kpkyykbk....',
+'....kpkyykbk....',
+'.....kpkkbk.....',
+'......kpbk......',
+'.....kbkkpk.....',
+'....kbkyykpk....',
+'....kbkyykpk....',
+'.....kbkkpk.....',
+'......kbpk......',
+'................'],
+chief:[
+'................',
+'................',
+'.k.....k.....k..',
+'kyk...kyk...kyk.',
+'kyyk.kyyyk.kyyk.',
+'kyyykyyyyykyyyk.',
+'kyyyyyyryyyyyyk.',
+'kyyyyyrrryyyyyk.',
+'kyyyyyyryyyyyyk.',
+'kYYYYYYYYYYYYYk.',
+'kyyyyyyyyyyyyyk.',
+'kYbYYYrYYYbYYYk.',
+'kkkkkkkkkkkkkkk.',
+'................',
+'................',
+'................'],
+cane:[
+'................',
+'.....kkkkk......',
+'....knnnnnk.....',
+'...knnkkknnk....',
+'...knk...knk....',
+'...knk...knk....',
+'...kk....knk....',
+'.........knk....',
+'.........knk....',
+'.........knk....',
+'.........knk....',
+'.........knk....',
+'.........knk....',
+'.........kGk....',
+'.........kdk....',
+'.........kkk....']
+};
+// Each row becomes runs of same-coloured rects, so a sprite is a few dozen SVG elements at most
+function pixIcon(id,cls='pix'){
+  const rows=PIX[id];if(!rows)return ic(TOOL_IC[id]||'cross');
+  let out='';
+  rows.forEach((row,y)=>{let x=0;while(x<16){const ch=row[x];if(ch==='.'||!PIX_PAL[ch]){x++;continue}let w=1;while(x+w<16&&row[x+w]===ch)w++;out+=`<rect x="${x}" y="${y}" width="${w}" height="1" fill="${PIX_PAL[ch]}"/>`;x+=w}});
+  return`<svg class="${cls}" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">${out}</svg>`;
+}
+
+/* ---- PIXIS MedStation: each requisition plays out at an automated dispensing cabinet ---- */
+// Drawer lights climb through the rarity colours and stop at the item's rarity before the drawer opens
+const RCOL=['#9fb3bd','#4a90ff','#b06bff','#ffc93c'];
+let PYX=null;
+function pyxHost(){let el=document.getElementById('pyxov');if(!el){el=document.createElement('div');el.id='pyxov';document.body.appendChild(el)}return el}
+function pyxPlay(res){
+  if(reduced||!res||!res.length)return;
+  const n=res.length,slots=n===1?6:10,cols=n===1?3:2;
+  // reveal from the most common to the rarest, so the best item comes last
+  const order=res.map((x,i)=>({...x,r:TOOL[x.id].r,i})).sort((a,b)=>a.r-b.r||a.i-b.i);
+  PYX={skip:false,done:false,n,order,pos:n===1?[rnd(slots)]:order.map((_,k)=>k)};
+  pyxHost().innerHTML=`<div class="emov minov pyxov" role="dialog" aria-modal="true" aria-label="Requisition">
+   <div class="pyxwrap"><div class="pyx"><div class="pyxbrand"><span>PIXIS · MEDSTATION</span><span>ED CABINET 02</span></div>
+    <div class="pyxscreen" id="pyxscr"></div><div class="pyxkeys">${'<i></i>'.repeat(12)}</div>
+    <div class="pyxgrid n${slots}">${Array.from({length:slots},(_,k)=>`<div class="pyxdr" id="pyxd${k}"><div class="tray"></div><div class="item"></div><div class="front"><span class="led"></span><b>${String.fromCharCode(65+Math.floor(k/cols))}${k%cols+1}</b><span class="handle"></span></div></div>`).join('')}</div></div>
+    <div class="pyxcap" id="pyxcap" aria-live="polite"></div>
+    <div class="pyxbtns"><button class="btn" data-act="pyxskip" id="pyxskip">Skip</button></div></div></div>`;
+  pyxRun(PYX);
+}
+async function pyxRun(P){
+  const scr=$('#pyxscr'),stop=()=>P.skip||PYX!==P,w=ms=>new Promise(r=>setTimeout(r,P.skip?0:ms));
+  const line=(t,cls='')=>scr.insertAdjacentHTML('beforeend',`<div class="${cls}">${t}</div>`);
+  const keys=[...document.querySelectorAll('.pyxkeys i')],press=()=>{const k=pick(keys);k.classList.add('on');setTimeout(()=>k.classList.remove('on'),90)};
+  const type=async(label,text,mask)=>{line(label);const el=scr.lastChild;for(const ch of text){if(stop())return;el.textContent+=mask?'•':ch;sfx('type');press();await w(55)}};
+  line('PIXIS MedStation v4.2');line('Sign in to dispense');await w(380);if(stop())return;
+  await type('USER  ',('DR.'+((S.doctor&&S.doctor.last)||'REYES')).toUpperCase().replace(/[^A-Z.]/g,'').slice(0,14));if(stop())return;
+  await type('PASS  ','xxxxxxx',true);if(stop())return;
+  line('BIO-ID <span class="pyxscan"><i></i></span>');await w(760);if(stop())return;
+  sTone(880,.08,{g:.04});sTone(1320,.14,{g:.04,at:.08});line('ACCESS GRANTED','ok');await w(480);if(stop())return;
+  scr.innerHTML='';line(`REQUISITION ×${P.n}`);line(`Dispensing ${P.n} item${P.n>1?'s':''}…`);
+  const leds=[...document.querySelectorAll('.pyxdr .led')];
+  for(let s=0;s<leds.length*2;s++){if(stop())return;leds.forEach(l=>l.classList.remove('on'));const l=leds[s%leds.length];l.style.setProperty('--led','#fff');l.classList.add('on');sfx('click');await w(50)}
+  leds.forEach(l=>l.classList.remove('on'));
+  for(let k=0;k<P.order.length;k++){if(stop())return;await pyxOpen(P,k,w,stop)}
+  if(!stop())pyxFinish();
+}
+async function pyxOpen(P,k,w,stop){
+  const it=P.order[k],dr=$('#pyxd'+P.pos[k]);if(!dr)return;
+  const led=dr.querySelector('.led'),fast=P.n>1;
+  led.style.setProperty('--led','#fff');
+  for(let f=0;f<4;f++){led.classList.toggle('on');await w(fast?55:100)}
+  led.classList.add('on');
+  for(let r=0;r<=it.r;r++){if(stop())return;led.style.setProperty('--led',RCOL[r]);dr.style.setProperty('--rc',RCOL[r]);sTone(520*Math.pow(1.26,r),.09,{type:'square',g:.025});await w(r<it.r?(fast?150:260):70)}
+  if(stop())return;
+  dr.classList.add('open','r'+it.r);dr.querySelector('.item').innerHTML=pixIcon(it.id);sfx('drawer');
+  pyxCaption(it);pyxFx(dr,it.r);
+  await w(it.r===3?1800:it.r===2?(fast?950:1300):(fast?520:1100));
+}
+function pyxCaption(it){
+  const t=TOOL[it.id],tag=it.tag==='NEW'?'New item':it.tag==='+30'?'Already maxed · ₲30 back':'Levelled up to '+it.tag.replace('LV ','Lv ');
+  const c=$('#pyxcap');if(c)c.innerHTML=`<span style="color:${RCOL[t.r]}">${'★'.repeat(t.r+1)} ${RNAME[t.r]}</span><b>${esc(t.n)}</b><span>${esc(tag)}</span>`;
+}
+function pyxFx(dr,r){
+  [523,659,784,1047,1319].slice(0,r+2).forEach((f,k)=>sTone(f,.45,{type:'triangle',g:.035,at:.05+k*.07}));
+  if(r<2)return;
+  const box=dr.getBoundingClientRect(),fx=document.createElement('div');fx.className='pyxfx';
+  for(let i=0;i<(r===3?30:14);i++){const a=Math.random()*Math.PI*2,d=60+Math.random()*(r===3?170:90);
+    fx.insertAdjacentHTML('beforeend',`<i class="spark" style="left:${box.left+box.width/2}px;top:${box.top+box.height/2}px;--rc:${RCOL[r]};--dx:${(Math.cos(a)*d).toFixed(0)}px;--dy:${(Math.sin(a)*d).toFixed(0)}px;animation-delay:${(Math.random()*.15).toFixed(2)}s"></i>`)}
+  if(r===3){fx.insertAdjacentHTML('beforeend','<div class="pyxflash"></div>');const s=$('#pyxscr');if(s)s.insertAdjacentHTML('beforeend','<div class="gold">CONTROLLED ITEM · WITNESS SIGNED</div>')}
+  document.body.appendChild(fx);setTimeout(()=>fx.remove(),1700);
+}
+// Skip, or the end of the sequence: every drawer open and lit, then a Done button
+function pyxFinish(){
+  const P=PYX;if(!P||P.done)return;P.done=true;
+  P.order.forEach((it,k)=>{const dr=$('#pyxd'+P.pos[k]);if(!dr)return;dr.style.setProperty('--rc',RCOL[it.r]);const led=dr.querySelector('.led');led.style.setProperty('--led',RCOL[it.r]);led.classList.add('on');dr.classList.add('open','r'+it.r);dr.querySelector('.item').innerHTML=pixIcon(it.id)});
+  const best=P.order[P.order.length-1];
+  if(P.n>1){const c=$('#pyxcap');if(c)c.innerHTML=`<span>${P.n} items dispensed · best</span><b>${esc(TOOL[best.id].n)}</b><span style="color:${RCOL[best.r]}">${'★'.repeat(best.r+1)} ${RNAME[best.r]}</span>`}
+  else pyxCaption(best);
+  const b=$('#pyxskip');if(b){b.textContent='Done';b.dataset.act='pyxdone';b.classList.add('primary');b.focus()}
+}
+function pyxClose(){PYX=null;pyxHost().innerHTML='';render()}
+
 /* ===================== SHARE CARDS ===================== */
 // Results become a portrait image (1080×1350, the size social apps like) drawn on a canvas
 const svgImg=svg=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);
@@ -5270,6 +5874,8 @@ document.addEventListener('click',e=>{
     case'tutskip':tutFinish(true);break;
     case'tipok':S.tipNow=null;coachKey=null;coachHost().hidden=true;document.body.classList.remove('coaching');break;
     case'tutreplay':TUT={done:false,tips:{}};saveTut();toast('The tutorial starts with your next new run.');break;
+    case'pyxskip':if(PYX){PYX.skip=true;pyxFinish()}break;
+    case'pyxdone':pyxClose();break;
     case'rpclose':S.rep=null;renderReport();break;
     case'rpsend':sendReport();break;
     case'rdclose':readClose(false);break;
@@ -5353,6 +5959,7 @@ document.addEventListener('pointerdown',e=>{
   e.preventDefault();if(b.dataset.act==='miniact')miniAct();else cprTap();
 });
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&PYX){if(PYX.done)pyxClose();else{PYX.skip=true;pyxFinish()}return}
   if(e.key==='Escape'&&S.ui.specOpen){S.ui.specOpen=false;render();return}
   if(e.key==='Escape'&&S.rep){S.rep=null;renderReport();return}
   if(e.key==='Escape'&&S.read){readClose(false);return}
