@@ -126,3 +126,21 @@ Not-yet-clinical players on **Intern** difficulty with the changes: median shift
 - The bot's decisions are simplified (it never uses consults, items' active effects are passive, and it reads the chart in a fixed order), so absolute numbers matter less than the direction of a change.
 
 New careers now start on **Intern**, labelled "Beginner friendly" in the doctor creator.
+
+## Medical Student difficulty (for players with no medical training)
+
+The `student` bot above is a pre-clinical medical student. A new `public` bot stands in for someone with no medical training at all (recognises 30% of Common diseases and almost no rarer ones, slow, often picks the wrong treatment and destination).
+
+Medical Student: each diagnosis is picked from four choices (the answer and its three closest differentials), +5 stability, every order costs 1 less, wrong diagnoses cost 1, one wrong treatment removed and wrong treatments cost 1 less, the right destination is highlighted, patients get worse 1.5× more slowly, rarer cases are held back by two shifts, +15 s on emergencies and arrests, CPR and procedures easier. Score ×0.5. A run ends after shift 8 (a "placement") with an offer to move up to Intern, and earns at most ₲2,000, so it is not worth farming for grant and then switching difficulty.
+
+Intern today → Medical Student (25 careers × 12 runs):
+
+```
+                                   public (no training)   student (pre-clinical)   doctor
+1st run: lost in shift 1           96% → 12%              48% → 0%                 8% → 0%
+1st run: median shift              1 → 3                  2 → 4                    3 → 9 (placement complete)
+arrests per patient treated        3.03 → 0.10            1.14 → 0.07              0.36 → 0.03
+grant per run (median)             21 → 486               141 → 1397               3369 → 2000 (cap)
+item levels by run 12 (max 220)    1 → 20                 5 → 66                   188 → 108
+specialties unlocked by run 12     0 → 6.1                1.5 → 7.8                8.4 → 10
+```

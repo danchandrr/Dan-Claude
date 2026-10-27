@@ -10,8 +10,9 @@ const { chromium } = require('playwright');
 // How each kind of player behaves. know: chance they would recognise a disease of each rarity
 // (Common → Unicorn) once they have the whole picture. need: how much of the chart they want before
 // guessing. Other numbers are the chance of getting that step right first time, and speed scales
-// how long each click-and-think takes.
+// how long each click-and-think takes. public: someone with no medical training.
 const PROFILES = {
+  public:  { know: [.3, .12, .04, .01, 0], need: .85, tx: .5, dispo: .55, read: .3, proc: .55, cprQ: .5, rhythm: .5, em: .35, speed: 1.6 },
   student: { know: [.8, .55, .3, .12, .04], need: .75, tx: .7, dispo: .75, read: .5, proc: .6, cprQ: .55, rhythm: .6, em: .45, speed: 1.4 },
   doctor:  { know: [.95, .8, .55, .3, .12], need: .55, tx: .85, dispo: .88, read: .7, proc: .75, cprQ: .75, rhythm: .8, em: .65, speed: 1 },
   expert:  { know: [.98, .92, .78, .55, .3], need: .4, tx: .95, dispo: .95, read: .88, proc: .88, cprQ: .9, rhythm: .95, em: .82, speed: .7 }
@@ -90,8 +91,11 @@ const BOT = () => {
         }
         tick(Math.ceil(7 * P.speed)); if (r.beds[i] !== p || p.phase !== 'case') continue;
         // knows it: right; does not: a differential that sometimes lands, better with more of the chart
-        const hit = m.knows ? rand() < .9 : rand() < .15 + .2 * f;
+        // with four choices on screen (Medical Student) a guess is among what is left, helped by the chart
+        const opts = p.opts && mods().choices ? p.opts.filter(n => !p.guesses.some(g => g.n === n)) : null;
+        const hit = m.knows ? rand() < .9 : opts ? rand() < 1 / opts.length + .3 * f : rand() < .15 + .2 * f;
         if (hit) { stat.tiers[d.t]++; guess(d.n); }
+        else if (opts) { stat.wrong++; guess(pick(opts.filter(n => n !== d.n))); }
         else { stat.wrong++; let n = wrongName(d), k = 0; while (p.guesses.some(g => g.n === n) && k++ < 20) n = wrongName(d); guess(n); }
         continue;
       }
@@ -99,7 +103,8 @@ const BOT = () => {
         const opts = p.tx.filter(o => !p.txWrong.includes(o)); treat(rand() < P.tx ? d.tx : pick(opts.filter(o => o !== d.tx).concat(d.tx))); continue; }
       if (p.phase === 'proc') { const id = p.procs.find(x => !p.procDone.includes(x)); S.mini = { id, ctx: { kind: 'bed', bed: i } }; miniDone(rand() < Math.min(.97, P.proc + mods().proc * .05)); continue; }
       if (p.phase === 'dispo') { tick(Math.ceil(3 * P.speed)); if (r.beds[i] !== p || p.phase !== 'dispo') continue;
-        const before = r.rep, code = rand() < P.dispo ? d.dispo || 'ward' : pick(DISPO_OPTS.map(o => o[0]).filter(c => c !== d.dispo));
+        // a highlighted destination is followed almost every time
+        const before = r.rep, code = rand() < (mods().bedHint ? .95 : P.dispo) ? d.dispo || 'ward' : pick(DISPO_OPTS.map(o => o[0]).filter(c => c !== d.dispo));
         dispo(code); if (r.rep < before) stat.causes.unsafe++; continue; }
     }
     if (r.phase !== 'over') endRun();
@@ -127,7 +132,9 @@ const BOT = () => {
   await page.goto(src); await page.waitForTimeout(500);
   await page.evaluate(BOT);
   const out = { when: new Date().toISOString(), careers, runs, results: {} };
-  const configs = [['doctor', 'em', 'resident'], ['student', 'em', 'resident'], ['expert', 'em', 'resident'], ['doctor', 'em', 'intern'], ['doctor', 'em', 'attending'], ['doctor', 'gp', 'resident'], ['student', 'em', 'intern']];
+  // SIM_CONFIGS picks setups, e.g. "public/em/student,public/em/intern"
+  const configs = process.env.SIM_CONFIGS ? process.env.SIM_CONFIGS.split(',').map(c => c.split('/'))
+    : [['doctor', 'em', 'resident'], ['student', 'em', 'resident'], ['expert', 'em', 'resident'], ['doctor', 'em', 'intern'], ['doctor', 'em', 'attending'], ['doctor', 'gp', 'resident'], ['student', 'em', 'intern'], ['student', 'em', 'student'], ['public', 'em', 'intern'], ['public', 'em', 'student']];
   for (const [prof, spec, diff] of configs) {
     const key = `${prof}/${spec}/${diff}`, res = [];
     for (let c = 0; c < careers; c++) {
