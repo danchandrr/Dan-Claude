@@ -16,7 +16,7 @@ const sum=(o,k)=>{const cs=o.results[k],R=o.runs,row={};
   row['arrests per patient treated']=f(mean(all.map(r=>r.crashes))/mean(all.map(r=>r.treated)),2);
   row['emergencies per hour of play']=f(mean(all.map(r=>r.ems))/(mean(all.map(r=>r.time))/3600),1);
   row['grant per run (run 1 / median)']=`${Math.round(q(cs.map(c=>c.runs[0].earned),.5))} / ${Math.round(q(all.map(r=>r.earned),.5))}`;
-  row['item levels by run '+R+' (max 140)']=f(mean(cs.map(c=>c.runs[R-1].items)));
+  row['item levels by run '+R+' (max 220)']=f(mean(cs.map(c=>c.runs[R-1].items)));
   row['upgrades by run '+R+' (of 11)']=f(mean(cs.map(c=>c.runs[R-1].upgrades)),1);
   const specs=['im','surg','anaes','id','path','paeds','obgyn','cardio','neuro','tox'];
   row['specialties unlocked by run '+R+' (avg of 10)']=f(mean(cs.map(c=>specs.filter(s=>c.unlockAt[s]).length)),1);

@@ -3333,9 +3333,12 @@ Object.assign(SPECS.id,{focus:d=>d.s==='Infectious',bonus:{stab:1,clues:1},d:SPE
 Object.assign(SPECS.surg,{focus:d=>d.dispo==='theatre',bonus:{stab:1,clues:1},d:SPECS.surg.d+' More surgical patients come in, with +1 stability, a clue charted and their organ system shown.'});
 POOL_SPECS.forEach(k=>{const f=SPECS[k].focus;SPECS[k].focus=d=>d.sp===k||(f?f(d):false)});
 const caseOK=i=>{const sp=S.doctor&&S.doctor.spec,c=D[i].sp;return!c||c===sp||!POOL_SPECS.includes(sp)};
+// pace slows how fast patients get worse; lag holds rarer cases back by that many shifts; last ends the run after that shift; cap limits the grant one run can earn
 const DIFFS={
- intern:{n:'Intern',d:'The place to start if you are new. +3 stability per patient. Score ×0.8.',fx:m=>{m.stab+=3;m.score-=.2}},
- resident:{n:'Resident',d:'The standard shift.',fx:()=>{}},
+ student:{n:'Medical Student',d:'No medical knowledge needed. Pick each diagnosis from four choices; orders are cheaper, patients worsen slowly and rare diseases come later. Runs last 8 shifts. Score ×0.5.',pace:1.5,lag:2,last:8,cap:2000,
+  fx:m=>{m.stab+=5;m.score-=.5;m.choices=4;m.cost.h++;m.cost.e++;m.cost.l++;m.cost.i++;m.wrong++;m.elim++;m.txPen++;m.dispoHalf=true;m.bedHint=true;m.emTime+=15;m.arrestBonus+=15;m.rosc+=.15;m.proc+=1}},
+ intern:{n:'Intern',d:'Some medical knowledge, or new to the game. +3 stability per patient. Score ×0.8.',fx:m=>{m.stab+=3;m.score-=.2}},
+ resident:{n:'Resident',d:'For working clinicians. The standard shift.',fx:()=>{}},
  attending:{n:'Attending',d:'−2 stability, no hints on wrong guesses, shorter emergencies. Score +50%.',fx:m=>{m.stab-=2;m.score+=.5;m.noHints=true;m.emTime-=8}}
 };
 
@@ -4049,7 +4052,7 @@ const fmt=n=>Math.round(n).toLocaleString('en-US');
 
 function mods(){
   const m={stab:0,rep:0,cost:{h:0,e:0,l:0,i:0},freeH:0,examAll:false,testsAll:false,imgAll:false,startExam:false,boost:[],start:0,sys:false,tier:0,letter:false,nameDx:false,elim:0,wrong:0,wrongReveal:false,freeWrong:0,txPen:0,
-    score:0,rare:0,zebra:1,grant:0,shield:0,emTime:up('resus')?10:0,noHints:false,proc:0,rosc:0,engine:0,arrestBonus:0,autoRosc:false,dispoHalf:false,bedHint:false,safeDischarge:false,cane:0,common:0};
+    score:0,rare:0,zebra:1,grant:0,shield:0,emTime:up('resus')?10:0,noHints:false,proc:0,rosc:0,engine:0,arrestBonus:0,autoRosc:false,dispoHalf:false,bedHint:false,safeDischarge:false,cane:0,common:0,choices:0};
   if(S.doctor){const sp=SPECS[S.doctor.spec],df=DIFFS[S.doctor.diff];if(sp)sp.fx(m);if(df)df.fx(m)}
   for(const id of S.meta.loadout){const t=TOOL[id],o=S.meta.owned[id];if(!t||!o)continue;t.fx(m,Math.max(1,Math.min(5,o.lv||1)))}
   if(S.run){for(const id of S.run.perks){const p=PERK[id];if(p&&p.fx)p.fx(m)}
@@ -4072,6 +4075,11 @@ const spawnGap=s=>Math.max(8,36-2.5*(s-1))+Math.random()*12;
 // Shift 1 is forgiving; from shift 4 patients deteriorate 8% faster each shift, up to about three times as fast
 const shiftPace=s=>s===1?1.6:Math.max(.3,1-.08*Math.max(0,s-3));
 const emGap=()=>120+Math.random()*90;
+const diffNow=()=>(S.doctor&&DIFFS[S.doctor.diff])||{};
+// The shift used to pick how rare cases are: easier difficulties hold rare cases back
+// Grant earned on shift, held to the difficulty's per-run cap
+const earn=(r,g)=>{const c=diffNow().cap;if(c)g=Math.max(0,Math.min(g,c-r.earned));r.earned+=g;S.meta.grant+=g;return g};
+const rarShift=r=>Math.max(1,r.shift-(diffNow().lag||0));
 function startRun(){
   S.run={shift:1,rep:0,score:0,streak:0,perks:[],used:{},phase:'floor',beds:Array(bedCount()).fill(null),queue:[],toArrive:shiftSize(1),arrived:0,spawnT:0,nextGap:spawnGap(1),clock:0,
     shieldUsed:0,treated:0,earned:0,rarest:-1,rarestName:'',crashes:0,deaths:0,lwbs:0,saves:0,chat:{},gift:{},cons:{},vchat:{},buff:{},cameos:[],visitors:pickVisitors(),autoRoscUsed:false,emClock:0,emNext:90+Math.random()*60,em:null,emWins:0,nid:1};
@@ -4087,7 +4095,7 @@ function spawn(){
 }
 // Cases a special guest can arrive with, limited to what this shift can already roll
 function cameoPool(r,emerg){
-  const maxT=Math.min(4,1+Math.floor(r.shift/2));
+  const maxT=Math.min(4,1+Math.floor(rarShift(r)/2));
   return CAMEO_PT.filter(c=>IDX[c.d]!=null&&!r.cameos.includes(c.id)&&!(S.meta.camRecent||[]).includes(c.id)&&!seenLately(c.d)&&D[IDX[c.d]].t<=maxT&&(!emerg||EMERG.has(c.d)));
 }
 function placePatient(p,front){
@@ -4130,12 +4138,12 @@ function makePatient(grand){
   if(!grand&&Math.random()<.1){const opts=cameoPool(r,false);if(opts.length){cam=pick(opts);di=IDX[cam.d];r.cameos.push(cam.id);camSeen(cam.id)}}
   const sp=S.doctor&&SPECS[S.doctor.spec];
   if(di==null&&sp&&sp.focus&&Math.random()<.35){
-    const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0,maxT=Math.max(minT,Math.min(4,1+Math.floor(r.shift/2)));
+    const rs=rarShift(r),minT=grand?Math.min(3,1+Math.floor((rs-1)/2)):0,maxT=Math.max(minT,Math.min(4,1+Math.floor(rs/2)));
     const fp=D.map((d,i)=>i).filter(i=>sp.focus(D[i])&&caseOK(i)&&D[i].t>=minT&&D[i].t<=maxT);if(fp.length)di=freshPick(fp,'f'+S.doctor.spec);
   }
   if(di==null){
-    const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0;
-    const t=rollTier(r.shift,minT);
+    const rs=rarShift(r),minT=grand?Math.min(3,1+Math.floor((rs-1)/2)):0;
+    const t=rollTier(rs,minT);
     const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&caseOK(i));
     di=freshPick(pool,'t'+t);
   }
@@ -4155,9 +4163,11 @@ function makePatient(grand){
   if(b.clues){for(let k=0;k<b.clues;k++)freeClue(p);b.clues=0}
   if(grand&&isDiag()){freeClue(p);freeClue(p)}
   if(b.labs){p.rev.l=d.l.length;b.labs=0}
-  p.last=null;
+  p.last=null;dxChoices(p);
   return p;
 }
+// Medical Student: the diagnosis is picked from the answer and its closest differentials instead of typed
+function dxChoices(p){const n=mods().choices;p.opts=n?shuffle([D[p.d].n,...ddxFor(p.d).filter(i=>i!==p.d).slice(0,n-1).map(i=>D[i].n)]):null}
 const curP=()=>S.run&&S.sel!=null?S.run.beds[S.sel]:null;
 function acuity(p){
   const d=D[p.d],[hr,bp,rr,sp,t]=hidden(p)?MASK[d.n].v:d.v,sys=+bp.split('/')[0],pose=hidden(p)?'alert':d.pose;
@@ -4171,7 +4181,7 @@ function decayInterval(p){
   if(p.tut)return 0;
   if(hidden(p)||!['case','treat','proc'].includes(p.phase))return 0;
   const base={1:14,2:24,3:45}[acuity(p)];if(!base)return 0;
-  let iv=base*shiftPace(S.run?S.run.shift:1);
+  let iv=base*shiftPace(S.run?S.run.shift:1)*(diffNow().pace||1);
   if(up('monitor'))iv*=1.25;
   if(up('oxygen')&&['resp','unconscious','drowsy'].includes(D[p.d].pose))iv*=1.5;
   if(p.phase==='treat')iv*=1.25;
@@ -4266,8 +4276,8 @@ function dispo(code){
   else{f=.8;label='Wrong destination'}
   if(m.dispoHalf&&f<1)f=+(1-(1-f)/2).toFixed(2);
   const bd=pointsBreakdown(p,f,label);
-  const grant=Math.floor(bd.total/GRANT_DIV*(1+m.grant));
-  r.score+=bd.total;r.earned+=grant;S.meta.grant+=grant;r.treated++;
+  const grant=earn(r,Math.floor(bd.total/GRANT_DIV*(1+m.grant)));
+  r.score+=bd.total;r.treated++;
   if(d.t>r.rarest){r.rarest=d.t;r.rarestName=d.n}
   if(repLoss){
     r.rep--;r.streak=0;
@@ -4307,6 +4317,8 @@ function clearBed(i){
 function checkShiftEnd(){
   const r=S.run;
   if(r.phase==='floor'&&r.arrived>=r.toArrive&&r.beds.every(b=>!b)&&!r.queue.length&&!r.em){
+    const last=diffNow().last;
+    if(last&&r.shift>=last){achEvent('shiftend',{r});r.graduated=true;r.shift++;sfx('bell');endRun();return true}
     r.phase='break';r.draft=shuffle(PERKS.map(p=>p.id)).slice(0,3);S.sel=null;sfx('bell');achEvent('shiftend',{r});return true;
   }
   return false;
@@ -4324,7 +4336,7 @@ function endRun(){
   const r=S.run;
   r.em=null;S.sel=null;S.mini=null;S.cpr=null;
   const bonus=(r.shift-1)*30;
-  S.meta.grant+=bonus;r.earned+=bonus;
+  earn(r,bonus);
   r.newBest=r.score>S.meta.best;
   if(r.newBest)S.meta.best=r.score;
   r.phase='over';achEvent('runend',{shift:r.shift,score:r.score});save();render();
@@ -4467,7 +4479,7 @@ function gift(id){
 /* ===================== EMERGENCIES ===================== */
 function triggerEmergency(){
   const r=S.run,m=mods();
-  const t=rollTier(r.shift,0);
+  const t=rollTier(rarShift(r),0);
   r.cameos=r.cameos||[];r.buff=r.buff||{};
   let di,cam=null;
   const co=Math.random()<.12?cameoPool(r,true):[];
@@ -4529,8 +4541,8 @@ function emFinish(ok,reason){
   if(ok){
     pts=Math.round(TIERS[d.t].pts*2.5*(1+left/e.dur)*(1+.2*(Math.min(r.shift,6)-1))*(1+Math.max(-.5,m.score))/10)*10;
     if(e.cam)pts=Math.round(pts*1.25/10)*10;
-    grant=Math.floor(pts/GRANT_DIV*(1+m.grant));
-    r.score+=pts;r.earned+=grant;S.meta.grant+=grant;if(!r.emRep){r.rep=Math.min(maxRep(),r.rep+1);r.emRep=true}r.streak++;r.emWins++;S.meta.ems=(S.meta.ems||0)+1;
+    grant=earn(r,Math.floor(pts/GRANT_DIV*(1+m.grant)));
+    r.score+=pts;if(!r.emRep){r.rep=Math.min(maxRep(),r.rep+1);r.emRep=true}r.streak++;r.emWins++;S.meta.ems=(S.meta.ems||0)+1;
     if(d.t>r.rarest){r.rarest=d.t;r.rarestName=d.n}
   }else{r.rep--;r.streak=0}
   e.phase='done';e.res={ok,pts,grant,reason,left};
@@ -5079,9 +5091,10 @@ function renderPatient(i){
   let right='';
   if(p.phase==='case'){
     const wp=Math.max(0,2-m.wrong),freeLeft=Math.max(0,m.freeWrong-(p.freeWrongUsed||0));
+    const pickDx=p.opts&&m.choices;
     right=orders+`<section class="panel dx o6"><h2>Diagnosis</h2>
-     <div class="combo"><input id="dxin" type="text" autocomplete="off" placeholder="Start typing a disease…" aria-label="Diagnosis" role="combobox" aria-expanded="false" aria-controls="dxlist"><button class="btn primary" data-act="submit">Submit</button>
-     <div class="list" id="dxlist" role="listbox" hidden></div></div>
+     ${pickDx?`<p class="label">Which one is it?</p><div class="emopts dxopts">${p.opts.map(n=>`<button data-dxpick="${esc(n)}" ${p.guesses.some(g=>g.n===n)?'disabled':''}>${esc(n)}</button>`).join('')}</div>`:`<div class="combo"><input id="dxin" type="text" autocomplete="off" placeholder="Start typing a disease…" aria-label="Diagnosis" role="combobox" aria-expanded="false" aria-controls="dxlist"><button class="btn primary" data-act="submit">Submit</button>
+     <div class="list" id="dxlist" role="listbox" hidden></div></div>`}
      ${p.guesses.length?`<ul class="guesses">${p.guesses.map(g=>{const gd=D.find(x=>x.n===g.n)||d;return g.hide?`<li><s>${esc(g.n)}</s><span class="chip n">No hints at Attending level</span></li>`:`<li><s>${esc(g.n)}</s><span class="chip ${g.sys?'y':'n'}">${ic(SYS_IC[gd.s])}${g.sys?'system match':'wrong system'}</span>${g.cmp==null?'':`<span class="chip ${g.cmp===0?'y':'u'}">${ic(g.cmp===0?'eq':g.cmp>0?'up':'down')}${g.cmp===0?'same rarity':g.cmp>0?'rarer':'more common'}</span>`}</li>`}).join('')}</ul>`:''}
      <p class="hint">${m.cane>=2||!wp?'Wrong guesses cost no stability.':`Wrong guesses cost ${wp} stability${freeLeft?` (the next ${freeLeft>1?freeLeft+' are':'one is'} free)`:''}.`}</p>
     </section>`;
@@ -5093,7 +5106,7 @@ function renderPatient(i){
     right=`<section class="panel dx o5"><span class="verdict good">${ic('check')}${esc(d.tx)}</span><h2 style="margin-top:6px">Bedside procedures</h2><p class="hint">Each failed attempt costs 2 stability.</p>${procList(p.procs,p.procDone,'bed')}</section>`;
   }else if(p.phase==='dispo'){
     right=`<section class="panel dx o5"><span class="verdict good">${ic('check')}Treated: ${esc(d.n)}</span><h2 style="margin-top:6px">Where should ${esc(p.name.split(' ')[0])} go?</h2><p class="hint">Sending a sick patient home costs reputation, and they come back worse.</p>
-     <div class="dispo">${DISPO_OPTS.map(([k,l,icn])=>{const hint=m.bedHint&&k===d.dispo;return`<button data-dispo="${k}" class="${hint?'hinted':''}">${ic(icn)}<span>${l}${hint?'<small>Bed Manager recommends</small>':''}</span></button>`}).join('')}</div></section>`;
+     <div class="dispo">${DISPO_OPTS.map(([k,l,icn])=>{const hint=m.bedHint&&k===d.dispo;return`<button data-dispo="${k}" class="${hint?'hinted':''}">${ic(icn)}<span>${l}${hint?'<small>Recommended</small>':''}</span></button>`}).join('')}</div></section>`;
   }else if(p.phase==='arrest'){
     right=`<section class="panel arrestp o5"><span class="verdict bad">${ic('heart')}Cardiac arrest</span><h2>No pulse. Start CPR now.</h2><p>Read the monitor: you will call the rhythm at the check. Without CPR the patient dies in <b id="arrT">${Math.ceil(p.arrestT)}</b> s.</p><button class="btn primary big" data-act="cpr">${ic('heart')}Start CPR</button></section>`;
   }else{
@@ -5192,7 +5205,8 @@ function renderBreak(){
 }
 function renderOver(){
   const r=S.run;
-  return`<div class="panel center">${OVER_ART}<span class="label">Shift report</span><h1>${r.newBest?'New personal best.':'Your reputation ran out.'}</h1>
+  return`<div class="panel center">${OVER_ART}<span class="label">Shift report</span><h1>${r.graduated?'Placement complete.':r.newBest?'New personal best.':'Your reputation ran out.'}</h1>
+   ${r.graduated?`<p>You finished all ${r.shift-1} shifts of your Medical Student placement.${S.doctor&&S.doctor.diff==='student'?' Ready for more? Interns type their own diagnoses and the shifts never end.':''}</p>`:''}
    <div class="sumgrid">
     <div class="sum"><span class="label">Score</span><b>${fmt(r.score)}</b></div>
     <div class="sum"><span class="label">Shifts survived</span><b>${r.shift-1}</b></div>
@@ -5206,7 +5220,7 @@ function renderOver(){
    <p>${r.rarest>=0?`Rarest case: <b>${esc(r.rarestName)}</b> ${tierBadge(r.rarest)}`:'No cases treated this run.'}</p>
    ${debriefHTML(r)}
    <p style="color:var(--muted)">Best score: ${fmt(S.meta.best)}. Spend grant money in Requisition before your next run.</p>
-   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" data-act="start">${ic('play')}Start a new run</button><button class="btn" data-act="cardshare" data-card="run">${ic('send')}Share</button><button class="btn" data-tab="req">${ic('cabinet')}Open Requisition</button><button class="btn" data-act="menu">${ic('door')}Main menu</button></div></div>`;
+   <div style="display:flex;gap:10px;flex-wrap:wrap">${r.graduated&&S.doctor&&S.doctor.diff==='student'?`<button class="btn primary" data-act="promote">${ic('badge')}Move up to Intern</button>`:''}<button class="btn ${r.graduated&&S.doctor&&S.doctor.diff==='student'?'':'primary'}" data-act="start">${ic('play')}Start a new run</button><button class="btn" data-act="cardshare" data-card="run">${ic('send')}Share</button><button class="btn" data-tab="req">${ic('cabinet')}Open Requisition</button><button class="btn" data-act="menu">${ic('door')}Main menu</button></div></div>`;
 }
 const QUICK=['How is your night going?','Any advice on my patients?','Teach me a clinical pearl','Tell me about yourself'];
 function chatPanel(){
@@ -6291,6 +6305,7 @@ function tutPatient(){
   const p=makePatient(false);
   Object.assign(p,{d:IDX['Acute Appendicitis'],name:'Maya Tan',sex:'F',age:24,cam:null,masked:false,turned:false,stab:20,max:20,rev:{h:0,e:0,l:0,i:0},
     showSys:false,showTier:false,letter:false,dxName:false,procs:[],focus:false,last:null,tut:true});
+  dxChoices(p);
   return p;
 }
 function tutFinish(skipped){
@@ -6309,7 +6324,8 @@ function tutStep(){
     if(!p.rev.h)return{k:'h',n:2,t:'Each order reveals one clue and costs a little stability. Start by taking a History.',sel:'[data-ord="h"]'};
     if(!p.rev.e)return{k:'e',n:3,t:'Clues land in the chart. Now Examine '+her+'.',sel:'[data-ord="e"]'};
     if(!p.rev.l)return{k:'l',n:4,t:'Order a Test. Some results come as an ECG, X-ray, blood gas or slide that you read yourself.',sel:'[data-ord="l"]'};
-    return{k:'dx',n:5,t:'Enough to go on? Type the diagnosis, pick it from the list and press Submit. A wrong guess costs stability, but tells you whether you were in the right organ system.',sel:'.dx .combo'};
+    return p.opts&&mods().choices?{k:'dx',n:5,t:'Enough to go on? Pick the diagnosis from the four choices. A wrong pick costs stability, but tells you whether you were in the right organ system.',sel:'.dx .dxopts'}
+      :{k:'dx',n:5,t:'Enough to go on? Type the diagnosis, pick it from the list and press Submit. A wrong guess costs stability, but tells you whether you were in the right organ system.',sel:'.dx .combo'};
   }
   if(p.phase==='treat')return{k:'tx',n:6,t:'Right diagnosis. Now choose the treatment. Wrong choices cost stability.',sel:'.tx'};
   if(p.phase==='dispo')return{k:'dispo',n:7,t:'Treated. Now decide where '+(p.sex==='F'?'she goes':'he goes')+'. Sending home someone who needed a bed costs reputation, and they come back worse.',sel:'.dispo'};
@@ -7404,7 +7420,7 @@ function renderCreate(){
       <button class="btn" data-act="randname">${ic('dice')}Random</button></div></div>
     <div class="field"><span class="label">Gender</span><div class="opts">${GENDERS.map(([k,l])=>`<button class="opt" data-set="gender:${k}" aria-pressed="${d.gender===k}">${l}</button>`).join('')}</div><p class="hint" style="margin:0">Co-workers will refer to you as ${PRON[d.gender]||'they/them'}.</p></div>
     ${specPicker(d)}
-    <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}${k==='intern'?' <span class="chip y">Beginner friendly</span>':''}</b><span>${s.d}</span></button>`).join('')}</div></div>
+    <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}${k==='student'?' <span class="chip y">For everyone</span>':k==='intern'?' <span class="chip y">Beginner friendly</span>':''}</b><span>${s.d}</span></button>`).join('')}</div></div>
     <div class="field"><span class="label">Skin tone</span><div class="opts">${sw('skin',DSKIN,'Skin tone',DSKIN_ORDER)}</div></div>
     ${chooser('Hair style','hair',HSTYLES,d.hair)}
     <div class="field"><span class="label">Hair, headscarf or turban colour</span><div class="opts">${sw('hc',HAIRC,'Hair colour',HAIRC_ORDER)}</div></div>
@@ -7545,12 +7561,14 @@ document.addEventListener('click',e=>{
   if(ds.q){chatSend(ds.q);return}
   if(ds.gift){gift(ds.gift);window.scrollTo({top:0});return}
   if(ds.emdx!==undefined){emDx(+ds.emdx);return}
+  if(ds.dxpick!==undefined){guess(ds.dxpick);return}
   if(ds.emtx!==undefined){emTx(+ds.emtx);return}
   if(ds.eq){const L=S.meta.loadout,i=L.indexOf(ds.eq);if(i>=0)L.splice(i,1);else if(L.length<4)L.push(ds.eq);else{toast('All four slots are full. Remove an item first.');return}
     S.run.rep=Math.min(S.run.rep,maxRep());save();render();return}
   if(ds.uneq){const L=S.meta.loadout;L.splice(L.indexOf(ds.uneq),1);S.run.rep=Math.min(S.run.rep,maxRep());save();render();return}
   switch(ds.act){
     case'start':startRun();fixRun(S.run);S.tab='shift';save();render();break;
+    case'promote':S.doctor.diff='intern';toast('You are an Intern now. Good luck.');startRun();fixRun(S.run);S.tab='shift';save();render();break;
     case'floor':S.sel=null;render();window.scrollTo({top:0});break;
     case'clear':if(S.sel!=null){clearBed(S.sel);save();render();window.scrollTo({top:0})}break;
     case'pause':S.paused=!S.paused;render();break;
