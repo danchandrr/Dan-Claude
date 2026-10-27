@@ -136,5 +136,5 @@ for doc,sec,cond,cases,note in ROWS:
     elif any(c in TODAY for c in cases): wx.cell(row=r,column=5).fill=GRN
     status.add(wx.cell(row=r,column=len(HX)-1))
 wx.auto_filter.ref=f"A1:H{wx.max_row}"
-out='/home/user/Dan-Claude/review/zebra-shift-medical-review.xlsx'
+import os;out=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','review','zebra-shift-medical-review.xlsx')
 import os;os.makedirs(os.path.dirname(out),exist_ok=True);wb.save(out);print('saved',out,os.path.getsize(out))

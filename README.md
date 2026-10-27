@@ -8,7 +8,7 @@ This folder is the installable web app version. It plays in any modern browser, 
 
 Once GitHub Pages is switched on (below), the game lives at:
 
-**https://danchandrr.github.io/Dan-Claude/**
+**https://playzebrashift.github.io/**
 
 ### Install it as an app
 
@@ -35,7 +35,7 @@ The online features (sign-in, friends, an all-time leaderboard, a daily leaderbo
 
 1. **Create the project.** Sign up at supabase.com, click **New project**, give it a name and a database password, and pick the region nearest your players. Wait a minute for it to start.
 2. **Create the tables.** Open **SQL Editor → New query**, paste the whole of `supabase/schema.sql`, and click **Run**. It should say *Success. No rows returned.*
-3. **Set the web address.** Open **Authentication → URL Configuration**. Set **Site URL** to `https://danchandrr.github.io/Dan-Claude/` and add the same address under **Redirect URLs**.
+3. **Set the web address.** Open **Authentication → URL Configuration**. Set **Site URL** to `https://playzebrashift.github.io/` and add the same address under **Redirect URLs**.
 4. **Set up email sending.** Supabase's built-in email sender only delivers to members of your Supabase team and a few emails an hour, so other players need your own sender. Under **Authentication → Emails → SMTP Settings**, enter the details from a free email service. A free Brevo account works: verify one sender address, then use its SMTP server, login and key. With your own SMTP set up you can also edit **Emails → Magic Link** and add `{{ .Token }}` so the email shows a code as well as the link. The code makes signing in easier inside the installed app, where email links open in a different browser.
 5. **Connect the game.** Open **Project Settings → API**. Copy the **Project URL** and the **anon public** key into `config.js`, then commit and push. (The anon key is meant to be public. The database rules in `schema.sql` decide what each player can read and write.)
 6. **Optional: Google sign-in.** Under **Authentication → Providers → Google**, follow Supabase's steps to add a Google client ID, then set `google: true` in `config.js`.

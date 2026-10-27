@@ -3,7 +3,7 @@
 import webpush from "npm:web-push@3.6.7";
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
-const APP = "https://danchandrr.github.io/Dan-Claude/";
+const APP = "https://playzebrashift.github.io/";
 
 Deno.serve(async (req) => {
   // Only the scheduled job knows this secret

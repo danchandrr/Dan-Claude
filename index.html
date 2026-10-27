@@ -5399,7 +5399,7 @@ function renderDaily(){
 }
 
 /* ---- Share links: a whole challenge or case travels inside the link itself ---- */
-const APP_URL=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://danchandrr.github.io/Dan-Claude/';
+const APP_URL=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://playzebrashift.github.io/';
 const b64u={enc:b=>{let s='';for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
   dec:s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))};
 async function packObj(o){
