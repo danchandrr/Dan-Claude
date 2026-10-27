@@ -1,6 +1,6 @@
 // Zebra Shift service worker: keeps the game playable offline.
 // Bump VERSION whenever index.html changes so players get the new build.
-const VERSION = 'zebra-shift-v15';
+const VERSION = 'zebra-shift-v16';
 const SHELL = [
   './',
   './index.html',

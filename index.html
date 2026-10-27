@@ -794,8 +794,9 @@ button.specopt:hover{background:var(--scrub-soft)}.specopt[aria-selected="true"]
 .specopt.locked{opacity:.75;cursor:not-allowed}.specopt.locked>.ic{width:34px;height:34px;padding:8px;border-radius:9px;background:var(--panel-2);color:var(--muted)}
 .specsep{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px;border-top:1px solid var(--line);margin-top:6px}
 .rplink{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-weight:600}.rplink .ic{width:13px;height:13px}.rdfoot .rplink{margin-left:auto}
-#achtoast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);z-index:70;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);max-width:calc(100% - 32px)}
-#achtoast.on{transform:translate(-50%,0)}
+#achtoast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);z-index:70;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .25s,visibility 0s linear .35s;max-width:calc(100% - 32px);opacity:0;visibility:hidden;pointer-events:none;cursor:pointer}
+#achtoast.on{transform:translate(-50%,0);opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+#achtoast .more{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
 #achtoast .ai{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--scrub);color:var(--scrub-ink);flex:none}
 #achtoast.f .ai{background:var(--amber);color:#fff}#achtoast.role .ai{background:var(--ok);color:#fff}#achtoast.s .ai{background:#6B4FB3;color:#fff}
 #achtoast .ic{width:22px;height:22px}#achtoast small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}#achtoast b{font-family:var(--f-display)}
@@ -2232,7 +2233,506 @@ const D=[
  l:['CSF: normal protein and cells','Creatine kinase normal'],
  i:['MRI spine: normal'],
  tx:'Remove the whole tick: strength returns within hours',w:['IV immunoglobulin for Guillain–Barré','Plasma exchange','Antibiotics for Lyme disease'],al:['tick bite paralysis','tick'],ecg:'sinus',pose:'drowsy',dispo:'ward',
- p:'Rising paralysis with normal CSF in a child back from the woods: search the scalp for a tick before giving immunoglobulin.'}
+ p:'Rising paralysis with normal CSF in a child back from the woods: search the scalp for a tick before giving immunoglobulin.'},
+// ---- False emergencies: alarming handover (ecc), reassuring findings, and the gentle plan is the right one
+{n:'Functional Seizures',t:0,s:'Neuro',a:[18,40],x:'A',late:true,fake:true,cc:'I keep having these fits. Nobody believes me.',ecc:'Paramedics: Fitting for twenty minutes at the shopping centre and not responding!',v:[96,'128/78',18,99,36.8],
+ h:['Several similar episodes this month; antiepileptic levels always normal','Recent bereavement and a lot of stress','No tongue biting or incontinence; remembers parts of the episode'],
+ e:['Eyes screwed shut and resist opening; side-to-side head movements','A hand dropped above the face always misses it'],
+ l:['Lactate 1.1 mmol/L; glucose 5.6 mmol/L','Prolactin normal 20 minutes after the episode'],
+ i:['Video EEG during an episode: normal background, no seizure activity'],
+ tx:'Stay calm, keep them safe, no more benzodiazepines; explain the diagnosis kindly and refer to neurology and psychology',w:['Intubate and load with phenytoin','A third dose of IV lorazepam','Thrombolysis for a stroke'],al:['PNES','dissociative seizures','non-epileptic seizures','functional seizure','pseudoseizures','non-epileptic attack disorder','NEAD'],ecg:'sinus',pose:'agitated',dispo:'home',
+ p:'Eyes that resist opening, side-to-side movements and a normal lactate point to dissociative seizures. Over-treating them with intubation and drugs causes real harm.'},
+{n:'Musculoskeletal Chest Pain',t:0,s:'MSK/Skin',a:[18,45],x:'A',late:true,fake:true,cc:'There is a sharp pain in my chest when I twist.',ecc:'Paramedics: Crushing chest pain, query heart attack! Aspirin given en route.',v:[88,'126/78',16,99,36.7],
+ h:['Sharp pain beside the breastbone, worse on twisting and deep breaths','Started after moving house and carrying boxes','No sweating, no breathlessness, no heart risk factors'],
+ e:['Pressing on the 3rd and 4th rib cartilages reproduces the pain exactly','Heart sounds and chest otherwise normal'],
+ l:['ECG: normal sinus rhythm','High-sensitivity troponin below 3 ng/L at 0 and 2 hours'],
+ i:['Chest X-ray: normal'],
+ tx:'Reassurance, an anti-inflammatory and discharge with advice',w:['Thrombolysis','Emergency cardiac catheterisation','Heparin infusion'],al:['costochondritis','chest wall pain','MSK chest pain','Tietze syndrome','musculoskeletal chest pain'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'Chest pain reproduced exactly by pressing, with a normal ECG and troponin, is chest-wall pain. The ECG still comes first.'},
+{n:'Acute Alcohol Intoxication',t:0,s:'Toxicology',a:[18,45],x:'A',late:true,fake:true,cc:'Friends: Drank too much at the party.',ecc:'Paramedics: Found unresponsive on the pavement. GCS 8. Query head injury!',v:[98,'118/74',14,97,36.2],
+ h:['Friends say they drank most of a bottle of vodka','No fall or head injury seen; no drugs taken','Rouses briefly to swear at the paramedics'],
+ e:['Smells of alcohol; snoring but protecting the airway; normal pupils','No scalp wound; moves all four limbs; more awake each half hour'],
+ l:['Blood alcohol 310 mg/dL; glucose 5.2 mmol/L','Paracetamol and salicylate levels undetectable'],
+ i:['CT head: normal'],
+ tx:'Recovery position, observation and a glucose check; discharge with a sober adult once alert',w:['Rapid sequence intubation for a GCS of 8','IV naloxone every 2 minutes','Emergency burr holes'],al:['drunk','alcohol intoxication','ethanol intoxication','alcohol poisoning'],ecg:'sinus',pose:'drowsy',dispo:'home',
+ p:'A low GCS from alcohol alone, with a protected airway and normal glucose, usually needs watching rather than a tube. Always check glucose and look for a head injury.'},
+{n:'Pseudohyperkalaemia',t:1,s:'Metabolic',a:[30,80],x:'A',late:true,fake:true,cc:'The lab rang me back about my blood test.',ecc:'Lab on the phone: potassium 7.4 mmol/L! Patient sent straight to resus!',v:[78,'132/80',16,98,36.8],
+ h:['Came in for routine bloods before a knee operation','Feels completely well; no palpitations or weakness','Difficult blood draw: tight tourniquet, small needle, sample left standing for hours'],
+ e:['Comfortable and chatting','Normal muscle power'],
+ l:['Lab comment: sample markedly haemolysed','ECG completely normal; repeat potassium on a blood gas 4.3 mmol/L'],
+ i:['No imaging needed'],
+ tx:'Repeat the potassium on a fresh, free-flowing sample or a blood gas; no treatment needed',w:['IV calcium gluconate with insulin and dextrose','Emergency haemodialysis','Nebulised salbutamol and calcium resonium'],al:['haemolysed sample','hemolyzed sample','spurious hyperkalaemia','pseudohyperkalemia','lab error'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'A high potassium in a well patient with a normal ECG is a sampling error until proven otherwise. Repeat it before you treat it.'},
+{n:'Breath-Holding Spell',t:0,s:'Neuro',a:[1,3],x:'A',late:true,fake:true,cc:'Parent: Went blue after a tantrum.',ecc:'Parent: Turned blue and went floppy! I think the baby stopped breathing!',v:[120,'96/60',26,99,36.9],
+ h:['Started crying after being told off, then went silent and blue','Floppy for about 30 seconds, then woke up and cried','Has happened twice before; otherwise healthy'],
+ e:['Pink, playful and chatting now','Normal heart sounds; no focal neurology'],
+ l:['Full blood count: mild iron-deficiency anaemia','ECG: normal QT interval'],
+ i:['No imaging needed'],
+ tx:'Reassure the parents, treat the iron deficiency and explain what to do in the next spell',w:['Start antiepileptic medication','Admit to ICU for monitoring','CT head'],al:['breath holding','breath-holding attack','cyanotic breath-holding spell'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'A toddler who cries, goes silent, turns blue and briefly floppy, then recovers fully, has had a breath-holding spell. Check for iron deficiency and the ECG.'},
+// ---- Specialty pools (sp). Specialists see their own pool; generalist specialties see every pool together.
+// Paediatrics
+{n:'Bronchiolitis',t:0,s:'Respiratory',a:[1,1],x:'A',late:true,sp:'paeds',cc:'Parent: Snuffly for three days, now breathing fast and not feeding.',v:[164,'92/58',58,91,37.9],
+ h:['Runny nose and cough for three days','Taking less than half the usual feeds','Older sibling at nursery with a cold'],
+ e:['Subcostal recession and nasal flaring','Fine crackles and wheeze on both sides'],
+ l:['Nasopharyngeal swab: RSV positive','Capillary gas: pH 7.36, pCO₂ 6.1 kPa'],
+ i:['Chest X-ray (not routinely needed): hyperinflation with patchy atelectasis'],
+ tx:'Supportive care: oxygen if saturations below 90–92%, nasal suction, small frequent or tube feeds',w:['Nebulised salbutamol every 20 minutes','Oral amoxicillin','Oral prednisolone'],al:['RSV bronchiolitis','bronchiolitis'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Bronchiolitis is supportive care. Bronchodilators, steroids and antibiotics do not change the course.'},
+{n:'Acute Diarrhoea with Severe Dehydration',t:0,s:'Gastro/Hepatic',a:[1,4],x:'A',late:true,sp:'paeds',cc:'Parent: Watery diarrhoea all day and now very sleepy.',v:[168,'74/40',36,97,37.6],
+ h:['More than ten watery stools in 24 hours','Not passed urine since this morning','Neighbour\'s child had the same last week'],
+ e:['Lethargic, sunken eyes, drinks poorly','Skin pinch goes back very slowly (over 2 seconds); cold hands'],
+ l:['Sodium 134, potassium 3.1, bicarbonate 14 mmol/L','Glucose 3.9 mmol/L'],
+ i:['No imaging needed'],
+ tx:'WHO Plan C: IV Ringer\'s lactate 100 mL/kg over 3–6 hours, then oral rehydration solution and zinc',w:['Loperamide syrup','Oral ciprofloxacin and home','Withhold all fluids to rest the gut'],al:['gastroenteritis with severe dehydration','severe dehydration','acute diarrhea','diare akut dehidrasi berat'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Lethargy, sunken eyes, poor drinking and a very slow skin pinch mean severe dehydration: WHO Plan C with IV fluids, then ORS and zinc.'},
+{n:'Nephrotic Syndrome',t:1,s:'Renal/GU',a:[2,6],x:'A',late:true,sp:'paeds',cc:'Parent: Puffy eyes every morning, and now the tummy and legs are swollen.',v:[104,'98/62',24,98,36.8],
+ h:['Puffy eyelids for a week, worse on waking','Urine looks frothy','Recent cold'],
+ e:['Pitting oedema of the legs and scrotum or labia','Shifting dullness in the abdomen'],
+ l:['Urine protein:creatinine ratio 850 mg/mmol','Albumin 14 g/L; cholesterol 9.8 mmol/L; normal creatinine and complement'],
+ i:['Ultrasound: ascites and normal-sized kidneys'],
+ tx:'Oral prednisolone, salt restriction, penicillin prophylaxis while oedematous, and watch for clots and infection',w:['IV furosemide alone','Immediate renal biopsy','High-protein drinks and discharge'],al:['nephrotic','minimal change disease','steroid-sensitive nephrotic syndrome','sindrom nefrotik'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Heavy proteinuria, low albumin and oedema in a young child is usually minimal change disease, which responds to steroids.'},
+{n:'Acute Post-Streptococcal Glomerulonephritis',t:1,s:'Renal/GU',a:[5,12],x:'A',late:true,sp:'paeds',cc:'Parent: Wee looks like cola and the face is puffy.',v:[96,'148/98',22,98,36.9],
+ h:['Skin sores (impetigo) three weeks ago','Passing less urine','Headache today'],
+ e:['Puffy face and mild ankle oedema','Healing impetigo scars on the legs'],
+ l:['Urinalysis: blood 3+, red cell casts, protein 1+','C3 low; ASO and anti-DNase B raised; creatinine mildly raised'],
+ i:['Renal ultrasound: slightly enlarged, echogenic kidneys'],
+ tx:'Salt and fluid restriction, furosemide and antihypertensives; penicillin to clear the strep',w:['High-dose steroids','Immediate dialysis','Oral iron for the dark urine'],al:['PSGN','APSGN','post-streptococcal glomerulonephritis','glomerulonefritis akut'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Cola-coloured urine, hypertension and oedema weeks after a strep throat or skin infection, with a low C3, is post-streptococcal glomerulonephritis.'},
+{n:'Pertussis',t:1,s:'Infectious',a:[1,6],x:'A',late:true,sp:'paeds',cc:'Parent: Coughing fits until going red, then a whoop and vomiting.',v:[128,'100/64',30,95,37.2],
+ h:['Cough for three weeks, worse at night','Coughing fits end with a whoop and vomiting','Vaccinations incomplete'],
+ e:['Well between coughing fits','Small bleeds in the whites of the eyes'],
+ l:['WBC 32 ×10⁹/L with marked lymphocytosis','Nasopharyngeal PCR: Bordetella pertussis'],
+ i:['Chest X-ray: "shaggy" heart border'],
+ tx:'Azithromycin (or clarithromycin), isolate, and give prophylaxis to household contacts',w:['Salbutamol inhaler and home','Oral prednisolone','Cough syrup and reassure'],al:['whooping cough','Bordetella','batuk rejan'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Paroxysmal cough with a whoop or post-tussive vomiting and a lymphocytosis is pertussis. Protect the babies in the household.'},
+{n:'Severe Acute Malnutrition (Kwashiorkor)',t:1,s:'Metabolic',a:[1,4],x:'A',late:true,sp:'paeds',cc:'Parent: Swollen feet and face, and always tired and miserable.',v:[116,'86/54',28,97,35.6],
+ h:['Fed mostly on rice water and cassava since weaning','Diarrhoea on and off for a month','Hair has turned light and thin'],
+ e:['Pitting oedema of both feet and face; flaky "paint" skin rash','Apathetic and irritable; hypothermic'],
+ l:['Glucose 2.8 mmol/L; albumin 18 g/L','Potassium 2.9 mmol/L; haemoglobin 76 g/L'],
+ i:['No imaging needed'],
+ tx:'WHO ten steps: treat low glucose and temperature, antibiotics, cautious rehydration (ReSoMal), start F-75 milk, then catch up',w:['Large IV fluid boluses for the swelling','Iron supplements on day one','High-protein feeds straight away'],al:['kwashiorkor','SAM','severe acute malnutrition','gizi buruk'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Oedema in a malnourished child is kwashiorkor. Go slow: low glucose, low temperature and infection kill first, and refeeding too fast is dangerous.'},
+{n:'Tetralogy of Fallot Hypercyanotic Spell',t:2,s:'Cardiovascular',a:[1,3],x:'A',late:true,sp:'paeds',cc:'Parent: Turned deep blue while crying and will not settle.',v:[176,'82/50',48,62,36.9],
+ h:['Known heart murmur, waiting for surgery','Spell started during a long cry','Squats after running to "rest"'],
+ e:['Deeply cyanosed and breathing fast','The usual murmur has gone quiet'],
+ l:['Blood gas: metabolic acidosis','Haemoglobin 178 g/L'],
+ i:['Echo: ventricular septal defect, overriding aorta, right ventricular outflow obstruction'],
+ tx:'Knee-to-chest position, oxygen, IV morphine, fluid bolus; phenylephrine or propranolol if it persists',w:['IV furosemide','Inotropes such as adrenaline','Lie flat and wait'],al:['tet spell','TOF spell','hypercyanotic spell','tetralogy of Fallot'],ecg:'sinus',pose:'agitated',dispo:'icu',
+ p:'During a tet spell the murmur softens as flow across the outflow tract falls. Knee-to-chest raises systemic resistance and pushes blood back to the lungs.'},
+{n:'Immune Thrombocytopenia',t:1,s:'Haematologic',a:[2,8],x:'A',late:true,sp:'paeds',cc:'Parent: Bruises everywhere, and tiny red spots appeared overnight.',v:[98,'100/64',20,99,36.8],
+ h:['A viral illness two weeks ago','Gum bleeding when brushing teeth','Otherwise well, eating and playing'],
+ e:['Widespread petechiae and bruises','No enlarged liver, spleen or lymph nodes'],
+ l:['Platelets 9 ×10⁹/L; haemoglobin and white cells normal','Blood film: large platelets, no blasts'],
+ i:['No imaging needed'],
+ tx:'Usually observation and advice; IVIG or a short course of steroids only for significant bleeding',w:['Platelet transfusion straight away','Splenectomy','Ibuprofen for the bruising'],al:['ITP','idiopathic thrombocytopenic purpura','immune thrombocytopenic purpura'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'A well child with isolated low platelets after a virus, and a normal film, has ITP. Most recover on their own; a film without blasts matters.'},
+{n:'Acute Rheumatic Fever',t:2,s:'Cardiovascular',a:[6,14],x:'A',late:true,sp:'paeds',cc:'Parent: Painful knees, then elbows, and a fever for a week.',v:[118,'104/66',22,98,38.4],
+ h:['Sore throat a month ago, not treated','Joint pain moving from one big joint to another','Lives in a crowded household'],
+ e:['New pansystolic murmur at the apex','Pink ring-shaped rash on the trunk (erythema marginatum)'],
+ l:['ASO titre raised; CRP 120 mg/L','ECG: prolonged PR interval'],
+ i:['Echo: mitral regurgitation with valve thickening'],
+ tx:'High-dose aspirin or NSAIDs, penicillin, then monthly benzathine penicillin for years',w:['Oral prednisolone only','Antiviral medication','Discharge with paracetamol'],al:['ARF','rheumatic fever','demam rematik'],ecg:'avblock',pose:'pain',dispo:'ward',
+ p:'Migratory arthritis and carditis after a strep throat meet the Jones criteria. Secondary prophylaxis protects the heart valves.'},
+{n:'Transient Synovitis',t:0,s:'MSK/Skin',a:[3,8],x:'A',late:true,sp:'paeds',cc:'Parent: Woke up limping and will not put weight on the right leg.',v:[96,'102/64',20,99,37.4],
+ h:['Cold last week','Limp started this morning','Otherwise well and playing on the floor'],
+ e:['Mildly restricted, painful hip rotation','Can bear some weight; not toxic-looking'],
+ l:['WBC 8.4, CRP 6 mg/L, ESR 12 mm/h','Temperature below 38.5 °C (Kocher criteria 0 of 4)'],
+ i:['Hip ultrasound: small effusion'],
+ tx:'Rest, ibuprofen and review in 48 hours, with clear return advice',w:['Emergency hip washout','IV antibiotics for six weeks','Plaster cast'],al:['irritable hip','toxic synovitis','transient synovitis'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'A well child with a limp after a virus and normal inflammatory markers has an irritable hip. Fever, inability to bear weight and raised markers suggest septic arthritis.'},
+{n:'Haemophilia A with Haemarthrosis',t:1,s:'Haematologic',a:[4,14],x:'M',late:true,sp:'paeds',cc:'Parent: His knee blew up after a fall off his bike.',v:[108,'108/66',20,99,37.1],
+ h:['Known haemophilia A','Maternal uncle had the same bleeding problem','Tingling and warmth in the knee before it swelled'],
+ e:['Hot, swollen, tense knee held bent','Very limited movement'],
+ l:['APTT prolonged; PT normal','Factor VIII level 2%'],
+ i:['Knee ultrasound: large haemarthrosis'],
+ tx:'Factor VIII replacement straight away (before any tests), rest, ice and physiotherapy later',w:['Aspirate the knee first and wait for factor','Ibuprofen for the pain','Intramuscular morphine'],al:['haemophilia','hemophilia','haemarthrosis','hemarthrosis','hemofilia'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'In haemophilia, give factor first and investigate later. Avoid NSAIDs and intramuscular injections.'},
+{n:'Beta-Thalassaemia Major',t:1,s:'Haematologic',a:[3,10],x:'A',late:true,sp:'paeds',cc:'Parent: Pale and breathless, and the transfusion is overdue.',v:[132,'96/58',28,97,37.0],
+ h:['Transfusion-dependent since infancy; missed the last two sessions','Takes iron chelation irregularly','Parents are cousins'],
+ e:['Pale with a large spleen and liver','Bossing of the forehead and prominent cheekbones'],
+ l:['Hb 52 g/L; MCV 62 fL','Ferritin 3,800 µg/L'],
+ i:['Skull X-ray: "hair-on-end" appearance'],
+ tx:'Packed red cell transfusion to a pre-transfusion Hb of 95–105 g/L, and restart regular iron chelation',w:['Oral iron supplements','Splenectomy tonight','Folic acid and discharge'],al:['thalassaemia major','thalassemia','beta thalassaemia','talasemia'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'A child with thalassaemia major needs regular transfusions. Never give iron: the danger is iron overload.'},
+// Obstetrics & Gynaecology
+{n:'HELLP Syndrome',t:2,s:'Obstetric',a:[22,40],x:'F',late:true,sp:'obgyn',cc:'Pain under my right ribs and I feel sick. I am 34 weeks pregnant.',v:[104,'164/108',20,97,36.9],
+ h:['34 weeks pregnant; headache for a day','Swollen hands and face','Pain in the upper right abdomen'],
+ e:['Tender upper right abdomen','Brisk reflexes; proteinuria 2+'],
+ l:['Platelets 62 ×10⁹/L; ALT 410 U/L; LDH 980 U/L','Blood film: fragmented red cells'],
+ i:['Liver ultrasound: no haematoma'],
+ tx:'Magnesium sulphate, control blood pressure, steroids for the baby\'s lungs, and deliver',w:['Antacids and discharge','Treat as gallstones and admit to surgery','Platelet transfusion and continue the pregnancy'],al:['HELLP','haemolysis elevated liver enzymes low platelets'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Right upper quadrant pain in late pregnancy with low platelets and raised liver enzymes is HELLP until proven otherwise. The cure is delivery.'},
+{n:'Hydatidiform Mole',t:1,s:'Obstetric',a:[18,45],x:'F',late:true,sp:'obgyn',cc:'Bleeding at 11 weeks, and terrible vomiting.',v:[112,'142/90',20,99,37.0],
+ h:['11 weeks pregnant by dates','Dark brown bleeding for a week','Vomiting much more than in her last pregnancy'],
+ e:['Uterus larger than dates (feels like 16 weeks)','Fine tremor'],
+ l:['Serum beta-hCG 380,000 IU/L','Free T4 raised, TSH suppressed'],
+ i:['Ultrasound: "snowstorm" appearance with no fetus'],
+ tx:'Suction evacuation of the uterus, histology, and hCG follow-up until normal',w:['Expectant management','Methotrexate first','Oral iron and review in a month'],al:['molar pregnancy','mole','complete mole','hamil anggur','mola hidatidosa'],ecg:'sinus',pose:'alert',dispo:'theatre',
+ p:'Bleeding, a large-for-dates uterus, very high hCG and hyperthyroid symptoms suggest a molar pregnancy. Follow hCG to catch persistent disease.'},
+{n:'Septic Abortion',t:1,s:'Obstetric',a:[16,40],x:'F',late:true,sp:'obgyn',cc:'Fever, pain and a bad-smelling discharge after an abortion.',v:[124,'92/54',26,96,39.4],
+ h:['Pregnancy ended a week ago, outside a clinic','Lower abdominal pain and shivering','Foul-smelling vaginal discharge'],
+ e:['Tender, bulky uterus; offensive discharge from an open cervix','Mottled skin and cold hands'],
+ l:['WBC 22, lactate 4.6 mmol/L','Blood cultures taken'],
+ i:['Ultrasound: retained products in the uterus'],
+ tx:'Sepsis bundle with broad-spectrum IV antibiotics, fluids, then urgent evacuation of retained products',w:['Oral antibiotics and discharge','Oxytocin and observe','Anticoagulation for pelvic clots'],al:['infected abortion','septic miscarriage','abortus septik'],ecg:'sinus',pose:'shiver',dispo:'theatre',
+ p:'Fever and offensive discharge after a pregnancy loss is septic abortion. Remove the source quickly and treat the sepsis.'},
+{n:'Placenta Praevia',t:1,s:'Obstetric',a:[25,42],x:'F',late:true,sp:'obgyn',cc:'Sudden bright red bleeding. It does not hurt. I am 32 weeks.',v:[108,'108/68',20,99,36.8],
+ h:['Painless bright red bleeding at 32 weeks','Two previous caesarean sections','Baby moving normally'],
+ e:['Soft, non-tender uterus; baby lying across','Do not do a vaginal examination'],
+ l:['Hb 98 g/L; group and crossmatch','Kleihauer test sent (Rh-negative)'],
+ i:['Ultrasound: placenta completely covering the internal os'],
+ tx:'Admit, IV access and crossmatch, steroids, anti-D if Rh-negative, and plan caesarean section; no vaginal examination',w:['Digital vaginal examination to check the cervix','Induce labour','Discharge on bed rest'],al:['praevia','placenta previa','low-lying placenta','plasenta previa'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Painless bright red bleeding in the third trimester is placenta praevia until an ultrasound says otherwise. Never put a finger through the cervix.'},
+{n:'Uterine Rupture',t:2,s:'Obstetric',a:[25,42],x:'F',late:true,sp:'obgyn',cc:'Midwife: Sudden tearing pain, then the contractions stopped.',v:[136,'78/42',28,97,36.6],
+ h:['Labouring for a vaginal birth after a previous caesarean','Oxytocin drip running','Sudden severe pain at the scar'],
+ e:['Baby\'s parts easy to feel under the skin; presenting part has gone back up','Fetal heart rate 70 beats per minute'],
+ l:['Hb 74 g/L','Crossmatch 6 units'],
+ i:['Bedside ultrasound: free fluid and fetus outside the uterus'],
+ tx:'Stop oxytocin, resuscitate, and immediate laparotomy for delivery and repair',w:['Increase the oxytocin','Ventouse delivery','Epidural top-up and wait'],al:['ruptured uterus','scar rupture','ruptur uteri'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Sudden pain, loss of contractions, a high presenting part and fetal bradycardia in a labour after caesarean is uterine rupture.'},
+{n:'Umbilical Cord Prolapse',t:2,s:'Obstetric',a:[20,40],x:'F',late:true,sp:'obgyn',cc:'Midwife: Waters broke and there is cord at the entrance!',v:[112,'124/78',22,99,36.8],
+ h:['Waters broke ten minutes ago','Baby was breech at the last scan','37 weeks; first contractions'],
+ e:['Loop of cord visible at the vulva, pulsating','Fetal heart rate dropping to 80'],
+ l:['No time for tests'],
+ i:['No time for imaging'],
+ tx:'Call for help, push the presenting part up off the cord (knee-chest or fill the bladder), keep the cord warm and moist, category 1 caesarean',w:['Push the cord back inside','Ask her to push to deliver quickly','Wait for an ultrasound'],al:['cord prolapse','prolaps tali pusat'],ecg:'sinus',pose:'alert',dispo:'theatre',
+ p:'Cord prolapse: take the pressure off the cord, avoid handling it, and deliver by the quickest safe route.'},
+{n:'Amniotic Fluid Embolism',t:3,s:'Obstetric',a:[25,42],x:'F',late:true,sp:'obgyn',cc:'Midwife: She went grey and stopped breathing straight after the birth!',v:[148,'60/30',8,72,36.6],
+ h:['Rapid labour, delivered five minutes ago','Sudden breathlessness and panic, then a seizure','No history of heart or lung disease'],
+ e:['Cyanosed and hypotensive; bleeding from cannula sites','Uterus contracted'],
+ l:['Fibrinogen 0.6 g/L; platelets 54; INR 2.8','Troponin rising'],
+ i:['Bedside echo: dilated, failing right ventricle'],
+ tx:'Resuscitate (CPR if arrested), intubate, blood products and fibrinogen for the DIC, ICU',w:['Thrombolysis for a PE','Magnesium for eclampsia','Oxytocin and observe'],al:['AFE','amniotic fluid embolism','anaphylactoid syndrome of pregnancy','emboli air ketuban'],ecg:'sinus',pose:'unconscious',dispo:'icu',proc:['intubate'],
+ p:'Sudden collapse, hypoxia and DIC around delivery is amniotic fluid embolism. Treatment is resuscitation and blood products.'},
+{n:'Peripartum Cardiomyopathy',t:2,s:'Cardiovascular',a:[20,40],x:'F',late:true,sp:'obgyn',cc:'Since the baby came I cannot lie flat and my legs are swollen.',v:[118,'104/70',26,91,36.8],
+ h:['Gave birth four weeks ago; first pregnancy, twins','Pre-eclampsia in the pregnancy','Breathless at night, needs three pillows'],
+ e:['Raised neck veins and a third heart sound','Crackles at both bases; ankle oedema'],
+ l:['NT-proBNP 6,400 ng/L','ECG: sinus tachycardia'],
+ i:['Echo: dilated left ventricle, ejection fraction 25%'],
+ tx:'Heart-failure treatment (diuretics, then beta-blocker), anticoagulation if very low function, consider bromocriptine; cardiology review',w:['Reassure: normal after a birth','Antibiotics for pneumonia','IV fluid bolus'],al:['PPCM','peripartum cardiomyopathy','postpartum cardiomyopathy'],ecg:'sinus',pose:'resp',dispo:'icu',
+ p:'New heart failure in late pregnancy or the months after birth is peripartum cardiomyopathy. Breathlessness lying flat is not normal postpartum.'},
+{n:'Acute Fatty Liver of Pregnancy',t:3,s:'Obstetric',a:[22,40],x:'F',late:true,sp:'obgyn',cc:'Vomiting for days, and now my eyes are yellow. I am 36 weeks.',v:[110,'118/74',20,98,37.1],
+ h:['36 weeks pregnant with twins','Nausea, vomiting and upper abdominal pain for a week','Very thirsty'],
+ e:['Jaundiced; mild confusion','Not hypertensive'],
+ l:['Glucose 2.6 mmol/L; INR 2.2; ALT 520 U/L','Uric acid raised; creatinine raised'],
+ i:['Liver ultrasound: bright, fatty liver'],
+ tx:'Correct glucose and clotting, stabilise, and deliver promptly; high-dependency care',w:['Discharge with antiemetics','Wait for term','Steroids and continue the pregnancy'],al:['AFLP','fatty liver of pregnancy'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Low glucose, raised INR and jaundice in the third trimester suggest acute fatty liver of pregnancy. Low glucose separates it from HELLP.'},
+{n:'Ovarian Hyperstimulation Syndrome',t:2,s:'Obstetric',a:[25,40],x:'F',late:true,sp:'obgyn',cc:'My stomach has swollen up since the egg collection, and I am breathless.',v:[112,'102/64',24,95,37.0],
+ h:['IVF egg collection five days ago','Abdomen distending and passing little urine','Nausea and weight gain of 4 kg'],
+ e:['Tense, distended abdomen with shifting dullness','Reduced breath sounds at the right base'],
+ l:['Haematocrit 48%; sodium 129 mmol/L','Creatinine mildly raised'],
+ i:['Ultrasound: large multicystic ovaries, ascites and a right pleural effusion'],
+ tx:'Admit, fluid balance, thromboprophylaxis, analgesia; drain the ascites if severe',w:['Emergency oophorectomy','IV furosemide alone','Discharge with paracetamol'],al:['OHSS','hyperstimulation'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Ascites, haemoconcentration and big cystic ovaries after IVF is ovarian hyperstimulation syndrome. Watch for clots.'},
+{n:'Tubo-Ovarian Abscess',t:1,s:'Obstetric',a:[18,40],x:'F',late:true,sp:'obgyn',cc:'Terrible pain low on the left with fever.',v:[116,'110/68',22,98,39.1],
+ h:['Treated for chlamydia last year','Pain getting worse for five days','Has an intrauterine device'],
+ e:['Tender left adnexal mass','Cervical motion tenderness'],
+ l:['WBC 19, CRP 210 mg/L','Pregnancy test negative'],
+ i:['Transvaginal ultrasound: 6 cm complex left adnexal collection'],
+ tx:'IV antibiotics (e.g. ceftriaxone, doxycycline, metronidazole), with drainage or surgery if large or not improving',w:['Oral nitrofurantoin','Methotrexate','Discharge with analgesia'],al:['TOA','tubo-ovarian abscess','pelvic abscess'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'A tender adnexal mass with fever after pelvic infection is a tubo-ovarian abscess. Large ones need drainage.'},
+// Cardiology
+{n:'Supraventricular Tachycardia',t:0,s:'Cardiovascular',a:[18,45],x:'A',late:true,sp:'cardio',cc:'My heart suddenly started racing and will not stop.',v:[192,'112/72',20,98,36.8],
+ h:['Started suddenly while bending down, 40 minutes ago','Similar short episodes for years','No chest pain; feels light-headed'],
+ e:['Regular pulse of 190','Alert, well perfused'],
+ l:['ECG: regular narrow-complex tachycardia, no visible P waves','Potassium and magnesium normal'],
+ i:['Chest X-ray: normal'],
+ tx:'Modified Valsalva manoeuvre, then IV adenosine with a flush, ready to record the rhythm strip',w:['Synchronised DC cardioversion first','IV amiodarone loading','Oral metoprolol and discharge'],al:['SVT','AVNRT','paroxysmal SVT','PSVT'],ecg:'svt',pose:'alert',dispo:'home',
+ p:'A stable regular narrow-complex tachycardia: try a modified Valsalva first (legs up after the strain), then adenosine.'},
+{n:'Ventricular Tachycardia',t:1,s:'Cardiovascular',a:[50,85],x:'A',late:true,sp:'cardio',cc:'Palpitations and dizziness. I had a heart attack two years ago.',v:[168,'98/62',22,95,36.7],
+ h:['Previous anterior heart attack','Palpitations for an hour','No chest pain now'],
+ e:['Regular pulse of 170; cannon waves in the neck','Alert, systolic pressure 98'],
+ l:['ECG: broad-complex tachycardia, AV dissociation, fusion beats','Potassium 3.4; magnesium 0.6 mmol/L'],
+ i:['Echo: old anterior scar, ejection fraction 30%'],
+ tx:'Stable VT: IV amiodarone (or synchronised cardioversion under sedation), correct potassium and magnesium; ICD assessment',w:['IV verapamil','IV adenosine and discharge','Vagal manoeuvres only'],al:['VT','monomorphic VT','broad complex tachycardia'],ecg:'vt',pose:'alert',dispo:'icu',
+ p:'Broad-complex tachycardia in someone with heart disease is VT until proven otherwise. Never give verapamil.'},
+{n:'Hypertensive Emergency',t:1,s:'Cardiovascular',a:[40,75],x:'A',late:true,sp:'cardio',cc:'Splitting headache and blurred vision. I ran out of my blood pressure tablets.',v:[96,'228/134',20,97,36.8],
+ h:['Stopped amlodipine and losartan a month ago','Headache and blurred vision since this morning','Vomited twice'],
+ e:['Fundoscopy: flame haemorrhages, cotton-wool spots and papilloedema','Mild confusion; no focal weakness'],
+ l:['Creatinine 210 µmol/L (normal last year); haematuria and proteinuria','Troponin normal'],
+ i:['CT head: no bleed'],
+ tx:'IV labetalol (or nicardipine) to lower the pressure by no more than 25% in the first hour, in HDU',w:['Sublingual nifedipine to normal pressure now','Discharge with the old tablets restarted','IV fluids'],al:['hypertensive crisis','malignant hypertension','hypertensive encephalopathy','krisis hipertensi'],ecg:'sinus',pose:'alert',dispo:'icu',
+ p:'Very high blood pressure with organ damage is an emergency. Lower it steadily, not suddenly, or you cause strokes.'},
+{n:'Acute Myocarditis',t:1,s:'Cardiovascular',a:[16,40],x:'A',late:true,sp:'cardio',cc:'Chest pain and breathlessness a week after a bad flu.',v:[118,'102/66',24,95,37.8],
+ h:['Flu-like illness ten days ago','Chest pain and palpitations for three days','Breathless climbing stairs'],
+ e:['Third heart sound; mild basal crackles','Tachycardic'],
+ l:['Troponin 3,200 ng/L; CRP 64 mg/L','ECG: diffuse T-wave inversion, ectopic beats'],
+ i:['Echo: global hypokinesis; cardiac MRI: patchy late enhancement not following a coronary territory'],
+ tx:'Admit to a monitored bed, heart-failure support, avoid NSAIDs and exertion; coronary angiography if in doubt',w:['Thrombolysis','Discharge with ibuprofen','Return to sport next week'],al:['myocarditis','viral myocarditis','miokarditis'],ecg:'twinv',pose:'chest',dispo:'icu',
+ p:'Chest pain, high troponin and heart failure after a viral illness in a young adult suggests myocarditis. No competitive sport for months.'},
+{n:'Rheumatic Mitral Stenosis',t:1,s:'Cardiovascular',a:[20,45],x:'F',late:true,sp:'cardio',cc:'I get breathless when I walk, and now my heart is racing.',v:[136,'110/72',26,93,36.9],
+ h:['Rheumatic fever as a child','Breathlessness worse over six months; now pregnant','Coughed up a little blood'],
+ e:['Irregularly irregular pulse; flushed cheeks','Loud first heart sound, opening snap and a low rumbling diastolic murmur'],
+ l:['ECG: atrial fibrillation','NT-proBNP raised'],
+ i:['Echo: mitral valve area 0.9 cm² with "hockey-stick" leaflets'],
+ tx:'Rate control (beta-blocker), diuretic, anticoagulation; refer for balloon valvotomy',w:['IV adenosine','Vasodilators to lower afterload','Antibiotics for pneumonia only'],al:['mitral stenosis','rheumatic heart disease','RHD','stenosis mitral'],ecg:'afib',pose:'resp',dispo:'ward',
+ p:'Rheumatic mitral stenosis decompensates with fast AF or pregnancy. Slow the heart so the left atrium has time to empty.'},
+{n:'Severe Aortic Stenosis',t:1,s:'Cardiovascular',a:[65,90],x:'A',late:true,sp:'cardio',cc:'I blacked out walking up the hill.',v:[72,'108/88',18,96,36.6],
+ h:['Collapsed while climbing a hill','Chest tightness on exertion for months','Breathless on exertion'],
+ e:['Slow-rising pulse; narrow pulse pressure','Harsh ejection systolic murmur radiating to the carotids; soft second heart sound'],
+ l:['ECG: left ventricular hypertrophy with strain','Troponin normal'],
+ i:['Echo: aortic valve area 0.6 cm², mean gradient 56 mmHg'],
+ tx:'Admit and refer for valve replacement (TAVI or surgery); avoid vasodilators and dehydration',w:['GTN spray for the chest pain','Discharge with a driving advice leaflet','Treadmill exercise test'],al:['AS','aortic stenosis','calcific aortic stenosis'],ecg:'twinv',pose:'alert',dispo:'ward',
+ p:'Exertional syncope, angina or breathlessness with severe aortic stenosis means the valve needs replacing soon.'},
+{n:'Torsades de Pointes',t:2,s:'Cardiovascular',a:[30,80],x:'F',late:true,sp:'cardio',cc:'Paramedics: Collapsed twice, came round each time.',v:[48,'96/60',18,97,36.6],
+ h:['Started erythromycin and ondansetron for a chest infection','Takes a diuretic','Recent diarrhoea'],
+ e:['Slow pulse between episodes','Alert now'],
+ l:['ECG: QTc 610 ms; runs of polymorphic VT twisting around the baseline','Potassium 2.9, magnesium 0.5 mmol/L'],
+ i:['Chest X-ray: small right basal consolidation'],
+ tx:'IV magnesium sulphate, replace potassium, stop QT-prolonging drugs; overdrive pacing or isoprenaline if recurrent',w:['IV amiodarone','More ondansetron for the nausea','IV sotalol'],al:['TdP','torsades','long QT','polymorphic VT'],ecg:'torsades',pose:'drowsy',dispo:'icu',
+ p:'Polymorphic VT with a long QT is torsades: magnesium first, and stop every drug that lengthens the QT.'},
+{n:'Prosthetic Valve Thrombosis',t:3,s:'Cardiovascular',a:[30,75],x:'A',late:true,sp:'cardio',cc:'Suddenly breathless. My valve does not click any more.',v:[124,'94/60',30,88,36.8],
+ h:['Mechanical mitral valve ten years ago','Stopped warfarin two weeks ago for a dental procedure','Breathless lying flat'],
+ e:['The usual crisp valve click is muffled','New murmur; crackles in both lungs'],
+ l:['INR 1.1','NT-proBNP very raised'],
+ i:['Fluoroscopy and echo: stuck mechanical leaflet with high gradient'],
+ tx:'Urgent cardiothoracic surgery, or thrombolysis if surgery is not possible; heparin',w:['Oral warfarin restart and discharge','IV furosemide only','Antibiotics for endocarditis'],al:['valve thrombosis','stuck valve','PVT'],ecg:'sinus',pose:'resp',dispo:'theatre',
+ p:'A muffled mechanical valve click with sudden heart failure after stopping warfarin is valve thrombosis. Listen for the click.'},
+// Neurology
+{n:'Intracerebral Haemorrhage',t:1,s:'Neuro',a:[50,85],x:'A',late:true,sp:'neuro',cc:'Family: Sudden weakness on one side and a terrible headache.',v:[88,'212/118',18,96,36.8],
+ h:['Sudden right-sided weakness and slurred speech an hour ago','Long-standing poorly controlled hypertension','Takes apixaban for atrial fibrillation'],
+ e:['Dense right hemiparesis; GCS 13','Vomiting; eyes deviated to the left'],
+ l:['INR 1.2; anti-Xa activity high','Glucose 7.1 mmol/L'],
+ i:['CT head: 40 mL left basal ganglia haemorrhage'],
+ tx:'Lower systolic pressure to about 140, reverse the anticoagulant (andexanet or prothrombin complex), neurosurgical review, stroke unit',w:['Thrombolysis','Aspirin 300 mg','Lumbar puncture'],al:['ICH','intracerebral hemorrhage','haemorrhagic stroke','hemorrhagic stroke','stroke perdarahan'],ecg:'afib',pose:'drowsy',dispo:'icu',
+ p:'Stroke symptoms with headache and vomiting suggest a bleed. Scan before any clot treatment, and reverse anticoagulants fast.'},
+{n:'Cervical Artery Dissection',t:2,s:'Neuro',a:[25,50],x:'A',late:true,sp:'neuro',cc:'Neck pain after a massage, and now my eyelid is drooping.',v:[84,'138/84',16,98,36.7],
+ h:['Neck manipulation at a massage parlour three days ago','One-sided neck pain and headache','Brief spell of word-finding difficulty'],
+ e:['Right Horner syndrome: small pupil and drooping eyelid','No limb weakness now'],
+ l:['Inflammatory markers normal','Glucose normal'],
+ i:['CT angiogram: right internal carotid dissection with a "string sign"'],
+ tx:'Antiplatelet (or anticoagulant) treatment and stroke-unit care',w:['More neck manipulation','Triptan for migraine','Discharge with physiotherapy'],al:['carotid dissection','vertebral dissection','arterial dissection','CAD'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Neck pain with Horner syndrome, especially after neck trauma or manipulation, is a carotid dissection until imaged.'},
+{n:'Idiopathic Intracranial Hypertension',t:1,s:'Neuro',a:[18,40],x:'F',late:true,sp:'neuro',cc:'Headaches every morning and my vision greys out when I stand.',v:[80,'128/80',16,99,36.7],
+ h:['Headache for two months, worse lying down','Whooshing sound in the ears in time with the pulse','Gained 12 kg this year; takes doxycycline for acne'],
+ e:['Bilateral papilloedema','Sixth nerve palsy; enlarged blind spots'],
+ l:['Lumbar puncture: opening pressure 38 cmH₂O, normal CSF contents','Bloods normal'],
+ i:['MRI with venography: no mass and no venous sinus thrombosis; empty sella'],
+ tx:'Stop doxycycline, acetazolamide, weight loss, and urgent ophthalmology to protect vision',w:['Triptans and discharge','Lumbar drain then forget about it','Opioids for the headache'],al:['IIH','benign intracranial hypertension','pseudotumour cerebri','pseudotumor cerebri'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Headache with papilloedema, normal imaging and high opening pressure is IIH. The danger is permanent loss of vision.'},
+{n:'Multiple Sclerosis Relapse',t:1,s:'Neuro',a:[20,45],x:'F',late:true,sp:'neuro',cc:'My left eye has gone blurry and it hurts to move it.',v:[78,'118/74',14,99,36.8],
+ h:['Pain on eye movement and blurred vision for three days','A year ago, numb legs for a month that got better','Colours look washed out'],
+ e:['Reduced acuity and red desaturation in the left eye; relative afferent pupillary defect','Brisk reflexes in the legs'],
+ l:['CSF: oligoclonal bands not matched in serum','Aquaporin-4 and MOG antibodies negative'],
+ i:['MRI brain: periventricular "Dawson\'s fingers" and an enhancing lesion'],
+ tx:'High-dose methylprednisolone for the relapse and neurology referral for disease-modifying treatment',w:['Antibiotic eye drops','Pilocarpine for glaucoma','Reassure, it is eye strain'],al:['MS','optic neuritis','multiple sclerosis','demyelination'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Painful visual loss with a past episode of neurological symptoms, separated in time and place, points to multiple sclerosis.'},
+{n:'Transverse Myelitis',t:2,s:'Neuro',a:[15,45],x:'A',late:true,sp:'neuro',cc:'Since yesterday my legs feel numb and weak and I cannot pee.',v:[86,'122/76',16,98,37.2],
+ h:['Diarrhoeal illness two weeks ago','Band-like pain around the chest','Legs weak and numb over 24 hours'],
+ e:['Weak legs with a sensory level at T6','Bladder full; brisk reflexes'],
+ l:['CSF: lymphocytes and raised protein','Infection screen negative'],
+ i:['MRI spine: swollen, bright cord from T4 to T8; no compression'],
+ tx:'High-dose IV methylprednisolone, plasma exchange if no response, catheter and VTE prophylaxis',w:['Physiotherapy only','IV immunoglobulin for Guillain–Barré alone','Urgent decompressive surgery'],al:['TM','myelitis','acute transverse myelitis'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'A sensory level with bladder involvement points to the spinal cord. Exclude compression with MRI first.'},
+{n:'Cluster Headache',t:0,s:'Neuro',a:[25,50],x:'M',late:true,sp:'neuro',cc:'Stabbing pain behind my right eye. It wakes me at 2 a.m. every night.',v:[98,'140/86',18,99,36.7],
+ h:['Attacks of 45 minutes, at the same time every night for two weeks','Same thing happened last spring','Smoker; pacing the room during attacks'],
+ e:['Right eye red and watering; drooping eyelid and runny nostril on the right','Restless and agitated'],
+ l:['Bloods normal'],
+ i:['MRI brain (first presentation): normal'],
+ tx:'High-flow 100% oxygen or subcutaneous sumatriptan for the attack; verapamil to prevent them',w:['Opioids for each attack','Lie still in a dark room','Antibiotics for sinusitis'],al:['cluster','trigeminal autonomic cephalalgia','suicide headache'],ecg:'sinus',pose:'agitated',dispo:'home',
+ p:'Short, severe one-sided eye pain with tearing and a runny nose, recurring at the same time each night, is cluster headache. Patients pace; migraineurs lie still.'},
+{n:'Posterior Reversible Encephalopathy Syndrome',t:2,s:'Neuro',a:[20,65],x:'A',late:true,sp:'neuro',cc:'Family: Bad headache, then she could not see properly and had a fit.',v:[92,'196/112',18,97,36.9],
+ h:['Kidney transplant; takes tacrolimus','Headache and blurred vision since yesterday','Seizure in the ambulance'],
+ e:['Cortical blindness: cannot see but pupils react','Drowsy, no focal weakness'],
+ l:['Tacrolimus level high','Creatinine raised'],
+ i:['MRI brain: bilateral parieto-occipital vasogenic oedema'],
+ tx:'Lower blood pressure gradually, stop or reduce the trigger drug, treat seizures',w:['Thrombolysis','Lumbar puncture and antibiotics only','Increase tacrolimus'],al:['PRES','posterior reversible encephalopathy','RPLS'],ecg:'sinus',pose:'confused',dispo:'icu',
+ p:'Headache, visual loss and seizures with high blood pressure or calcineurin inhibitors, and posterior oedema on MRI, is PRES. It reverses if you treat the cause.'},
+{n:'Reversible Cerebral Vasoconstriction Syndrome',t:3,s:'Neuro',a:[25,55],x:'F',late:true,sp:'neuro',cc:'Thunderclap headaches, four of them this week.',v:[90,'152/92',16,99,36.8],
+ h:['Recurrent sudden worst-ever headaches, each peaking within a minute','Started an SSRI and a decongestant last month','Gave birth six weeks ago'],
+ e:['No neck stiffness','Neurologically normal between attacks'],
+ l:['Lumbar puncture: no xanthochromia','Bloods normal'],
+ i:['CT angiogram: "string of beads" narrowing of several cerebral arteries'],
+ tx:'Stop vasoactive drugs, nimodipine, avoid triggers; repeat imaging to confirm it resolves',w:['Triptans for migraine','High-dose steroids for vasculitis','Coil the aneurysm'],al:['RCVS','reversible cerebral vasoconstriction','Call-Fleming syndrome'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Repeated thunderclap headaches over days, with beaded arteries and no aneurysm, is RCVS. Triptans and decongestants make it worse.'},
+{n:'Neuromyelitis Optica',t:3,s:'Neuro',a:[20,50],x:'F',late:true,sp:'neuro',cc:'Hiccups for days, then I went blind in one eye and my legs got weak.',v:[88,'124/78',16,98,36.9],
+ h:['Intractable hiccups and vomiting last week','Severe visual loss in the right eye','Leg weakness and bladder problems now'],
+ e:['Right eye: perception of light only','Weak legs with a sensory level'],
+ l:['Serum aquaporin-4 antibody positive','CSF: neutrophils; no oligoclonal bands'],
+ i:['MRI spine: swollen cord lesion over more than three vertebral segments'],
+ tx:'High-dose IV methylprednisolone and early plasma exchange, then long-term immunosuppression',w:['MS disease-modifying drugs such as interferon','Antiemetics only','Observe and wait'],al:['NMO','NMOSD','Devic disease','neuromyelitis optica spectrum disorder'],ecg:'sinus',pose:'alert',dispo:'icu',
+ p:'Severe optic neuritis, a long cord lesion and hiccups or vomiting point to NMO. Some MS drugs make it worse.'},
+// Toxicology
+{n:'Paraquat Poisoning',t:2,s:'Toxicology',a:[18,60],x:'A',late:true,sp:'tox',cc:'Drank weedkiller from the farm shed.',v:[112,'118/74',24,95,37.0],
+ h:['Swallowed a mouthful of paraquat weedkiller two hours ago','Burning mouth and throat','Vomiting'],
+ e:['Ulcers on the tongue and throat','Lungs clear for now'],
+ l:['Urine dithionite test: dark blue','Creatinine rising'],
+ i:['Chest X-ray: clear now (lung fibrosis comes later)'],
+ tx:'Activated charcoal or Fuller\'s earth early, supportive care, avoid extra oxygen unless needed, involve palliative care if the dose is lethal',w:['High-flow oxygen to keep saturations at 100%','Atropine for organophosphates','Induce vomiting at home and discharge'],al:['paraquat','herbicide poisoning','racun rumput','Gramoxone'],ecg:'sinus',pose:'pain',dispo:'icu',
+ p:'Paraquat burns the mouth, then destroys the kidneys and lungs. Oxygen speeds the lung damage, so give only what is needed.'},
+{n:'Ethylene Glycol Poisoning',t:2,s:'Toxicology',a:[25,60],x:'A',late:true,sp:'tox',cc:'Found confused and drunk, but the breath does not smell of alcohol.',v:[118,'132/80',30,97,36.8],
+ h:['Empty antifreeze bottle in the garage','Seemed drunk for a few hours, now confused','No alcohol smell'],
+ e:['Drowsy; deep, rapid breathing','Muscle twitching'],
+ l:['High anion gap acidosis and high osmolar gap; calcium low','Urine microscopy: envelope-shaped calcium oxalate crystals'],
+ i:['CT head: normal'],
+ tx:'Fomepizole (or ethanol) to block alcohol dehydrogenase, haemodialysis, sodium bicarbonate',w:['Activated charcoal alone','Flumazenil','IV fluids and discharge when sober'],al:['antifreeze poisoning','ethylene glycol','EG poisoning'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A drunk-looking patient with no alcohol, a high osmolar and anion gap and oxalate crystals has drunk antifreeze. Block the enzyme and dialyse.'},
+{n:'Iron Overdose',t:1,s:'Toxicology',a:[1,4],x:'A',late:true,sp:'tox',cc:'Parent: Ate a whole pack of mum\'s pregnancy iron tablets.',v:[138,'86/50',28,98,37.0],
+ h:['Swallowed about 30 iron tablets two hours ago','Vomiting, and the vomit had blood in it','Black diarrhoea'],
+ e:['Pale, drowsy; tender abdomen','Cool hands'],
+ l:['Serum iron 98 µmol/L at 4 hours; metabolic acidosis','Glucose 8.2 mmol/L'],
+ i:['Abdominal X-ray: radio-opaque tablets in the stomach'],
+ tx:'IV desferrioxamine, fluids, whole-bowel irrigation for tablets on X-ray; activated charcoal does not bind iron',w:['Activated charcoal','Induce vomiting with ipecac','Observe and discharge'],al:['iron poisoning','iron toxicity','ferrous sulfate overdose'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Iron overdose causes gut bleeding, then shock and liver failure. Charcoal does not bind iron; desferrioxamine does.'},
+{n:'Calcium-Channel Blocker Overdose',t:1,s:'Toxicology',a:[30,75],x:'A',late:true,sp:'tox',cc:'Paramedics: Took a box of amlodipine. Blood pressure 70.',v:[62,'72/38',18,97,36.4],
+ h:['Swallowed 40 amlodipine tablets three hours ago','Feels faint','No history of diabetes'],
+ e:['Warm, flushed skin; drowsy','Slow pulse'],
+ l:['Glucose 14.2 mmol/L (high, unlike beta-blocker overdose)','ECG: sinus bradycardia'],
+ i:['Chest X-ray: early pulmonary oedema'],
+ tx:'IV calcium, high-dose insulin with dextrose, vasopressors; ECMO if refractory',w:['IV glucagon alone and discharge','Atropine only','Flumazenil'],al:['CCB overdose','amlodipine overdose','verapamil overdose','calcium channel blocker poisoning'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Shock with a slow pulse and a high glucose after an overdose points to a calcium-channel blocker. High-dose insulin is the key treatment.'},
+{n:'Isoniazid Overdose',t:2,s:'Toxicology',a:[16,45],x:'A',late:true,sp:'tox',cc:'Paramedics: Seizing and not stopping despite diazepam!',v:[132,'144/88',28,92,38.0],
+ h:['On tuberculosis treatment','Took the whole month\'s supply after an argument','Seizures for 20 minutes'],
+ e:['Generalised seizures','No response to two doses of benzodiazepine'],
+ l:['Severe lactic acidosis; pH 6.9','Glucose 9.4 mmol/L'],
+ i:['CT head: normal'],
+ tx:'IV pyridoxine (vitamin B6) gram for gram, plus benzodiazepines',w:['Phenytoin loading','More diazepam alone','Activated charcoal only'],al:['INH overdose','isoniazid poisoning','INH toxicity'],ecg:'sinus',pose:'rigid',dispo:'icu',
+ p:'Seizures that do not stop with benzodiazepines in someone on TB treatment: give pyridoxine. Phenytoin does not work.'},
+{n:'Datura Poisoning',t:2,s:'Toxicology',a:[15,35],x:'A',late:true,sp:'tox',cc:'Friends: Drank "trumpet flower tea" and now sees things that are not there.',v:[138,'148/90',22,98,38.6],
+ h:['Brewed tea from angel\'s trumpet flowers at a party','Picking at things in the air','Has not passed urine'],
+ e:['Dilated pupils; hot, dry, flushed skin','Absent bowel sounds; full bladder; agitated delirium'],
+ l:['CK mildly raised','Glucose normal'],
+ i:['Bladder scan: 900 mL'],
+ tx:'Benzodiazepines for agitation, catheter, cooling; consider physostigmine if severe and the ECG is normal',w:['Haloperidol for the agitation','Atropine','Discharge when calm'],al:['anticholinergic toxicity','anticholinergic syndrome','angel trumpet','jimsonweed','kecubung'],ecg:'sinus',pose:'agitated',dispo:'ward',
+ p:'Hot as a hare, blind as a bat, dry as a bone, red as a beet, mad as a hatter: anticholinergic poisoning.'},
+{n:'Sulfonylurea Overdose',t:1,s:'Toxicology',a:[30,75],x:'A',late:true,sp:'tox',cc:'Family: Keeps going hypo even after the sugar drink.',v:[104,'136/82',18,98,36.5],
+ h:['Took a handful of gliclazide tablets','Low glucose three times despite dextrose','Not diabetic themself; the tablets belong to a parent'],
+ e:['Sweaty and confused when low','Recovers with dextrose, then drifts off again'],
+ l:['Glucose 1.9 mmol/L; insulin and C-peptide high','Sulfonylurea screen positive'],
+ i:['No imaging needed'],
+ tx:'IV dextrose and subcutaneous octreotide, with at least 24 hours of observation',w:['One dextrose bolus and discharge','Insulin infusion','Glucagon alone repeatedly'],al:['gliclazide overdose','glibenclamide overdose','sulphonylurea overdose','sulfonylurea poisoning'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Recurrent hypoglycaemia after a sulfonylurea overdose needs octreotide. Dextrose alone drives more insulin release.'},
+{n:'Kerosene Ingestion',t:1,s:'Toxicology',a:[1,4],x:'A',late:true,sp:'tox',cc:'Parent: Drank kerosene from a soft-drink bottle and is coughing.',v:[148,'96/60',44,90,38.2],
+ h:['Swallowed kerosene stored in a water bottle','Coughed and choked straight after','Vomited once'],
+ e:['Smells of kerosene; grunting and recession','Crackles in the right lung'],
+ l:['Blood gas: low oxygen','WBC raised'],
+ i:['Chest X-ray: right lower zone pneumonitis'],
+ tx:'Oxygen and respiratory support; do not induce vomiting or pass a stomach tube',w:['Induce vomiting','Gastric lavage','Activated charcoal'],al:['hydrocarbon pneumonitis','hydrocarbon ingestion','paraffin poisoning','kerosene poisoning','minyak tanah'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Kerosene harms the lungs, not the gut. Vomiting or lavage risks more aspiration.'},
+// Infectious diseases
+{n:'Cryptococcal Meningitis',t:2,s:'Infectious',a:[25,50],x:'A',late:true,sp:'id',cc:'Headache for three weeks, getting worse, and now I am confused.',v:[92,'126/80',18,98,37.9],
+ h:['HIV positive; stopped antiretrovirals last year','Headache and fever for three weeks','Blurred vision'],
+ e:['Mild neck stiffness; confused','Papilloedema'],
+ l:['CD4 count 34 cells/µL; serum cryptococcal antigen positive','CSF: opening pressure 36 cmH₂O, India ink positive'],
+ i:['CT head: no mass'],
+ tx:'Amphotericin B with flucytosine, repeat lumbar punctures to lower pressure; start antiretrovirals after a few weeks',w:['Ceftriaxone alone','Start antiretrovirals today','Acetazolamide for the pressure'],al:['crypto meningitis','cryptococcal','cryptococcosis','Cryptococcus'],ecg:'sinus',pose:'confused',dispo:'ward',
+ p:'Subacute headache in advanced HIV is cryptococcal meningitis until the antigen is negative. Drain the pressure and delay ART.'},
+{n:'Pyogenic Liver Abscess',t:1,s:'Infectious',a:[45,75],x:'A',late:true,sp:'id',cc:'High fevers and pain under my right ribs.',v:[118,'108/66',22,97,39.4],
+ h:['Type 2 diabetes','Fevers and rigors for ten days','Right upper abdominal pain'],
+ e:['Tender, enlarged liver','Right basal dullness'],
+ l:['WBC 21, CRP 260 mg/L, ALP raised','Blood cultures: Klebsiella pneumoniae'],
+ i:['CT abdomen: 7 cm multiloculated abscess in the right lobe of the liver'],
+ tx:'IV antibiotics (e.g. ceftriaxone plus metronidazole) and percutaneous drainage; look for eye or brain spread',w:['Oral amoxicillin and discharge','Metronidazole alone for amoebic abscess','Liver biopsy for cancer'],al:['hepatic abscess','Klebsiella liver abscess','KLA','abses hati'],ecg:'sinus',pose:'shiver',dispo:'ward',
+ p:'Klebsiella liver abscess is common in Asia, especially with diabetes, and can spread to the eye.'},
+{n:'Streptococcus suis Meningitis',t:3,s:'Infectious',a:[35,65],x:'M',late:true,sp:'id',cc:'Fever and headache, and now I cannot hear.',v:[112,'118/72',22,97,39.6],
+ h:['Pig farmer who also slaughters at home','Cut on his hand last week','Ate undercooked pork'],
+ e:['Neck stiffness; sudden hearing loss in both ears','Unsteady, with vertigo'],
+ l:['CSF: neutrophils; Gram-positive cocci in pairs and chains','Blood culture: Streptococcus suis'],
+ i:['CT head: normal'],
+ tx:'IV ceftriaxone with dexamethasone, and hearing follow-up',w:['IV aciclovir alone','Oral amoxicillin','Antifungals'],al:['S. suis','strep suis','streptococcus suis','pig meningitis'],ecg:'sinus',pose:'confused',dispo:'ward',
+ p:'Meningitis with deafness in someone who handles pigs points to Streptococcus suis, a common cause of adult meningitis in parts of Southeast Asia.'},
+{n:'Spinal Tuberculosis',t:2,s:'Infectious',a:[15,60],x:'A',late:true,sp:'id',cc:'Back pain for months, and now my legs feel weak.',v:[96,'118/74',18,98,37.8],
+ h:['Back pain for four months, worse at night','Night sweats and weight loss','Uncle had tuberculosis'],
+ e:['Angular kyphosis (gibbus) at T10','Weak legs with brisk reflexes'],
+ l:['ESR 98 mm/h; interferon-gamma release assay positive','CT-guided biopsy: caseating granulomas; Xpert MTB positive'],
+ i:['MRI spine: destruction of T9–T10 with a paraspinal (cold) abscess'],
+ tx:'Anti-tuberculous therapy for 9–12 months, with surgical decompression if the cord is compromised',w:['Physiotherapy only','Steroid injection into the spine','Short course of flucloxacillin'],al:['Pott disease','Pott\'s disease','tuberculous spondylitis','spinal TB','spondilitis TB'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Chronic back pain with night sweats, a gibbus and a paraspinal abscess is spinal TB.'},
+{n:'Cerebral Toxoplasmosis',t:2,s:'Infectious',a:[25,50],x:'A',late:true,sp:'id',cc:'Family: Weakness on the left side and a seizure this morning.',v:[94,'124/78',18,98,37.9],
+ h:['HIV positive, not on treatment','Headache and confusion for two weeks','First seizure today'],
+ e:['Left-sided weakness','Fever; no neck stiffness'],
+ l:['CD4 count 46 cells/µL','Toxoplasma IgG positive'],
+ i:['MRI brain: several ring-enhancing lesions in the basal ganglia'],
+ tx:'Pyrimethamine with sulfadiazine and folinic acid (or co-trimoxazole), then antiretrovirals',w:['Brain biopsy before any treatment','Steroids alone','Antifungals'],al:['toxoplasmosis','toxo','toxoplasma encephalitis'],ecg:'sinus',pose:'confused',dispo:'ward',
+ p:'Multiple ring-enhancing lesions in advanced HIV are treated as toxoplasmosis first. If they do not shrink in two weeks, think lymphoma.'},
+{n:'Disseminated Gonococcal Infection',t:2,s:'Infectious',a:[18,35],x:'A',late:true,sp:'id',cc:'Painful wrist and fingers, and spots on my hands.',v:[104,'118/72',18,99,38.4],
+ h:['New sexual partner a month ago','Joint pains moving from joint to joint','Painful tendons on the back of the hand'],
+ e:['Tenosynovitis of the wrist and fingers','A few pustules on the hands and feet'],
+ l:['Blood cultures negative; NAAT swab: Neisseria gonorrhoeae','Joint fluid culture negative'],
+ i:['Wrist ultrasound: tenosynovitis'],
+ tx:'IV ceftriaxone, then oral treatment; test and treat partners and screen for other infections',w:['NSAIDs alone for reactive arthritis','Steroid injection into the joint','Oral flucloxacillin'],al:['DGI','gonococcal arthritis','gonorrhoea arthritis','disseminated gonorrhoea'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Tenosynovitis, a few pustules and migrating joint pain in a sexually active young adult is disseminated gonorrhoea.'},
+{n:'Severe Fever with Thrombocytopenia Syndrome',t:4,s:'Infectious',a:[50,80],x:'A',late:true,sp:'id',cc:'High fever and diarrhoea after working in the fields.',v:[64,'102/60',20,97,39.3],
+ h:['Farm worker in rural China or Korea','Tick bite a week ago','Diarrhoea and muscle aches'],
+ e:['Relative bradycardia; tender lymph nodes','Drowsy, with a tremor'],
+ l:['Platelets 32, WBC 1.6 ×10⁹/L; AST and CK raised','PCR: SFTS virus (Dabie bandavirus)'],
+ i:['Chest X-ray: normal'],
+ tx:'Supportive care, isolation with blood and body fluid precautions; favipiravir in some centres',w:['Doxycycline alone for scrub typhus','Platelet transfusion and discharge','Antimalarials'],al:['SFTS','Dabie bandavirus','severe fever with thrombocytopenia'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Fever, low platelets and low white cells after a tick bite in East Asia: SFTS spreads to carers through blood, so isolate.'},
+{n:'Nipah Virus Encephalitis',t:4,s:'Infectious',a:[20,60],x:'A',late:true,sp:'id',cc:'Fever, then confusion and twitching.',v:[118,'156/96',26,93,39.2],
+ h:['Drank raw date palm sap in Bangladesh last week','Fever and headache for four days','A neighbour died of a similar illness'],
+ e:['Confused; segmental myoclonus','Areflexia and a cough'],
+ l:['CSF: lymphocytic pleocytosis','RT-PCR: Nipah virus'],
+ i:['MRI brain: small scattered white-matter lesions'],
+ tx:'Supportive care with strict isolation; notify public health immediately',w:['Discharge with paracetamol','Aciclovir alone with no isolation','Antimalarials'],al:['Nipah','NiV','Nipah encephalitis'],ecg:'sinus',pose:'confused',dispo:'icu',
+ p:'Encephalitis after raw date palm sap or pig contact in South or Southeast Asia: think Nipah, isolate, and protect staff.'},
+{n:'Avian Influenza (H5N1)',t:4,s:'Infectious',a:[10,50],x:'A',late:true,sp:'id',cc:'Fever and cough that became severe breathlessness in two days.',v:[124,'104/64',36,84,39.5],
+ h:['Handled sick backyard chickens a week ago','Several of the chickens died','No other travel'],
+ e:['Crackles in both lungs','Struggling to breathe'],
+ l:['Lymphopenia and low platelets','Throat swab RT-PCR: influenza A(H5N1)'],
+ i:['Chest X-ray: rapidly spreading bilateral consolidation'],
+ tx:'Oseltamivir straight away, airborne isolation, ventilatory support; notify public health',w:['Oral amoxicillin and discharge','Wait for the swab before treating','Steroids alone'],al:['bird flu','H5N1','avian flu','flu burung'],ecg:'sinus',pose:'resp',dispo:'icu',
+ p:'Severe pneumonia after contact with sick or dead poultry: give oseltamivir before the result, and isolate.'},
+// Surgery
+{n:'Incarcerated Inguinal Hernia',t:0,s:'Gastro/Hepatic',a:[40,85],x:'M',late:true,sp:'surg',cc:'The lump in my groin will not go back in and it hurts.',v:[104,'138/84',18,98,37.2],
+ h:['Groin lump for years that always went back','Stuck and painful for eight hours','Vomited twice; no wind since this morning'],
+ e:['Tense, tender, irreducible lump above and medial to the pubic tubercle','No cough impulse; distended abdomen'],
+ l:['WBC 13.8; lactate 2.4 mmol/L','Potassium 3.6'],
+ i:['Abdominal X-ray: dilated small bowel loops'],
+ tx:'Analgesia, nil by mouth, drip and suck, and urgent hernia repair',w:['Force the hernia back and discharge','Truss and outpatient review','Laxatives'],al:['strangulated hernia','incarcerated hernia','inguinal hernia','hernia inkarserata'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'A painful, irreducible hernia with obstruction may be strangulated. Do not force it back; operate.'},
+{n:'Acute Limb Ischaemia',t:1,s:'Cardiovascular',a:[55,85],x:'A',late:true,sp:'surg',cc:'My right leg went cold and painful an hour ago.',v:[96,'142/84',18,97,36.7],
+ h:['Sudden pain in the right leg an hour ago','Atrial fibrillation; stopped anticoagulants','Leg feels numb'],
+ e:['Pale, cold, pulseless right leg below the knee','Reduced sensation and weak toe movement'],
+ l:['ECG: atrial fibrillation','CK mildly raised'],
+ i:['CT angiogram: embolus at the popliteal bifurcation'],
+ tx:'IV heparin and urgent embolectomy (or thrombolysis), watch for compartment syndrome after',w:['Elevate the leg and give paracetamol','Compression stockings','Outpatient vascular clinic'],al:['ALI','acute ischaemic limb','arterial embolism','iskemia tungkai akut'],ecg:'afib',pose:'pain',dispo:'theatre',
+ p:'Pain, pallor, pulselessness, paraesthesia, paralysis and a perishing cold limb: six hours to save it.'},
+{n:"Fournier's Gangrene",t:2,s:'Infectious',a:[45,75],x:'M',late:true,sp:'surg',cc:'Agonising pain and swelling in my scrotum.',v:[126,'94/56',24,96,39.0],
+ h:['Diabetic, poorly controlled','Scrotal pain out of proportion for two days','Takes an SGLT2 inhibitor'],
+ e:['Swollen, dusky scrotum and perineum with crepitus','Skin starting to blacken'],
+ l:['WBC 26; glucose 24 mmol/L; lactate 4.2 mmol/L','Sodium 128; creatinine raised'],
+ i:['CT pelvis: gas in the soft tissues of the perineum'],
+ tx:'Emergency radical debridement, broad-spectrum IV antibiotics and resuscitation',w:['Oral antibiotics and review tomorrow','Scrotal support and analgesia','Ultrasound and wait'],al:['Fournier','Fourniers gangrene','perineal necrotising fasciitis','gangren Fournier'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Severe perineal pain with crepitus in a diabetic is Fournier\'s gangrene. The knife comes before the scan when it is obvious.'},
+{n:'Ascending Cholangitis',t:1,s:'Gastro/Hepatic',a:[50,85],x:'A',late:true,sp:'surg',cc:'Shaking chills, pain under my right ribs and my eyes are yellow.',v:[118,'96/58',22,96,39.4],
+ h:['Known gallstones','Rigors and right upper abdominal pain since yesterday','Dark urine and pale stools'],
+ e:['Jaundiced and tender in the right upper abdomen','Confused and hypotensive'],
+ l:['Bilirubin 92 µmol/L; ALP 540 U/L; WBC 18','Blood cultures: E. coli'],
+ i:['Ultrasound: dilated common bile duct with a stone'],
+ tx:'IV antibiotics and fluids, then urgent ERCP to drain the bile duct',w:['Laparoscopic cholecystectomy tonight','Oral antibiotics and discharge','Wait for the stone to pass'],al:['cholangitis','acute cholangitis','Charcot triad','kolangitis'],ecg:'sinus',pose:'shiver',dispo:'ward',
+ p:'Fever, jaundice and right upper quadrant pain is Charcot\'s triad. Add confusion and shock and it is Reynolds\' pentad: drain the duct.'},
+{n:'Large Bowel Obstruction',t:1,s:'Gastro/Hepatic',a:[60,90],x:'A',late:true,sp:'surg',cc:'I have not opened my bowels for five days and my belly is huge.',v:[108,'124/76',20,97,37.4],
+ h:['Change in bowel habit and weight loss for three months','No bowel movement or wind for five days','Dark blood in the stool lately'],
+ e:['Distended, tympanic abdomen; tender right iliac fossa','Empty rectum'],
+ l:['Hb 94 g/L, microcytic','CEA raised'],
+ i:['CT abdomen: obstructing sigmoid tumour with a caecum of 11 cm'],
+ tx:'Drip and suck, then urgent surgery or a colonic stent; caecum over 10 cm risks perforation',w:['Laxatives and an enema','Discharge for outpatient colonoscopy','Flexible sigmoidoscopy decompression alone'],al:['LBO','colorectal cancer obstruction','malignant bowel obstruction','obstructing colon cancer'],ecg:'sinus',pose:'hunched',dispo:'theatre',
+ p:'An obstructing colon cancer with a caecum over 10 cm and right iliac fossa tenderness is close to perforating.'},
+{n:'Perianal Abscess',t:0,s:'Gastro/Hepatic',a:[20,60],x:'A',late:true,sp:'surg',cc:'Throbbing pain by my bottom, and I cannot sit down.',v:[100,'128/78',16,99,37.9],
+ h:['Pain beside the anus getting worse for three days','Cannot sit; pain on opening bowels','Diabetic'],
+ e:['Red, fluctuant, very tender swelling next to the anus','No crepitus'],
+ l:['WBC 13.2; glucose 11.4 mmol/L','CRP 68 mg/L'],
+ i:['No imaging needed'],
+ tx:'Incision and drainage under anaesthetic',w:['Oral antibiotics alone','Topical haemorrhoid cream','Sitz baths and review in a week'],al:['perianal abscess','anorectal abscess','perirectal abscess','abses perianal'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Pus needs a way out. A perianal abscess needs drainage; antibiotics alone fail.'},
+{n:'Gallstone Ileus',t:2,s:'Gastro/Hepatic',a:[65,90],x:'F',late:true,sp:'surg',cc:'Vomiting on and off for days and my belly is bloated.',v:[104,'128/76',20,97,37.2],
+ h:['Long history of gallstone attacks','Colicky pain that comes and goes for four days','Vomiting'],
+ e:['Distended abdomen with tinkling bowel sounds','No hernias'],
+ l:['Mild raised WBC','Electrolytes: low potassium'],
+ i:['CT abdomen: gas in the bile ducts, small bowel obstruction and a stone in the terminal ileum (Rigler\'s triad)'],
+ tx:'Laparotomy and enterolithotomy to remove the stone',w:['ERCP','Laxatives','Cholecystectomy only'],al:['gallstone ileus','Rigler triad','Bouveret syndrome'],ecg:'sinus',pose:'hunched',dispo:'theatre',
+ p:'Air in the bile ducts with small bowel obstruction in an older woman with gallstones is gallstone ileus.'},
+{n:'Massive Haemothorax',t:1,s:'Respiratory',a:[18,50],x:'A',late:true,sp:'surg',cc:'Paramedics: Stabbed in the left side of the chest. Getting worse.',v:[132,'84/50',30,89,36.4],
+ h:['Stab wound to the left chest 30 minutes ago','Increasingly breathless','Lightheaded'],
+ e:['Absent breath sounds and stony dullness on the left','Trachea central; neck veins flat'],
+ l:['Hb 88 g/L','Blood gas: lactate 5.0 mmol/L'],
+ i:['FAST and chest X-ray: large left haemothorax'],
+ tx:'Resuscitate with blood, insert a large chest drain; thoracotomy if over 1,500 mL drains at once',w:['Needle decompression only','Observe and repeat the X-ray tomorrow','IV fluids and discharge'],al:['haemothorax','hemothorax','traumatic haemothorax','hemotoraks'],ecg:'sinus',pose:'resp',dispo:'theatre',proc:['chestdrain'],
+ p:'Dull to percussion with flat neck veins after chest trauma is blood, not air. Drain it, and watch how much comes out.'}
 ];
 // rhythm + bed pose for the original cases
 const EXTRA={'Acute Appendicitis':['sinus','pain'],'Community-Acquired Pneumonia':['sinus','shiver'],'ST-Elevation Myocardial Infarction':['stemi','chest'],'Acute Asthma Exacerbation':['sinus','resp'],'Acute Pyelonephritis':['sinus','shiver'],'Diabetic Ketoacidosis':['sinus','drowsy'],'Ureteric Colic':['sinus','pain'],'Cellulitis':['sinus','alert'],'Acute Cholecystitis':['sinus','pain'],'Pulmonary Embolism':['sinus','resp'],'Ischaemic Stroke':['afib','confused'],'Anaphylaxis':['sinus','resp'],'Acute Gout':['sinus','alert'],'Acute Pancreatitis':['sinus','hunched'],'Subarachnoid Haemorrhage':['twinv','drowsy'],'Aortic Dissection':['sinus','chest'],'Meningococcal Meningitis':['sinus','drowsy'],'Ruptured Ectopic Pregnancy':['sinus','pain'],'Thyroid Storm':['afib','agitated'],'Tension Pneumothorax':['sinus','resp'],'Ruptured Abdominal Aortic Aneurysm':['sinus','pain'],'Carbon Monoxide Poisoning':['sinus','confused'],'Testicular Torsion':['sinus','pain'],'Bleeding Peptic Ulcer':['sinus','drowsy'],'Acute Angle-Closure Glaucoma':['sinus','hunched'],'Addisonian Crisis':['peaked','drowsy'],'HSV Encephalitis':['sinus','confused'],'Guillain–Barré Syndrome':['sinus','alert'],'Necrotising Fasciitis':['sinus','pain'],'Phaeochromocytoma Crisis':['sinus','agitated'],'Thrombotic Thrombocytopenic Purpura':['sinus','confused'],'Kawasaki Disease':['sinus','shiver'],'Falciparum Malaria':['sinus','shiver'],'Boerhaave Syndrome':['sinus','chest'],'Methanol Poisoning':['sinus','confused'],'Cauda Equina Syndrome':['sinus','alert'],'Acute Intermittent Porphyria':['sinus','pain'],"Wilson's Disease":['sinus','confused'],'Tetanus':['sinus','rigid'],'Foodborne Botulism':['sinus','drowsy'],'Haemophagocytic Lymphohistiocytosis':['sinus','shiver'],'Rabies':['sinus','agitated'],'Hereditary Angioedema':['sinus','resp'],"Weil's Disease":['sinus','shiver'],'Scurvy':['sinus','alert'],'Creutzfeldt–Jakob Disease':['sinus','confused'],'Primary Amoebic Meningoencephalitis':['sinus','unconscious'],'Anti-NMDA Receptor Encephalitis':['sinus','agitated'],'Inhalational Anthrax':['sinus','resp'],'Grayanotoxin (Mad Honey) Poisoning':['avblock','drowsy']};
@@ -2326,8 +2826,28 @@ const DDX={
 const REL={'Cardiovascular':['Respiratory','Gastro/Hepatic'],'Respiratory':['Cardiovascular','Infectious','Immune'],'Neuro':['Toxicology','Metabolic','Endocrine','Infectious'],'Gastro/Hepatic':['Renal/GU','Obstetric','Cardiovascular'],'Renal/GU':['Gastro/Hepatic','Obstetric'],'Endocrine':['Metabolic','Toxicology','Neuro'],'Infectious':['Respiratory','Neuro','Haematologic','Immune'],'Haematologic':['Infectious','Immune'],'Immune':['Respiratory','Infectious','MSK/Skin'],'Toxicology':['Neuro','Metabolic','Endocrine'],'MSK/Skin':['Infectious','Immune'],'Obstetric':['Gastro/Hepatic','Renal/GU'],'Ophthalmic':['Neuro'],'Metabolic':['Endocrine','Toxicology','Neuro'],'Psychiatric':['Toxicology','Neuro','Endocrine']};
 D.forEach(d=>{const x=EXTRA[d.n];d.ecg=d.ecg||(x?x[0]:'sinus');d.pose=d.pose||(x?x[1]:'alert');d.dispo=d.dispo||DISPO[d.n]||'ward';d.proc=d.proc||PROC[d.n]||[]});
 const EXTRA_EMERG=['Urosepsis with Septic Shock','Acute Pulmonary Oedema','Variceal Upper GI Bleed','Hyperkalaemia','Organophosphate Poisoning','Heat Stroke','Dengue Shock Syndrome','Cholera','Accidental Hypothermia','Status Epilepticus','Eclampsia','Extradural Haematoma','Placental Abruption',"Ludwig's Angina",'Hantavirus Pulmonary Syndrome','Intussusception','Methaemoglobinaemia','Neutropenic Sepsis','Spinal Epidural Abscess','Myxoedema Coma','MDMA-Associated Hyponatraemia'];
+EXTRA_EMERG.push('Acute Diarrhoea with Severe Dehydration','Tetralogy of Fallot Hypercyanotic Spell','HELLP Syndrome','Septic Abortion','Placenta Praevia','Uterine Rupture','Umbilical Cord Prolapse','Amniotic Fluid Embolism','Supraventricular Tachycardia','Ventricular Tachycardia','Hypertensive Emergency','Torsades de Pointes','Intracerebral Haemorrhage','Calcium-Channel Blocker Overdose','Isoniazid Overdose','Acute Limb Ischaemia',"Fournier's Gangrene",'Ascending Cholangitis','Massive Haemothorax');
 EXTRA_EMERG.push('Hyperosmolar Hyperglycaemic State','Inhaled Foreign Body','Complete Heart Block','Postpartum Haemorrhage','ACE-Inhibitor Angioedema','Tricyclic Antidepressant Overdose','Tumour Lysis Syndrome','Splenic Rupture','Beta-Blocker Overdose','Toxic Epidermal Necrolysis','Malignant Hyperthermia','Tetrodotoxin (Pufferfish) Poisoning');
 Object.assign(DDX,{
+ 'Acute Diarrhoea with Severe Dehydration':['Cholera','Intussusception','Diabetic Ketoacidosis','Viral Gastroenteritis','Dengue Shock Syndrome'],
+ 'Tetralogy of Fallot Hypercyanotic Spell':['Inhaled Foreign Body','Breath-Holding Spell','Methaemoglobinaemia','Acute Asthma Exacerbation','Simple Febrile Seizure'],
+ 'HELLP Syndrome':['Eclampsia','Acute Fatty Liver of Pregnancy','Acute Cholecystitis','Thrombotic Thrombocytopenic Purpura','Placental Abruption'],
+ 'Septic Abortion':['Ruptured Ectopic Pregnancy','Tubo-Ovarian Abscess','Toxic Shock Syndrome','Urosepsis with Septic Shock','Acute Appendicitis'],
+ 'Placenta Praevia':['Placental Abruption','Uterine Rupture','Ruptured Ectopic Pregnancy','Postpartum Haemorrhage','Hydatidiform Mole'],
+ 'Uterine Rupture':['Placental Abruption','Placenta Praevia','Amniotic Fluid Embolism','Postpartum Haemorrhage','Ruptured Ectopic Pregnancy'],
+ 'Umbilical Cord Prolapse':['Placental Abruption','Uterine Rupture','Placenta Praevia','Eclampsia','Amniotic Fluid Embolism'],
+ 'Amniotic Fluid Embolism':['Pulmonary Embolism','Eclampsia','Anaphylaxis','Postpartum Haemorrhage','Peripartum Cardiomyopathy'],
+ 'Supraventricular Tachycardia':['Atrial Fibrillation with Fast Ventricular Rate','Ventricular Tachycardia','Panic Attack','Thyroid Storm','Pulmonary Embolism'],
+ 'Ventricular Tachycardia':['Supraventricular Tachycardia','Torsades de Pointes','Hyperkalaemia','Tricyclic Antidepressant Overdose','Atrial Fibrillation with Fast Ventricular Rate'],
+ 'Hypertensive Emergency':['Intracerebral Haemorrhage','Phaeochromocytoma Crisis','Posterior Reversible Encephalopathy Syndrome','Subarachnoid Haemorrhage','Eclampsia'],
+ 'Torsades de Pointes':['Ventricular Tachycardia','Complete Heart Block','Brugada Syndrome','Vasovagal Syncope','Tricyclic Antidepressant Overdose'],
+ 'Intracerebral Haemorrhage':['Ischaemic Stroke','Subarachnoid Haemorrhage','Hypertensive Emergency','Extradural Haematoma','Hypoglycaemia'],
+ 'Calcium-Channel Blocker Overdose':['Beta-Blocker Overdose','Digoxin Toxicity','Complete Heart Block','Hyperkalaemia','Urosepsis with Septic Shock'],
+ 'Isoniazid Overdose':['Status Epilepticus','Tricyclic Antidepressant Overdose','Hypoglycaemia','Eclampsia','MDMA-Associated Hyponatraemia'],
+ 'Acute Limb Ischaemia':['Deep Vein Thrombosis','Compartment Syndrome','Aortic Dissection','Cellulitis','Necrotising Fasciitis'],
+ "Fournier's Gangrene":['Necrotising Fasciitis','Testicular Torsion','Cellulitis','Perianal Abscess','Toxic Shock Syndrome'],
+ 'Ascending Cholangitis':['Acute Cholecystitis','Acute Pancreatitis','Pyogenic Liver Abscess','Biliary Colic','Urosepsis with Septic Shock'],
+ 'Massive Haemothorax':['Tension Pneumothorax','Cardiac Tamponade','Splenic Rupture','Aortic Dissection','Primary Spontaneous Pneumothorax'],
  'Hyperosmolar Hyperglycaemic State':['Diabetic Ketoacidosis','Hypoglycaemia','Ischaemic Stroke','Urosepsis with Septic Shock','Chronic Subdural Haematoma'],
  'Inhaled Foreign Body':['Acute Asthma Exacerbation','Croup','Acute Epiglottitis','Anaphylaxis','Community-Acquired Pneumonia'],
  'Complete Heart Block':['Vasovagal Syncope','Digoxin Toxicity','Beta-Blocker Overdose','Hyperkalaemia','Lyme Carditis'],
@@ -2341,6 +2861,17 @@ Object.assign(DDX,{
  'Malignant Hyperthermia':['Neuroleptic Malignant Syndrome','Serotonin Syndrome','Heat Stroke','Thyroid Storm','MDMA-Associated Hyponatraemia'],
  'Tetrodotoxin (Pufferfish) Poisoning':['Foodborne Botulism','Ciguatera Fish Poisoning','Guillain–Barré Syndrome','Neurotoxic Snakebite (Krait)','Myasthenic Crisis']
 });
+D.forEach(d=>{if(d.n==='Panic Attack'){d.fake=true;d.ecc='Paramedics: Chest pain, tingling hands, cannot breathe. Query heart attack!'}if(d.n==='Vasovagal Syncope'){d.fake=true;d.ecc='Paramedics: Collapsed and unresponsive at a blood donation centre!'}});
+Object.assign(DDX,{
+ 'Functional Seizures':['Status Epilepticus','Hypoglycaemia','Eclampsia','HSV Encephalitis','Tricyclic Antidepressant Overdose'],
+ 'Musculoskeletal Chest Pain':['ST-Elevation Myocardial Infarction','Aortic Dissection','Pulmonary Embolism','Acute Pericarditis','Primary Spontaneous Pneumothorax'],
+ 'Acute Alcohol Intoxication':['Opioid Overdose','Hypoglycaemia','Extradural Haematoma','Methanol Poisoning','Chronic Subdural Haematoma'],
+ 'Pseudohyperkalaemia':['Hyperkalaemia','Tumour Lysis Syndrome','Rhabdomyolysis','Addisonian Crisis','Diabetic Ketoacidosis'],
+ 'Breath-Holding Spell':['Simple Febrile Seizure','Inhaled Foreign Body','Status Epilepticus','Intussusception','Croup'],
+ 'Panic Attack':['ST-Elevation Myocardial Infarction','Pulmonary Embolism','Thyroid Storm','Acute Asthma Exacerbation','Hypoglycaemia'],
+ 'Vasovagal Syncope':['Complete Heart Block','Hypertrophic Cardiomyopathy','Pulmonary Embolism','Ruptured Ectopic Pregnancy','Subarachnoid Haemorrhage']
+});
+const FAKE=D.map((d,i)=>i).filter(i=>D[i].fake);
 const IDX=Object.fromEntries(D.map((d,i)=>[d.n,i]));
 const DISPO_OPTS=[['home','Discharge home','door'],['ward','Admit to ward','bed'],['icu','Admit to ICU','heart'],['theatre','Theatre / cath lab','scalpel']];
 const DISPO_NAME=Object.fromEntries(DISPO_OPTS.map(o=>[o[0],o[1]]));
@@ -2454,6 +2985,12 @@ const SPECS={
  diag:{n:'Diagnostician',d:'Everybody lies, and you can tell: trick cases are flagged when they arrive. Wrong guesses say rarer or more common, the first one on each patient is free, and after two the organ system is shown. Your guess list puts the right system first. Grand Rounds patients arrive with 2 clues charted, right picture reads give +2 stability, Zebras and Unicorns score ×1.5, and Dr. Hoof visits every shift. Your bedside manner costs every patient 1 stability.',fx:m=>{m.cane=Math.max(m.cane,1);m.zebra*=1.5;m.freeWrong++;m.engine=Math.max(m.engine,1);m.stab--}},
  tox:{n:'Toxicology',d:'More poisonings, which arrive with +2 stability, a clue charted and their organ system shown. Wrong treatments cost 1 less stability for everyone.',focus:d=>d.s==='Toxicology',bonus:{stab:2,clues:1,elim:1},fx:m=>{m.txPen++}}
 };
+// Specialty pools: cases tagged sp only reach that specialty, plus the generalist specialties, which see every pool at once
+const POOL_SPECS=['paeds','obgyn','cardio','neuro','tox','id','surg'];
+Object.assign(SPECS.id,{focus:d=>d.s==='Infectious',bonus:{stab:1,clues:1},d:SPECS.id.d+' More infections come in, with +1 stability, a clue charted and their organ system shown.'});
+Object.assign(SPECS.surg,{focus:d=>d.dispo==='theatre',bonus:{stab:1,clues:1},d:SPECS.surg.d+' More surgical patients come in, with +1 stability, a clue charted and their organ system shown.'});
+POOL_SPECS.forEach(k=>{const f=SPECS[k].focus;SPECS[k].focus=d=>d.sp===k||(f?f(d):false)});
+const caseOK=i=>{const sp=S.doctor&&S.doctor.spec,c=D[i].sp;return!c||c===sp||!POOL_SPECS.includes(sp)};
 const DIFFS={
  intern:{n:'Intern',d:'The place to start if you are new. +3 stability per patient. Score ×0.8.',fx:m=>{m.stab+=3;m.score-=.2}},
  resident:{n:'Resident',d:'The standard shift.',fx:()=>{}},
@@ -2553,7 +3090,51 @@ const CAMEO_DR=[
  {id:'jackal',n:'Dr. Henry Jackal',role:'Research physician (with a tonic)',look:{skin:'#E1B48C',hair:'short',hc:'#141414',scrub:'#24292C',facial:'moustache',hat:'tophat',hatc:'#1d1d1d'},
   persona:'Polite Victorian research physician who sometimes sips a mysterious tonic and briefly becomes a rude, reckless alter ego called Mr. Snide, then apologises. Swings between courtesy and menace.',
   greet:'Good evening. Pay no attention to the flask. Or to anyone called Mr. Snide.',lines:['Every doctor has two sides. Mine simply has a name.','Mr. Snide says your differential is cowardly. I apologise for him.','Never test the tonic on yourself. Learn from my mistakes.'],
-  buff:{n:'The tonic',d:'+25% points this shift, but each new patient arrives with 1 less stability.',fx:r=>{r.buff.score=(r.buff.score||0)+.25;r.buff.stab=(r.buff.stab||0)-1}}}
+  buff:{n:'The tonic',d:'+25% points this shift, but each new patient arrives with 1 less stability.',fx:r=>{r.buff.score=(r.buff.score||0)+.25;r.buff.stab=(r.buff.stab||0)-1}}},
+ {id:'ikjoon',n:'Dr. Lee Ik-joon',role:'Liver transplant surgeon, plays guitar in the hospital band',look:{skin:'#F3D3B5',hair:'curtain',hc:'#141414',scrub:'#2B3F6B',extra:['coat']},
+  persona:'Brilliant hepatobiliary surgeon from a Seoul university hospital who never stops joking. A devoted single dad, plays guitar in a band with his four medical-school friends, sings slightly off-key, and quietly carries every patient he loses.',
+  greet:'You look hungry. Half my jjajangmyeon for one good case story?',lines:['A liver grows back. Your sleep will not.','Band practice is Thursday. You can play the tambourine.','Patients remember how you made them feel. Also whether you fixed their liver.'],
+  buff:{n:'Thursday band practice',d:'Every new patient this shift arrives with +1 stability.',fx:r=>{r.buff.stab=(r.buff.stab||0)+1}}},
+ {id:'songwha',n:'Dr. Chae Song-wha',role:'Neurosurgery professor and camping enthusiast',look:{skin:'#F6D7BD',hair:'long',hc:'#3B2416',scrub:'#7A2E3A'},
+  persona:'Calm, warm, unflappable neurosurgeon who everyone in the hospital goes to for advice. Loves solo camping, never raises her voice, and makes impossible operations look ordinary.',
+  greet:'Sit. Eat something first. Then show me the CT.',lines:['A calm surgeon is a fast surgeon.','I go camping to remember what quiet sounds like.','Ask for help early. Nobody gives medals for struggling alone.'],
+  buff:{n:'Steady hands',d:'Procedures are much easier for the rest of this shift.',fx:r=>{r.buff.proc=(r.buff.proc||0)+1.5}}},
+ {id:'saboo',n:'Dr. Kim Sa-boo',role:'Legendary surgeon of Stonewall Hospital',look:{skin:'#E8B992',hair:'short',hc:'#C7CCCF',scrub:'#2F5D46',glasses:true,extra:['coat']},
+  persona:'Gruff, legendary triple-board surgeon who runs a tiny rural hospital and is known only as Teacher Kim. Asks juniors whether they want to be a good doctor or the best doctor, values doing right over doing well, and teaches through tough love.',
+  greet:'Are you a good doctor or the best doctor? Think fast. The patient will not wait.',lines:['A good doctor is the one the patient needs right now.','Small hospital, big cases. Stop complaining.','Being romantic means doing the right thing when nobody is watching.'],
+  buff:{n:'Romantic doctor',d:'Restores 1 reputation.',fx:r=>{r.rep=Math.min(maxRep(),r.rep+1)}}},
+ {id:'kanghyeok',n:'Dr. Baek Kang-hyeok',role:'Trauma surgeon, formerly of a war zone',look:{skin:'#F3D3B5',hair:'sidepart',hc:'#141414',scrub:'#24292C',facial:'stubble'},
+  persona:'Arrogant, impossibly fast trauma surgeon who spent years operating in war zones. Obsessed with the golden hour, impatient with bureaucracy, secretly devoted to building a real trauma team.',
+  greet:'Golden hour. You have fifty-nine minutes left. Why are you sitting?',lines:['Trauma does not wait for a consent form.','I operated by head torch in a tent. You have lights.','Faster. No, faster than that.'],
+  buff:{n:'Golden hour',d:'+20 seconds on your next emergency.',fx:r=>{r.buff.emTime=(r.buff.emTime||0)+20}}},
+ {id:'shion',n:'Dr. Park Shi-on',role:'Paediatric surgery resident with a perfect memory',look:{skin:'#F6D7BD',hair:'bangs',hc:'#141414',scrub:'#6FA3C8',extra:['coat'],steth:true},
+  persona:'Gentle, literal-minded paediatric surgery resident on the autism spectrum with a photographic memory for anatomy. Honest to a fault, notices details everyone else misses, adores children, and is learning to read people the way he reads scans. Never mocked; the joke is always on people who underestimate him.',
+  greet:'Hello. The patient in Bay 2 has a heart rate of 112. I noticed when I walked past.',lines:['Page 214 of the anatomy atlas is my favourite.','Children say what they mean. I like that.','You did not ask, but your shoelace is untied.'],
+  buff:{n:'Perfect recall',d:'Your next patient arrives with 2 extra clues charted.',fx:r=>{r.buff.clues=(r.buff.clues||0)+2}}},
+ {id:'jungsook',n:'Dr. Cha Jung-sook',role:'First-year resident, aged 45',look:{skin:'#F3D3B5',hair:'bob',hc:'#3B2416',scrub:'#6FA3C8',extra:['coat']},
+  persona:'Housewife of twenty years who went back to finish her residency in her forties. Warm, stubborn and funny, runs a ward like a busy household, and is not intimidated by professors who are younger than her.',
+  greet:'Twenty years of school runs. A full waiting room does not scare me.',lines:['Mothers triage before breakfast every day.','Better late than never. Tell my professor.','Eat properly. A hungry doctor is a cranky doctor.'],
+  buff:{n:'Mum mode',d:'Nobody leaves the waiting room without being seen this shift.',fx:r=>{r.buff.noLWBS=true}}},
+ {id:'michiko',n:'Dr. Michiko Daimonji',role:'Freelance surgeon. Does not fail.',look:{skin:'#F6D7BD',hair:'long',hc:'#141414',scrub:'#24292C',cap:true,capStyle:'plain'},
+  persona:'Cool, unsmiling freelance surgeon from Tokyo who says "I do not fail" and means it. Refuses meetings, paperwork and anything that is not surgery, bills by the operation, and walks out at exactly five o clock.',
+  greet:'I do not fail. I also do not do paperwork.',lines:['That is not in my contract.','Freelancers are paid to succeed.','Scalpel. Do not hand it to me slowly.'],
+  buff:{n:'I do not fail',d:'+20% points for the rest of this shift.',fx:r=>{r.buff.score=(r.buff.score||0)+.2}}},
+ {id:'blackjock',n:'Black Jock',role:'Unlicensed genius surgeon',look:{skin:'#F6D7BD',hair:'bob',hc:'#141414',scrub:'#24292C',extra:['cape','scar','bowtie'],capec:'#141414'},
+  persona:'Brooding, unlicensed genius surgeon in a black cape with a patchwork scar across his face. Charges outrageous fees to the rich and operates for free on the poor, scorns the medical establishment, and has a tiny, bossy assistant.',
+  greet:'I have no licence. I also have no failures. Choose which one bothers you.',lines:['My fee is ten million. Or one good reason.','A licence does not hold a scalpel. Hands do.','My assistant says I need sleep. My assistant is very small and very loud.'],
+  buff:{n:'Outrageous fee',d:'Hands you ₲50 from a very rich patient.',fx:r=>{S.meta.grant+=50}}},
+ {id:'copper',n:'Tony Tony Copper',role:'Ship’s doctor of a pirate crew. A reindeer.',look:{skin:'#B07A3D',hair:'bald',hc:'#B07A3D',scrub:'#E08AAE',hat:'tophat',hatc:'#E7739A',extra:['antlers','bluenose'],bg:'#F7E4EC'},
+  persona:'Small, shy reindeer who became a doctor and sails with a pirate crew. Wants to cure every disease in the world, gets flustered and dances when complimented while insisting it does not make him happy, and hates being called a raccoon.',
+  greet:'C-calling me a great doctor does not make me happy, you jerk! ...Say it again.',lines:['I will be a doctor who can cure any disease!','I am a reindeer. Not a raccoon.','There is no illness that cannot be cured.'],
+  buff:{n:'Doctor of the crew',d:'+1 stability for every patient in a bay right now.',fx:r=>{r.beds.forEach(p=>{if(p&&['case','treat','proc','dispo'].includes(p.phase)){p.stab++;if(p.stab>p.max)p.max=p.stab}})}}},
+ {id:'munno',n:'Munno Bhai, M.B.B.S.',role:'Medical student (allegedly)',look:{skin:'#C98F62',hair:'short',hc:'#141414',scrub:'#E3E9EB',facial:'moustache',extra:['coat']},
+  persona:'Big-hearted Mumbai gangster who bluffed his way into medical college to please his father. Calls everyone "mamu", prescribes a "jaadu ki jhappi" (magic hug) before any medicine, and is followed everywhere by his loyal sidekick Circuit.',
+  greet:'Arre mamu! Before the medicine, the patient needs one jaadu ki jhappi. A magic hug.',lines:['First the hug, then the injection.','Circuit says I should study. Circuit is not a doctor either.','Respect the cleaner. The cleaner knows everything.'],
+  buff:{n:'Jaadu ki jhappi',d:'Restores 1 reputation.',fx:r=>{r.rep=Math.min(maxRep(),r.rep+1)}}},
+ {id:'kotoh',n:'Dr. Kensuke Kotoh',role:'Island doctor, ex-Tokyo surgeon',look:{skin:'#F3D3B5',hair:'short',hc:'#141414',scrub:'#E3E9EB',extra:['coat']},
+  persona:'Quiet Tokyo surgeon who moved to a remote fishing island to run its only clinic. Does house calls by bicycle, wins over sceptical islanders one patient at a time, and treats with whatever the island has.',
+  greet:'On my island the ambulance is a fishing boat. You are spoiled here.',lines:['House calls by bicycle keep a doctor humble.','On an island, every patient is a neighbour.','Listen to the patient. Then listen to their grandmother.'],
+  buff:{n:'House call',d:'Your next patient arrives with every test result charted.',fx:r=>{r.buff.labs=1}}}
 ];
 const CAMEO_DR_BY=Object.fromEntries(CAMEO_DR.map(c=>[c.id,c]));
 const CAMEO_PT=[
@@ -2571,13 +3152,58 @@ const CAMEO_PT=[
  {id:'grump',n:'Forrest Grump',tag:'Long-distance runner',d:'Heat Stroke',sex:'M',age:40,look:{skin:'#F3D3B5',hair:'short',hc:'#5A3A22',hat:'cap',hatc:'#B03A2E',facial:'beard'},quip:'Paramedics: "He just felt like running. In this heat. For a very long time."'},
  {id:'loft',n:'Lara Loft',tag:'Tomb explorer',d:'Falciparum Malaria',sex:'F',age:32,look:{skin:'#E1B48C',hair:'ponytail',hc:'#3B2416'},quip:'Paramedics: "Back from an expedition in West Africa. Skipped her malaria tablets."'},
  {id:'grillz',n:'Bear Grillz',tag:'Survival TV presenter',d:"Weil's Disease",sex:'M',age:45,look:{skin:'#E1B48C',hair:'short',hc:'#6E4426',facial:'stubble'},quip:'Paramedics: "Filmed a river-crossing episode after the floods. Drank the water on camera."'},
- {id:'rampage',n:'Gordon Rampage',tag:'Celebrity chef',d:'Foodborne Botulism',sex:'M',age:55,look:{skin:'#F3D3B5',hair:'short',hc:'#D9B26A',hat:'chef',hatc:'#fff'},quip:'Paramedics: "Furious about his own home-canned beans. He can barely shout, which worries his staff."'}
+ {id:'rampage',n:'Gordon Rampage',tag:'Celebrity chef',d:'Foodborne Botulism',sex:'M',age:55,look:{skin:'#F3D3B5',hair:'short',hc:'#D9B26A',hat:'chef',hatc:'#fff'},quip:'Paramedics: "Furious about his own home-canned beans. He can barely shout, which worries his staff."'},
+ {id:'sanjo',n:'Sanjo Blackleg',tag:'Floating-restaurant chef',d:'Tetrodotoxin (Pufferfish) Poisoning',sex:'M',age:21,look:{skin:'#F6D7BD',hair:'sidepart',hc:'#D9B26A',facial:'goatee',extra:['bowtie']},quip:'Paramedics: "Swears he prepared the pufferfish perfectly. He was showing off to a lady at the next table."'},
+ {id:'gokou',n:'Son Gokou',tag:'Martial artist from another planet',d:'Acute Pericarditis',sex:'M',age:29,look:{skin:'#F3D3B5',hair:'spiky',hc:'#141414'},quip:'Paramedics: "Says a boy from the future warned him about a heart virus. Asked if he could eat first. Eleven bowls."'},
+ {id:'kimshim',n:'Kim Shim',tag:'939-year-old goblin',d:'Tension Pneumothorax',sex:'M',age:39,look:{skin:'#F6D7BD',hair:'sidepart',hc:'#141414',extra:['sword']},quip:'Paramedics: "Complains of a sword through his chest that only his bride can see. We see a pneumothorax."'},
+ {id:'shijin',n:'Captain Yoo Shi-jin',tag:'Special forces, peacekeeping',d:'Compartment Syndrome',sex:'M',age:33,look:{skin:'#E8B992',hair:'short',hc:'#141414',hat:'beanie',hatc:'#4B5A3A'},quip:'Paramedics: "Pulled people out of earthquake rubble for nine hours. Now his own leg is the emergency. Still flirting with the doctor."'}
 ];
 const CAMEO_PT_BY=Object.fromEntries(CAMEO_PT.map(c=>[c.id,c]));
 
-const FIRST_M=['Diego','Wei','Tomasz','Kofi','Mateo','Rashid','Sean','Jonah','Dmitri','Ravi','Samuel','Hugo','Kenta','Olu','Arjun','Felix','Malik','Andrés'];
-const FIRST_F=['Amara','Priya','Fatima','Hannah','Yuki','Ingrid','Leila','Mei','Ana','Grace','Noor','Elena','Aiyana','Zainab','Sofia','Chloe','Imani','Rosa'];
-const LAST=['Okafor','Nguyen','Kowalski','Haddad','Rossi','Mensah','Tanaka','Silva','Byrne','Patel','Lindqvist','Moreau','Adeyemi','Kim','Novak','Castillo','Abbasi','Fischer','Walsh','Iyer'];
+// Patient names come from one naming tradition at a time, so first and family names belong together.
+// Each entry: male first names | female first names | family names. "Ivanov/Ivanova" gives the male/female form.
+const NAME_SETS=[
+ 'Budi,Agus,Rizky,Dimas,Fajar,Hendra,Wahyu,Bayu,Arief,Yoga,Teguh,Iqbal,Rudi,Bambang,Joko,Eko,Galih|Siti,Dewi,Putri,Ayu,Rina,Intan,Nurul,Fitri,Indah,Wulan,Ratna,Sri,Lestari,Anisa,Dian,Rahma,Kartika|Santoso,Wibowo,Susanto,Pratama/Pratiwi,Saputra/Saputri,Kurniawan/Kurniawati,Setiawan/Setiawati,Hidayat,Nugroho,Prasetyo,Wijaya,Purnomo,Sulistyo,Rahmadi,Firmansyah',
+ 'Asep,Dadang,Ujang,Cecep,Yayan,Deden,Iwan,Rian|Euis,Neng,Tini,Yuyun,Lilis,Imas,Rini,Elis|Sutisna,Permana,Sumarna,Hermawan,Suhendar,Kusnadi,Rukmana,Gumilar',
+ 'Togar,Rajab,Fikri,Hasan,Ilham,Zulfikar,Yusuf,Andre,Ricky,Johannes,Marthen,Frans|Rosmawati,Ulfa,Nadia,Melati,Yohana,Grace,Febriani,Sarah,Debora,Maria|Nasution,Siregar,Harahap,Lubis,Sinaga,Simanjuntak,Hutapea,Ginting,Manurung,Sitompul,Tanjung,Pattinasarany,Latuconsina,Wenas,Pangemanan,Lumentut,Rumbiak',
+ 'Kevin,Steven,Hendrik,Jason,William,Felix,Andreas,Edwin|Felicia,Jessica,Michelle,Angeline,Natalia,Vanessa,Cindy,Stefanie|Halim,Hartono,Tanuwidjaja,Gunawan,Salim,Wijaya,Tanoto,Lim,Kusuma,Sugianto',
+ 'Ahmad,Hafiz,Faizal,Azlan,Syafiq,Amirul,Zulkifli,Haikal|Nur Aisyah,Siti Aminah,Farah,Aina,Nabila,Syazwani,Hidayah,Zarina|bin Ismail/binti Ismail,bin Hassan/binti Hassan,bin Rahman/binti Rahman,bin Osman/binti Osman,bin Yusof/binti Yusof',
+ 'Jose,Mark,Paolo,Rommel,Jericho,Carlo,Rodel,Jun|Maria Clara,Joy,Rowena,Kristine,Mary Grace,Angelica,Liezel,Princess|Santos,Reyes,Cruz,Bautista,Dela Cruz,Mendoza,Villanueva,Aquino,Garcia,Ramos',
+ 'Somchai,Anan,Kittisak,Thanawat,Prasert,Chaiwat|Siriporn,Ploy,Kanya,Nattaya,Malee,Pimchanok|Srisuk,Chaiyaporn,Wongsawat,Rattanakorn,Boonmee,Thongchai',
+ 'Minh,Tuan,Hung,Quang,Duc,Long,Bao|Linh,Huong,Lan,Mai,Thao,Ngoc,Trang|Nguyen,Tran,Le,Pham,Hoang,Vu,Dang,Bui,Do',
+ 'Wei,Jun,Hao,Lei,Ming,Jian,Bo,Zhen|Mei,Li,Xiu,Ying,Fang,Jing,Lan,Yan|Wang,Zhang,Chen,Liu,Huang,Zhao,Wu,Zhou,Xu,Lin',
+ 'Ji-hoon,Min-jun,Seo-jun,Hyun-woo,Jae-won,Dong-hyun,Sung-min|Ji-woo,Seo-yeon,Min-ji,Ha-eun,Soo-ah,Ye-jin,Eun-bi|Kim,Lee,Park,Choi,Jung,Kang,Cho,Yoon,Jang,Han',
+ 'Haruto,Kenta,Ren,Daiki,Takumi,Shota,Hiroshi,Kaito|Yuki,Sakura,Aoi,Hina,Mei,Yui,Haruka,Emi|Tanaka,Suzuki,Takahashi,Watanabe,Ito,Yamamoto,Nakamura,Kobayashi,Sato,Kato',
+ 'Arjun,Rohan,Vikram,Aditya,Rahul,Amit,Karan,Sanjay|Priya,Ananya,Kavya,Neha,Pooja,Divya,Meera,Shreya|Sharma,Verma,Gupta,Singh,Mehta,Kapoor,Joshi,Malhotra,Chopra',
+ 'Karthik,Suresh,Arun,Vijay,Ganesh,Prakash,Senthil|Lakshmi,Deepa,Revathi,Anjali,Kavitha,Nithya,Sowmya|Iyer,Nair,Menon,Reddy,Pillai,Krishnan,Subramanian,Rao',
+ 'Imran,Bilal,Usman,Faisal,Tariq,Rafiq,Arif|Ayesha,Sana,Hira,Nadia,Farzana,Rubina,Mahnoor|Khan,Ahmed,Hussain,Chowdhury,Rahman,Malik,Qureshi,Siddiqui',
+ 'Omar,Khaled,Youssef,Karim,Hamza,Tarek,Samir,Nabil|Fatima,Layla,Noor,Mariam,Huda,Rania,Salma,Yasmin|Haddad,Al-Masri,Nasser,Khalil,Mansour,Saleh,Hamdan,Abboud',
+ 'Reza,Arash,Kian,Dariush,Navid,Babak|Shirin,Parisa,Leila,Niloufar,Sara,Mahsa|Hosseini,Rahimi,Karimi,Moradi,Tehrani,Jafari',
+ 'Emre,Mehmet,Burak,Can,Murat,Kerem|Elif,Zeynep,Ayse,Defne,Ebru,Selin|Yilmaz,Kaya,Demir,Sahin,Celik,Aydin,Arslan',
+ 'Kofi,Kwame,Kojo,Yaw,Kwesi,Fiifi|Ama,Akosua,Abena,Efua,Adwoa,Esi|Mensah,Asante,Boateng,Owusu,Appiah,Darko',
+ 'Chinedu,Emeka,Tunde,Olu,Femi,Ikenna,Obinna|Chiamaka,Ngozi,Funmilayo,Adaeze,Yetunde,Amara,Ifeoma|Okafor,Adeyemi,Okonkwo,Balogun,Eze,Nwosu,Adebayo',
+ 'Juma,Baraka,Otieno,Kamau,Tesfaye,Abebe|Wanjiru,Achieng,Neema,Amani,Hiwot,Selam|Mwangi,Ochieng,Kiprop,Njoroge,Haile,Bekele',
+ 'Mateo,Diego,Santiago,Alejandro,Javier,Luis,Andrés,Carlos|Sofia,Valentina,Camila,Lucia,Isabela,Gabriela,Ana,Daniela|Garcia,Rodriguez,Hernandez,Lopez,Castillo,Morales,Ortiz,Vargas,Rojas',
+ 'João,Pedro,Thiago,Rafael,Lucas,Gustavo|Ana Clara,Beatriz,Larissa,Mariana,Juliana,Fernanda|Silva,Santos,Oliveira,Souza,Pereira,Costa,Almeida',
+ 'Marco,Luca,Giovanni,Alessandro,Matteo|Giulia,Chiara,Francesca,Elena,Martina|Rossi,Russo,Ferrari,Esposito,Bianchi,Romano,Ricci',
+ 'Hugo,Louis,Julien,Antoine,Mathis|Chloé,Camille,Manon,Léa,Inès|Moreau,Dubois,Lefèvre,Laurent,Girard,Fontaine',
+ 'Felix,Lukas,Jonas,Maximilian,Tobias|Hannah,Lena,Emma,Mia,Johanna|Fischer,Weber,Schneider,Becker,Hoffmann,Wagner',
+ 'Tomasz,Piotr,Krzysztof,Pavel,Jakub,Ondřej|Agnieszka,Katarzyna,Magdalena,Zuzana,Tereza|Kowalski/Kowalska,Nowak,Wiśniewski/Wiśniewska,Novák/Nováková,Dvořák/Dvořáková',
+ 'Dmitri,Alexei,Sergei,Ivan,Mikhail,Andriy|Anastasia,Olga,Natalia,Irina,Oksana,Svetlana|Ivanov/Ivanova,Petrov/Petrova,Smirnov/Smirnova,Volkov/Volkova,Shevchenko,Kovalenko',
+ 'Erik,Lars,Magnus,Johan,Nils|Ingrid,Astrid,Freya,Sigrid,Elin|Lindqvist,Andersson,Johansson,Nilsson,Berg,Hansen',
+ 'Sean,Liam,Ciarán,Callum,Rhys,Owen|Siobhan,Aoife,Niamh,Ffion,Isla,Fiona|Byrne,Walsh,Murphy,O\'Brien,MacLeod,Evans',
+ 'Jonah,Samuel,Ethan,Michael,Tyler,Marcus,Daniel|Grace,Chloe,Olivia,Madison,Imani,Brianna,Sarah|Johnson,Williams,Brown,Jackson,Thompson,Harris,Robinson',
+ 'Yosef,Avi,Noam,Eitan|Tamar,Noa,Shira,Yael|Cohen,Levi,Mizrahi,Friedman,Katz',
+ 'Nikos,Giorgos,Dimitris,Kostas|Eleni,Maria,Katerina,Sofia|Papadopoulos/Papadopoulou,Georgiou,Nikolaidis/Nikolaidou,Pappas',
+ 'Tama,Wiremu,Sione,Manaia|Aroha,Mere,Losana,Moana|Ngata,Parata,Tupou,Fifita'
+].map(x=>{const[m,f,l]=x.split('|').map(s=>s.split(','));return{m,f,l}});
+// Two random numbers make one name, so seeded patients (Case of the day, challenges) use the same draws as before.
+function nameFrom(sex,u1,u2){
+  const n=NAME_SETS.length,k=Math.min(n-1,Math.floor(u1*n)),c=NAME_SETS[k],firsts=sex==='M'?c.m:c.f;
+  const first=firsts[Math.min(firsts.length-1,Math.floor((u1*n-k)*firsts.length))],fam=c.l[Math.min(c.l.length-1,Math.floor(u2*c.l.length))].split('/');
+  return first+' '+(sex==='M'?fam[0]:fam[1]||fam[0]);
+}
+const randName=sex=>nameFrom(sex,Math.random(),Math.random());
 
 /* ===================== ICONS & GRAPHICS ===================== */
 const ICONS={
@@ -2669,11 +3295,17 @@ const CAT_IC={h:'history',e:'exam',l:'tests',i:'imaging'};
 
 const SKIN=['#F3D3B5','#E1B48C','#C68E5F','#9A6440','#6B4429'];
 const HAIR=['#2B1D14','#5A3A22','#A0703A','#141414','#C9A15A'];
-const DSKIN=['#F6D7BD','#E8B992','#C98F62','#A06A43','#74482B','#4E2F1E'];
-const HAIRC=['#141414','#3B2416','#6E4426','#B07A3D','#D9B26A','#A33A26','#C7CCCF','#3D5FA8'];
-const SCRUBS=[['Ceil blue','#6FA3C8'],['Teal','#1C7C84'],['Navy','#2B3F6B'],['Wine','#7A2E3A'],['Black','#24292C'],['Hunter green','#2F5D46'],['Lavender','#8C7BB8']];
-const HSTYLES=[['short','Short'],['buzz','Buzz cut'],['long','Long'],['bun','Bun'],['ponytail','Ponytail'],['braids','Braids'],['curly','Curly'],['afro','Afro'],['mohawk','Mohawk'],['scarf','Headscarf'],['bald','Bald']];
-const FACIAL=[['none','None'],['stubble','Stubble'],['moustache','Moustache'],['goatee','Goatee'],['beard','Full beard']];
+const DSKIN=['#F6D7BD','#E8B992','#C98F62','#A06A43','#74482B','#4E2F1E','#FBE3D2','#D9A877','#3A2216'];
+const DSKIN_ORDER=[6,0,1,7,2,3,4,5,8];
+const HAIRC=['#141414','#3B2416','#6E4426','#B07A3D','#D9B26A','#A33A26','#C7CCCF','#3D5FA8','#7B3F2A','#EDE6D6','#E07AA8','#7E57C2','#2BA59A','#2F5D46','#E9EEEF'];
+const HAIRC_ORDER=[0,1,8,2,3,4,9,5,6,14,10,11,7,12,13];
+const SCRUBS=[['Ceil blue','#6FA3C8'],['Teal','#1C7C84'],['Navy','#2B3F6B'],['Wine','#7A2E3A'],['Black','#24292C'],['Hunter green','#2F5D46'],['Lavender','#8C7BB8'],['Royal blue','#2E5BBA'],['Caribbean','#1FA2B8'],['Sage','#8FAE8B'],['Pink','#E08AAE'],['Maroon','#5E1F2B'],['Pewter','#6B7377'],['White','#E3E9EB']];
+const HSTYLES=[['short','Short'],['buzz','Buzz cut'],['long','Long'],['bun','Bun'],['ponytail','Ponytail'],['braids','Braids'],['curly','Curly'],['afro','Afro'],['mohawk','Mohawk'],['scarf','Headscarf'],['bald','Bald'],['bob','Bob'],['bangs','Straight bangs'],['curtain','Curtain bangs'],['sidepart','Side part'],['wavy','Long wavy'],['pixie','Pixie'],['pigtails','Pigtails'],['locs','Locs'],['topknot','Top knot'],['cornrows','Cornrows'],['spiky','Spiky'],['turban','Turban']];
+const EYEWEAR=[['none','None'],['round','Round'],['square','Square'],['halfrim','Half-rim'],['sun','Sunglasses']];
+const CAPS=[['none','None'],['plain','Plain'],['dots','Dots'],['stars','Stars'],['floral','Flowers']];
+const MOODS=[['smile','Smile'],['grin','Grin'],['flat','Neutral'],['smirk','Smirk']];
+const EXTRAS=[['steth','Stethoscope'],['coat','White coat'],['earrings','Earrings'],['mask','Face mask'],['lanyard','ID lanyard'],['freckles','Freckles'],['blush','Blush'],['mole','Beauty mark'],['nosestud','Nose stud']];
+const FACIAL=[['none','None'],['stubble','Stubble'],['moustache','Moustache'],['goatee','Goatee'],['beard','Full beard'],['handlebar','Handlebar'],['chinstrap','Chinstrap'],['sideburns','Sideburns']];
 const GENDERS=[['f','Woman'],['m','Man'],['nb','Non-binary']];
 const PRON={f:'she/her',m:'he/him',nb:'they/them'};
 function hash(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h}
@@ -2686,6 +3318,10 @@ function hairBack(style,cx,cy,r,hc){
   if(style==='braids')return`<rect x="${cx-r-2}" y="${cy-3}" width="5" height="27" rx="2.5" fill="${hc}"/><rect x="${cx+r-3}" y="${cy-3}" width="5" height="27" rx="2.5" fill="${hc}"/>`;
   if(style==='ponytail')return`<path d="M${cx+r-3} ${cy-8}q13 2 9 23q-3-8-9-13z" fill="${hc}"/>`;
   if(style==='scarf')return`<path d="M${cx-r-4} ${cy}a${r+4} ${r+4} 0 0 1 ${2*r+8} 0v14q0 11-${r+4} 13q-${r+4}-2-${r+4}-13z" fill="${hc}"/>`;
+  if(style==='bob')return`<path d="M${cx-r-3} ${cy}c0-12 6-${r+3} ${r+3}-${r+3}s${r+3} ${r-9} ${r+3} ${r+3}v11q0 3-3 3H${cx-r}q-3 0-3-3z" fill="${hc}"/>`;
+  if(style==='wavy')return`<path d="M${cx-r-4} ${cy}c0-12 7-${r+3} ${r+4}-${r+3}s${r+4} ${r-9} ${r+4} ${r+3}v22q-3 4-6 0t-6 0-6 0-6 0-6 0q-3 4-6 0z" fill="${hc}"/>`;
+  if(style==='pigtails')return`<circle cx="${cx-r-4}" cy="${cy+3}" r="5.5" fill="${hc}"/><circle cx="${cx+r+4}" cy="${cy+3}" r="5.5" fill="${hc}"/><path d="M${cx-r-6} ${cy+8}q2 7-1 12M${cx+r+6} ${cy+8}q-2 7 1 12" stroke="${hc}" stroke-width="4" stroke-linecap="round" fill="none"/>`;
+  if(style==='locs'){let o='';for(let k=0;k<6;k++){const x=cx-r-2+k*(2*r+4)/5;o+=`<rect x="${(x-2).toFixed(1)}" y="${cy-6}" width="4.4" height="${28-Math.abs(k-2.5)*2}" rx="2.2" fill="${hc}"/>`}return o}
   return'';
 }
 function hatSvg(h,c,cx,cy,r){
@@ -2708,6 +3344,9 @@ function facialSvg(f,cx,cy,r,c){
   if(f==='stubble')return`<path d="${beard}" fill="${c}" opacity=".28"/><path d="${mous}" fill="${c}" opacity=".28"/>`;
   if(f==='moustache')return`<path d="${mous}" fill="${c}"/>`;
   if(f==='goatee')return`<path d="${mous}" fill="${c}"/><path d="M${cx-4} ${cy+11.5}q4 1 8 0l-1.5 6q-2.5 1.5-5 0z" fill="${c}"/>`;
+  if(f==='handlebar')return`<path d="M${cx-8} ${cy+5}q-2-3 0-4q2 3 8 2.5q6 .5 8-2.5q2 1 0 4q-3 2-8 1q-5 1-8-1z" fill="${c}"/>`;
+  if(f==='chinstrap')return`<path d="M${cx-r+.5} ${cy+1}Q${cx-r+1} ${cy+r+5} ${cx} ${cy+r+5}Q${cx+r-1} ${cy+r+5} ${cx+r-.5} ${cy+1}l-2.2 0Q${cx+r-3} ${cy+r+2} ${cx} ${cy+r+2}Q${cx-r+3} ${cy+r+2} ${cx-r+2.7} ${cy+1}z" fill="${c}"/>`;
+  if(f==='sideburns')return`<path d="M${cx-r+.3} ${cy-3}h3v9q-1.5 2-3 0z" fill="${c}"/><path d="M${cx+r-3.3} ${cy-3}h3v9q-1.5 2-3 0z" fill="${c}"/>`;
   return'';
 }
 function hairFront(style,cx,cy,r,hc){
@@ -2718,16 +3357,40 @@ function hairFront(style,cx,cy,r,hc){
   if(style==='bun')return cap+`<circle cx="${cx}" cy="${cy-r-3}" r="6" fill="${hc}"/>`;
   if(style==='curly'){let s='';for(let k=0;k<7;k++){const a=Math.PI*(1+k/6);s+=`<circle cx="${(cx+Math.cos(a)*(r-1)).toFixed(1)}" cy="${(cy-2+Math.sin(a)*(r-1)).toFixed(1)}" r="5.6" fill="${hc}"/>`}return s+cap}
   if(style==='bald')return`<ellipse cx="${cx-r+1.5}" cy="${cy+1}" rx="2.2" ry="4.5" fill="${hc}"/><ellipse cx="${cx+r-1.5}" cy="${cy+1}" rx="2.2" ry="4.5" fill="${hc}"/>`;
+  if(style==='bangs'||style==='bob')return cap+`<path d="M${cx-r+1} ${cy-11}h${2*r-2}v5.5q-${r-1} 2.5-${2*r-2} 0z" fill="${hc}"/>`;
+  if(style==='curtain')return cap+`<path d="M${cx} ${cy-r+1}q-8 2-${r-1} ${r-4}l3.2.8q3-7 ${r-4.2}-${r-4.8}zM${cx} ${cy-r+1}q8 2 ${r-1} ${r-4}l-3.2.8q-3-7-${r-4.2}-${r-4.8}z" fill="${hc}"/>`;
+  if(style==='sidepart')return cap+`<path d="M${cx-6} ${cy-r+.5}q${r+6} 0 ${r+5} ${r-6}q-6-6-${r+5}-${r-6}.5z" fill="${hc}"/><path d="M${cx-6} ${cy-r+1}q-2 4-1 8" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="none"/>`;
+  if(style==='pixie')return`<path d="M${cx-r} ${cy-3}c0-9 6-${r-1} ${r}-${r-1}s${r} ${r-10} ${r} ${r-2}c-3-3-7-4-11-3q-6 2-${r-5} 5z" fill="${hc}"/><path d="M${cx-3} ${cy-r+1}q9 1 ${r+1} 8q-7-3-13-2z" fill="${hc}"/>`;
+  if(style==='spiky'){let o='';for(let k=0;k<5;k++){const x=cx-r+3+k*(2*r-6)/4;o+=`<path d="M${(x-4).toFixed(1)} ${cy-r+6}L${x.toFixed(1)} ${cy-r-7+Math.abs(k-2)*2}L${(x+4).toFixed(1)} ${cy-r+6}z" fill="${hc}"/>`}return o+cap}
+  if(style==='cornrows'){let o=cap;for(let k=-2;k<=2;k++)o+=`<path d="M${cx+k*4.5} ${cy-r+1.5}q${k*1.2} 5 ${k*2.2} 10" stroke="rgba(255,255,255,.22)" stroke-width="1" fill="none"/>`;return o}
+  if(style==='topknot')return`<g opacity=".8">${cap}</g><circle cx="${cx}" cy="${cy-r-2}" r="4.4" fill="${hc}"/><path d="M${cx-3} ${cy-r+1.5}h6" stroke="rgba(0,0,0,.25)" stroke-width="1.2"/>`;
+  if(style==='turban')return`<path d="M${cx-r-2} ${cy-2}q-1-${r+6} ${r+2}-${r+6}q${r+3} 0 ${r+2} ${r+6}q-${r+2}-5-${2*r+4} 0z" fill="${hc}"/><path d="M${cx-r} ${cy-6}q${r} -9 ${2*r} -2M${cx-r+3} ${cy-12}q${r-3}-5 ${2*r-6} 1" stroke="rgba(0,0,0,.18)" stroke-width="1.3" fill="none"/>`;
   return cap;
+}
+// Scrub cap in the scrub colour, with an optional print
+function scrubCap(st,c,cy,r){
+  const base=`<path d="M${40-r-1} ${cy-1}c0-10 7-${r+1} ${r+1}-${r+1}s${r+1} ${r-9} ${r+1} ${r+1}z" fill="${c}"/>`;
+  const at=[[34,cy-9],[42,cy-12],[47,cy-6],[30,cy-4],[39,cy-6]];
+  if(st==='dots')return base+at.slice(0,3).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.3" fill="#fff" opacity=".7"/>`).join('');
+  if(st==='stars')return base+at.map(([x,y])=>`<path d="M${x} ${y-1.8}l.55 1.2 1.3.15-1 .9.3 1.3-1.15-.7-1.15.7.3-1.3-1-.9 1.3-.15z" fill="#FFE27A"/>`).join('');
+  if(st==='floral')return base+at.map(([x,y],i)=>`<g fill="${['#fff','#FFC2D8','#FFE27A'][i%3]}"><circle cx="${x-1}" cy="${y}" r=".9"/><circle cx="${x+1}" cy="${y}" r=".9"/><circle cx="${x}" cy="${y-1}" r=".9"/><circle cx="${x}" cy="${y+1}" r=".9"/></g><circle cx="${x}" cy="${y}" r=".6" fill="#E2742B"/>`).join('');
+  return base;
+}
+function eyewearSvg(k,y){
+  if(k==='round')return`<g fill="none" stroke="#1d1d1d" stroke-width="1.4"><circle cx="35" cy="${y}" r="4.2"/><circle cx="45" cy="${y}" r="4.2"/><path d="M39.2 ${y}h1.6"/></g>`;
+  if(k==='square')return`<g fill="none" stroke="#1d1d1d" stroke-width="1.4"><rect x="30.6" y="${y-3.4}" width="8.6" height="6.6" rx="1.4"/><rect x="40.8" y="${y-3.4}" width="8.6" height="6.6" rx="1.4"/><path d="M39.2 ${y-1}h1.6"/></g>`;
+  if(k==='halfrim')return`<g fill="none" stroke="#1d1d1d" stroke-width="1.6"><path d="M30.8 ${y-1.4}q0-2.2 4.2-2.2t4.2 2.2M40.8 ${y-1.4}q0-2.2 4.2-2.2t4.2 2.2M39.2 ${y-1.6}h1.6"/></g><g fill="none" stroke="#1d1d1d" stroke-width=".5" opacity=".5"><path d="M30.8 ${y-1.4}q0 4.4 4.2 4.4t4.2-4.4M40.8 ${y-1.4}q0 4.4 4.2 4.4t4.2-4.4"/></g>`;
+  if(k==='sun')return`<g stroke="#1d1d1d" stroke-width="1.2"><path d="M30.4 ${y-3}h8.8v3.4q0 3-4.4 3t-4.4-3zM40.8 ${y-3}h8.8v3.4q0 3-4.4 3t-4.4-3z" fill="#22303a"/><path d="M39.2 ${y-2}h1.6" fill="none"/></g><path d="M32 ${y-1.6}l2-.8" stroke="#fff" stroke-width=".8" opacity=".6"/>`;
+  return'';
 }
 let pid=0;
 // Head-and-shoulders portrait used for patients, staff and your doctor.
 function portrait(L,o={}){
   const cx=40,cy=o.child?37:33,r=o.child?13:14.5,id='pc'+(pid++);
-  const eyeY=cy-1,mY=cy+7,mood=o.mood||'smile';
+  const eyeY=cy-1,mY=cy+7,mood=o.mood||L.mood||'smile';
   const eyes=o.eyes==='closed'?`<path d="M33 ${eyeY}h4M43 ${eyeY}h4" stroke="#1d1d1d" stroke-width="1.8" stroke-linecap="round"/>`
     :`<circle cx="35" cy="${eyeY}" r="1.7" fill="#1d1d1d"/><circle cx="45" cy="${eyeY}" r="1.7" fill="#1d1d1d"/>`;
-  const mouth=mood==='smile'?`M35 ${mY} Q40 ${mY+3.5} 45 ${mY}`:mood==='flat'?`M35.5 ${mY+1} L44.5 ${mY+1}`:`M35 ${mY+2.5} Q40 ${mY-1.5} 45 ${mY+2.5}`;
+  const mouth=mood==='smile'?`M35 ${mY} Q40 ${mY+3.5} 45 ${mY}`:mood==='flat'?`M35.5 ${mY+1} L44.5 ${mY+1}`:mood==='smirk'?`M35.5 ${mY+1.5} Q41 ${mY+2.5} 45.5 ${mY-1}`:mood==='grin'?`M34.5 ${mY-.5} Q40 ${mY+6} 45.5 ${mY-.5}Z`:`M35 ${mY+2.5} Q40 ${mY-1.5} 45 ${mY+2.5}`;
   const body=o.gown?'#7FB6C6':L.scrub,X=L.extra||[],has=k=>X.includes(k);
   const hood=L.hat==='hood';
   return`<svg class="${o.cls||'avatar'}" viewBox="0 0 80 80" role="img" aria-label="${o.label||'Portrait'}">
@@ -2743,21 +3406,31 @@ function portrait(L,o={}){
     ${has('arc')?'<circle cx="40" cy="71" r="4.5" fill="#BFF3FF" stroke="#5FD3F0" stroke-width="2"/>':''}
     <rect x="35" y="${cy+10}" width="10" height="${56-cy-8}" fill="${L.skin}"/>
     ${has('bowtie')?'<path d="M33 57l7 3-7 3zM47 57l-7 3 7 3z" fill="#A33A26"/><circle cx="40" cy="60" r="1.6" fill="#7a1f14"/>':''}
+    ${has('antlers')?`<path d="M${cx-8} ${cy-r+2}l-6-12m3 6l-7-2m4-6l-3-6M${cx+8} ${cy-r+2}l6-12m-3 6l7-2m-4-6l3-6" stroke="#8a5a2b" stroke-width="2.6" stroke-linecap="round" fill="none"/>`:''}
     ${has('ears')?`<circle cx="${cx-r+2}" cy="${cy-r+3}" r="5.5" fill="${L.skin}"/><circle cx="${cx+r-2}" cy="${cy-r+3}" r="5.5" fill="${L.skin}"/><circle cx="${cx-r+2}" cy="${cy-r+3}" r="2.6" fill="#B07A2A"/><circle cx="${cx+r-2}" cy="${cy-r+3}" r="2.6" fill="#B07A2A"/>`:''}
     <circle cx="40" cy="${cy}" r="${r}" fill="${L.skin}"/>
     ${has('metal')?`<circle cx="40" cy="${cy}" r="${r-1}" fill="#9AA6AC" stroke="#6d777c"/><path d="M33.5 ${cy+6}h13v3.5h-13z" fill="#5d666b"/><circle cx="30" cy="${cy-2}" r=".9" fill="#6d777c"/><circle cx="50" cy="${cy-2}" r=".9" fill="#6d777c"/>`:''}
     ${o.shock?`<circle cx="40" cy="${cy}" r="${r}" fill="#EAF2F2" opacity=".35"/>`:''}
-    ${L.cap?`<path d="M${40-r-1} ${cy-1}c0-10 7-${r+1} ${r+1}-${r+1}s${r+1} ${r-9} ${r+1} ${r+1}z" fill="${L.scrub}"/><circle cx="34" cy="${cy-9}" r="1.3" fill="#fff" opacity=".7"/><circle cx="42" cy="${cy-12}" r="1.3" fill="#fff" opacity=".7"/><circle cx="47" cy="${cy-6}" r="1.3" fill="#fff" opacity=".7"/>`:hood||L.hat?'':hairFront(L.hair,cx,cy,r,L.hc)}
+    ${L.cap?scrubCap(L.capStyle||'dots',L.scrub,cy,r):hood||L.hat?'':hairFront(L.hair,cx,cy,r,L.hc)}
+    ${has('freckles')?`<g fill="#9a5b3a" opacity=".55"><circle cx="32.5" cy="${cy+3}" r=".7"/><circle cx="34.5" cy="${cy+4.2}" r=".7"/><circle cx="31.5" cy="${cy+5}" r=".7"/><circle cx="47.5" cy="${cy+3}" r=".7"/><circle cx="45.5" cy="${cy+4.2}" r=".7"/><circle cx="48.5" cy="${cy+5}" r=".7"/></g>`:''}
+    ${has('blush')?`<ellipse cx="31.5" cy="${cy+4.5}" rx="3.2" ry="1.9" fill="#F08A8A" opacity=".45"/><ellipse cx="48.5" cy="${cy+4.5}" rx="3.2" ry="1.9" fill="#F08A8A" opacity=".45"/>`:''}
     ${o.fever?`<circle cx="32" cy="${cy+4}" r="3" fill="#E5604F" opacity=".4"/><circle cx="48" cy="${cy+4}" r="3" fill="#E5604F" opacity=".4"/>`:''}
     ${eyes}
-    ${L.glasses?`<g fill="none" stroke="#1d1d1d" stroke-width="1.4"><circle cx="35" cy="${eyeY}" r="4.2"/><circle cx="45" cy="${eyeY}" r="4.2"/><path d="M39.2 ${eyeY}h1.6"/></g>`:''}
+    ${eyewearSvg(L.eyewear||(L.glasses?'round':'none'),eyeY)}
     ${has('goggles')?`<g fill="rgba(140,200,220,.45)" stroke="#3a3f42" stroke-width="2"><circle cx="35" cy="${eyeY}" r="4.6"/><circle cx="45" cy="${eyeY}" r="4.6"/></g><path d="M${cx-r} ${eyeY}h3.5M${cx+r-3.5} ${eyeY}h3.5" stroke="#3a3f42" stroke-width="2"/>`:''}
     ${has('metal')?'':`<path d="${mouth}" fill="none" stroke="#5a2a22" stroke-width="1.8" stroke-linecap="round"/>`}
     ${L.facial&&L.facial!=='none'?facialSvg(L.facial,cx,cy,r,L.hc):''}
+    ${has('mole')?`<circle cx="46.5" cy="${cy+8}" r=".9" fill="#3a2418"/>`:''}
+    ${has('nosestud')?`<circle cx="42.6" cy="${cy+3.6}" r=".9" fill="#E3B341" stroke="#9c7a1c" stroke-width=".3"/>`:''}
+    ${has('mask')?`<path d="M${cx-r+1.5} ${cy+1.5}q${r-1.5}-3 ${2*r-3} 0v6q-1 6-${r-1.5} 7.5q-${r-2.5}-1.5-${r-1.5}-7.5z" fill="#A9D3E8" stroke="#78aecb" stroke-width=".6"/><path d="M${cx-r+3} ${cy+5}h${2*r-6}M${cx-r+3} ${cy+8}h${2*r-6}" stroke="#86bcd6" stroke-width=".6"/>`:''}
     ${has('nose')?`<circle cx="40" cy="${cy+3.5}" r="3.2" fill="#E5484D"/>`:''}
+    ${has('bluenose')?`<ellipse cx="40" cy="${cy+3.5}" rx="3" ry="2.3" fill="#3D6FD8"/>`:''}
+    ${has('scar')?`<path d="M${cx-9} ${cy-9}q6 6 7 18" stroke="#8a4a3a" stroke-width="1" fill="none"/><path d="M${cx-9.5} ${cy-5.5}l3-1M${cx-7.5} ${cy-2}l3-1M${cx-6} ${cy+1.5}l3-.6M${cx-5} ${cy+5}l3-.4" stroke="#8a4a3a" stroke-width=".8"/>`:''}
+    ${has('sword')?'<path d="M52 82L61 52" stroke="#C9D3D8" stroke-width="2.6"/><path d="M57 60l8 2.6" stroke="#B8902E" stroke-width="2.4" stroke-linecap="round"/><path d="M62 52l2.2-6" stroke="#5a3a22" stroke-width="2.6" stroke-linecap="round"/>':''}
     ${has('earrings')?`<circle cx="${cx-r+.5}" cy="${cy+5}" r="1.7" fill="#E3B341"/><circle cx="${cx+r-.5}" cy="${cy+5}" r="1.7" fill="#E3B341"/>`:''}
     ${L.hat&&!L.cap?hatSvg(L.hat,L.hatc||'#24292C',cx,cy,r):''}
     ${o.sweat?`<path d="M${40+r-3} ${cy-9}c-2 3-2 5 0 5.5s2-2.5 0-5.5z" fill="#6EC3EE" stroke="#3D93C2" stroke-width=".8"/>`:''}
+    ${has('lanyard')&&!o.gown?'<path d="M34 56.5L39 74M46 56.5L41 74" stroke="#2E5BBA" stroke-width="1.6"/><rect x="36" y="73.5" width="8" height="7" rx="1" fill="#fff" stroke="#9aa4a9" stroke-width=".6"/><rect x="37.2" y="75" width="2.6" height="3" fill="#cfd6d8"/><path d="M40.8 75.6h2M40.8 77.2h2" stroke="#9aa4a9" stroke-width=".6"/>':''}
     ${L.steth?'<path d="M29 57c0 10 4 15 11 15s11-5 11-15" fill="none" stroke="#3a3f42" stroke-width="2.2"/><circle cx="40" cy="73" r="3.2" fill="#9aa4a9" stroke="#3a3f42" stroke-width="1.5"/>':''}
     ${L.spec&&!o.gown?specGear(L.spec,cy):''}
    </g></svg>`;
@@ -2788,8 +3461,8 @@ const SPEC_BOX={em:'47 55 13 19',gp:'46 55 14 19',im:'46 55 14 19',surg:'46 53 1
   id:'21.5 61.5 11 11',paeds:'21.5 61.5 11 11',obgyn:'21.5 61.5 11 11',cardio:'21.5 61.5 11 11',tox:'21.5 61.5 11 11',diag:'56 47 24 36'};
 const specIcon=k=>k==='diag'?`<i class="specic cane">${ic('cane')}</i>`:`<svg class="specic" viewBox="${SPEC_BOX[k]||'0 0 80 80'}" aria-hidden="true">${specGear(k,33)}</svg>`;
 // One-line summaries for the dropdown; the full perks show under the chosen specialty
-const SPEC_SHORT={em:'+1 stability, longer emergencies',gp:'A little help with every patient',im:'Tests cost less',surg:'Fewer wrong treatments, easier procedures',anaes:'Easier procedures, better CPR',
-  id:'Wrong guesses cost less',path:'+30% on Rare cases and above',paeds:'More children, and easier for you',obgyn:'More O&G cases, and easier for you',cardio:'More heart cases, better CPR',
+const SPEC_SHORT={em:'+1 stability, longer emergencies',gp:'A little help with every patient',im:'Tests cost less',surg:'More surgical cases; fewer wrong treatments',anaes:'Easier procedures, better CPR',
+  id:'More infections; wrong guesses cost less',path:'+30% on Rare cases and above',paeds:'More children, and easier for you',obgyn:'More O&G cases, and easier for you',cardio:'More heart cases, better CPR',
   neuro:'More brain and nerve cases',tox:'More poisonings, safer treatments',diag:'Everybody lies. Zebras pay more.'};
 // Specialty picker: unlocked ones first, then locked ones with what it takes to earn them
 function specPicker(d){
@@ -2801,15 +3474,33 @@ function specPicker(d){
    <div class="specdd ${o?'open':''}">
     <button type="button" class="specsel" data-act="specdd" aria-haspopup="listbox" aria-expanded="${o}">${specIcon(cur)}<span><b>${esc(SPECS[cur].n)}</b><small>${esc(SPEC_SHORT[cur]||'')}</small></span><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
     ${o?`<div class="speclist" role="listbox" aria-label="Specialty">${open.map(item).join('')}${locked.length?`<div class="specsep">Locked · earn these on shift</div>${locked.map(lock).join('')}`:''}</div>`:''}
-   </div><p class="hint specfull">${esc(SPECS[cur].d)}</p></div>`;
+   </div><p class="hint specfull">${esc(SPECS[cur].d)}</p><p class="hint" style="margin:0">${POOL_SPECS.includes(cur)?`Specialist pool: ${D.filter(x=>x.sp===cur).length} cases only this specialty sees, on top of the shared core cases.`:'Generalist: every specialty\u2019s cases come in, mixed into one large pool.'}</p></div>`;
 }
+// Each name tradition gets likely skin tones and hair colours (indexes into SKIN and HAIR); "h" marks
+// traditions where many women wear a headscarf, "t" where men named Singh often wear a turban.
+const SET_LOOK=['123|30|h','12|30|h','1234|30|h','01|30','123|30|h','123|30','12|30','012|30','01|30','01|30','01|30','123|30|t','234|30','123|30|h','012|301|h','01|301|h','01|3012','34|3','34|3','34|3','0123|3012','01234|30124','01|0124','014|01243','0|01243','0|0124','0|0124','0|1024','0|01243','01234|30124','01|3012','01|301','23|30'];
+const FAM_SET=new Map();NAME_SETS.forEach((c,i)=>c.l.forEach(f=>f.split('/').forEach(x=>FAM_SET.set(x,i))));
+const lookCache=new Map();
 function patientLook(p){
   if(p.cam&&CAMEO_PT_BY[p.cam])return CAMEO_PT_BY[p.cam].look;
-  const h=hash(p.name),F=['long','bun','curly','long'],M=['short','buzz','curly','short'];
-  const hair=p.sex==='M'&&p.age>=65&&h%3===0?'bald':(p.sex==='F'?F:M)[(h>>2)%4];
-  return{skin:SKIN[h%5],hair,hc:p.age>=62?'#C7CCCF':HAIR[(h>>4)%5]};
+  const key=p.name+'|'+p.sex+'|'+p.age;if(lookCache.has(key))return lookCache.get(key);
+  const h=hash(p.name),pk=(a,sh)=>a[(h>>>sh)%a.length],words=p.name.split(' ');
+  let set=-1;for(let k=1;k<words.length&&set<0;k++){const f=words.slice(k).join(' ');if(FAM_SET.has(f))set=FAM_SET.get(f)}
+  const [sk,hr,fl='']=(SET_LOOK[set]||'01234|30124').split('|'),kid=p.age<13,old=p.age>=62;
+  const F=kid?['pigtails','bob','ponytail','braids','curly','bangs']:['long','bun','curly','bob','wavy','ponytail','bangs','pixie','braids','locs','curtain'];
+  const M=kid?['short','spiky','curly','buzz','bangs']:['short','buzz','curly','sidepart','spiky','cornrows','topknot','curtain','short'];
+  let hair=p.sex==='M'&&p.age>=60&&h%3===0?'bald':pk(p.sex==='F'?F:M,3),hc=old?'#C7CCCF':HAIR[+pk(hr,7)];
+  if(fl==='h'&&p.sex==='F'&&p.age>=12&&h%5<2){hair='scarf';hc=pk(['#2F5D46','#7A2E3A','#2B3F6B','#C9A15A','#8C7BB8','#E08AAE','#3D3D3D','#E9EEEF'],9)}
+  if(fl==='t'&&p.sex==='M'&&words[words.length-1]==='Singh'&&h%5<3){hair='turban';hc=pk(['#E2742B','#2B3F6B','#7A2E3A','#E9EEEF','#C9A15A'],9)}
+  if(hair==='cornrows'&&!'34'.includes(sk[sk.length-1]))hair='short';
+  const L={skin:SKIN[+pk(sk,11)],hair,hc,glasses:p.age>=50&&h%4===0};
+  lookCache.set(key,L);return L;
 }
-function docLook(d){return{skin:DSKIN[d.skin]||DSKIN[0],hair:d.hair,hc:HAIRC[d.hc]||HAIRC[0],scrub:(SCRUBS[d.scrub]||SCRUBS[0])[1],glasses:d.glasses,cap:d.cap,steth:d.steth,facial:d.facial,spec:d.spec,extra:[d.coat&&'coat',d.earrings&&'earrings'].filter(Boolean)}}
+function docLook(d){const cs=d.capStyle||(d.cap?'dots':'none');return{skin:DSKIN[d.skin]||DSKIN[0],hair:d.hair,hc:HAIRC[d.hc]||HAIRC[0],scrub:(SCRUBS[d.scrub]||SCRUBS[0])[1],eyewear:d.eyewear||(d.glasses?'round':'none'),cap:cs!=='none',capStyle:cs,steth:d.steth,facial:d.facial,spec:d.spec,mood:d.mood||'smile',
+  extra:['coat','earrings','mask','lanyard','freckles','blush','mole','nosestud'].filter(k=>d[k])}}
+// The fields of a doctor that make up their appearance, shared with the online profile
+const LOOK_KEYS=['skin','hair','hc','scrub','glasses','eyewear','cap','capStyle','steth','coat','earrings','mask','lanyard','freckles','blush','mole','nosestud','facial','mood'];
+const docPublic=d=>Object.fromEntries(LOOK_KEYS.map(k=>[k,d[k]]));
 
 /* ---- Patient in bed ---- */
 const LYING={h:[92,94],n:[108,99],s:[114,100],e:[148,104],w:[176,102],p:[190,103],k:[250,103],f:[312,103]};
@@ -2860,6 +3551,19 @@ function sceneShell(inner,over,label){
     <rect x="351" y="22" width="18" height="26" rx="4" fill="#d9eef7" stroke="#8fb9cc"/><rect x="354" y="34" width="12" height="11" rx="2" fill="#a9d4e8"/>
    </g>${over}</svg>`;
 }
+// The raised bed head sits just behind the patient's back, so the body rests on it instead of passing through it.
+// Reclined poses tilt it to match the torso; upright or forward-leaning poses get a standard incline behind the hips.
+function backrest(J,H,sc,r){
+  const P=J.p,N=[P[0]+(J.n[0]-P[0])*sc,P[1]+(J.n[1]-P[1])*sc],Hd=[P[0]+(H[0]-P[0])*sc,P[1]+(H[1]-P[1])*sc];
+  let dx=N[0]-P[0],dy=N[1]-P[1];const len=Math.hypot(dx,dy);dx/=len;dy/=len;
+  const lean=dx<-.3;if(!lean){dx=-.6;dy=-.8}
+  const bx=dy,by=-dx,off=lean?9.5*sc:0,L=lean?len+r*sc+14:96,T=9;
+  const x0=lean?P[0]+bx*off:P[0]-14,y0=lean?Math.min(106,P[1]+by*off):106;
+  const q=(x,y)=>`${x.toFixed(1)},${y.toFixed(1)}`,x1=x0+dx*L,y1=y0+dy*L;
+  const poly=`<polygon points="${q(x0,y0)} ${q(x1,y1)} ${q(x1+bx*T,y1+by*T)} ${q(x0+bx*T,Math.min(106,y0+by*T))}" fill="#E3EAED" stroke="#B9C6CC" stroke-width="1.2" stroke-linejoin="round"/>`;
+  const pc=lean?[Hd[0]+bx*(r*sc*.55),Hd[1]+by*(r*sc*.55)]:[x1-dx*18-bx*5,y1-dy*18-by*5],rot=Math.atan2(dy,dx)*180/Math.PI+90;
+  return poly+`<ellipse cx="${pc[0].toFixed(1)}" cy="${pc[1].toFixed(1)}" rx="${(7*sc+2).toFixed(1)}" ry="${(15*sc).toFixed(1)}" transform="rotate(${rot.toFixed(1)} ${pc[0].toFixed(1)} ${pc[1].toFixed(1)})" fill="#fff" stroke="#CFD8DC"/>`;
+}
 function bedScene(p,poseKey){
   if(!p)return sceneShell('<ellipse cx="86" cy="100" rx="20" ry="6.5" fill="#fff" stroke="#CFD8DC"/><rect x="262" y="95" width="70" height="10" rx="3" fill="#DCE6EE" stroke="#B5C4CF"/>','','Empty bed, clean and ready');
   const L=patientLook(p),P=POSES[poseKey]||POSES.alert,J=P.J,child=p.age<13;
@@ -2895,8 +3599,7 @@ function bedScene(p,poseKey){
   if(fx.includes('mask'))fig+=`<rect x="${f1(mx-5)}" y="${f1(my-5)}" width="10" height="9" rx="4" fill="rgba(120,200,160,.5)" stroke="#4f9e7c" stroke-width="1"/><path d="M${f1(mx)} ${f1(my-5)}C${f1(mx)} 30 330 20 340 34" stroke="#79b8a0" stroke-width="1.6" fill="none"/>`;
   if(child)fig=`<g transform="translate(${J.p[0]} ${J.p[1]}) scale(.74) translate(${-J.p[0]} ${-J.p[1]})">${fig}</g>`;
   const cls=fx.includes('shake')?'shake':fx.includes('shiver')?'shiver':'';
-  const back=P.br?`<polygon points="150,106 162,104 110,38 96,45" fill="#E3EAED" stroke="#B9C6CC" stroke-width="1.2"/><ellipse cx="106" cy="50" rx="9" ry="16" transform="rotate(-40 106 50)" fill="#fff" stroke="#CFD8DC"/>`
-    :`<ellipse cx="86" cy="100" rx="20" ry="6.5" fill="#fff" stroke="#CFD8DC"/>`;
+  const back=P.br?backrest(J,H,child?.74:1,r):`<ellipse cx="86" cy="100" rx="20" ry="6.5" fill="#fff" stroke="#CFD8DC"/>`;
   let bubble='';
   if(P.say&&!child||P.say&&poseKey!=='unconscious'&&child){const txt=P.say,w=Math.round(txt.length*5.6+16);let bx=Math.min(H[0]+70+14,500-w),by=Math.max(4,H[1]-40);
     bubble=`<g><rect x="${bx}" y="${by}" width="${w}" height="19" rx="9.5" fill="var(--panel)" stroke="var(--line)"/><path d="M${bx+10} ${by+18}l-5 7 10-7" fill="var(--panel)" stroke="var(--line)"/><rect x="${bx+5}" y="${by+15}" width="12" height="3" fill="var(--panel)"/><text x="${bx+w/2}" y="${by+13}" text-anchor="middle" font-family="Atkinson Hyperlegible,system-ui,sans-serif" font-size="10.5" font-style="italic" fill="var(--ink)">${txt}</text></g>`}
@@ -3082,12 +3785,12 @@ function makePatient(grand){
   const sp=S.doctor&&SPECS[S.doctor.spec];
   if(di==null&&sp&&sp.focus&&Math.random()<.35){
     const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0,maxT=Math.max(minT,Math.min(4,1+Math.floor(r.shift/2)));
-    const fp=D.map((d,i)=>i).filter(i=>sp.focus(D[i])&&D[i].t>=minT&&D[i].t<=maxT);if(fp.length)di=freshPick(fp,'f'+S.doctor.spec);
+    const fp=D.map((d,i)=>i).filter(i=>sp.focus(D[i])&&caseOK(i)&&D[i].t>=minT&&D[i].t<=maxT);if(fp.length)di=freshPick(fp,'f'+S.doctor.spec);
   }
   if(di==null){
     const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0;
     const t=rollTier(r.shift,minT);
-    const pool=D.map((d,i)=>i).filter(i=>D[i].t===t);
+    const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&caseOK(i));
     di=freshPick(pool,'t'+t);
   }
   const d=D[di],m=mods(),b=r.buff;
@@ -3095,7 +3798,7 @@ function makePatient(grand){
   const age=cam?cam.age:sp&&sp.kids&&d.a[0]<16?d.a[0]+rnd(Math.min(d.a[1],15)-d.a[0]+1):d.a[0]+rnd(d.a[1]-d.a[0]+1);
   const st=Math.max(3,10+m.stab+(b.stab||0));
   const mk=MASK[d.n],masked=!!mk&&Math.random()<.7;
-  const p={id:r.nid++,d:di,name:cam?cam.n:pick(sex==='M'?FIRST_M:FIRST_F)+' '+pick(LAST),sex,age,cam:cam?cam.id:null,
+  const p={id:r.nid++,d:di,name:cam?cam.n:randName(sex),sex,age,cam:cam?cam.id:null,
     mrn:String(rnd(90)+10)+'-'+String(rnd(900)+100)+'-'+String(rnd(900)+100),bay:0,grand,
     rev:{h:0,e:0,l:0,i:0},stab:st,max:st,guesses:[],showSys:m.sys,showTier:m.tier,letter:m.letter,dxName:m.nameDx,freeHUsed:0,freeWrongUsed:0,last:null,tx:null,txWrong:[],wrongTx:0,
     procs:d.proc.slice(),procDone:[],procFails:0,phase:'case',masked,maskT:45+Math.random()*50,turned:false,defused:false,decay:0,wait:0,arrestT:0,prev:null,rhythm:null,rosc:false,caught:false,bounce:false,out:null,doneT:0};
@@ -3422,19 +4125,20 @@ function triggerEmergency(){
   r.cameos=r.cameos||[];r.buff=r.buff||{};
   let di,cam=null;
   const co=Math.random()<.12?cameoPool(r,true):[];
-  const spe=S.doctor&&SPECS[S.doctor.spec],fe=spe&&spe.focus&&Math.random()<.3?D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&spe.focus(D[i])):[];
+  const spe=S.doctor&&SPECS[S.doctor.spec],fe=spe&&spe.focus&&Math.random()<.3?D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&spe.focus(D[i])&&caseOK(i)):[];
   if(co.length){cam=pick(co);di=IDX[cam.d];r.cameos.push(cam.id);camSeen(cam.id)}
+  else if(Math.random()<.15)di=freshPick(FAKE,'fake');
   else if(fe.length)di=freshPick(fe,'emf'+S.doctor.spec);
   else{
-    let pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&D[i].t===t);
+    let pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&D[i].t===t&&caseOK(i));
     let key='em'+t;
-    if(!pool.length){pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n));key='em'}
+    if(!pool.length){pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&caseOK(i));key='em'}
     di=freshPick(pool,key);
   }
   const d=D[di];
   const sex=cam?cam.sex:d.x==='A'?(Math.random()<.5?'M':'F'):d.x;
   const extra=r.buff.emTime||0;r.buff.emTime=0;
-  r.em={d:di,name:cam?cam.n:pick(sex==='M'?FIRST_M:FIRST_F)+' '+pick(LAST),sex,age:cam?cam.age:d.a[0]+rnd(d.a[1]-d.a[0]+1),cam:cam?cam.id:null,
+  r.em={d:di,name:cam?cam.n:randName(sex),sex,age:cam?cam.age:d.a[0]+rnd(d.a[1]-d.a[0]+1),cam:cam?cam.id:null,
     phase:'alert',el:0,pen:0,dur:Math.max(25,45+m.emTime+extra+(d.proc.length?12:0)),wrong:[],opts:ddxFor(di),tx:shuffle([d.tx,...shuffle(d.w).slice(0,2)]),res:null,procDone:[]};
   sfx('siren');sfx('alarm');save();render();
 }
@@ -3484,7 +4188,7 @@ function emFinish(ok,reason){
     if(d.t>r.rarest){r.rarest=d.t;r.rarestName=d.n}
   }else{r.rep--;r.streak=0}
   e.phase='done';e.res={ok,pts,grant,reason,left};
-  logCase({k:ok?'em-ok':'em-fail',n:d.n,name:e.name,reason,wrongCalls:e.wrong.map(i=>D[e.opts[i]].n)});sfx(ok?'right':'flat');if(ok)setTimeout(()=>sfx('coin'),400);achEvent('em',{ok});
+  logCase({k:ok?'em-ok':'em-fail',n:d.n,name:e.name,reason,wrongCalls:e.wrong.map(i=>D[e.opts[i]].n)});sfx(ok?'right':'flat');if(ok)setTimeout(()=>sfx('coin'),400);achEvent('em',{ok});if(ok&&d.fake)achGive('standdown');
   save();render();
 }
 function closeEmer(){
@@ -4234,7 +4938,7 @@ function renderEmer(){
   if(S.screen!=='game'||!r||!r.em){el.innerHTML='';return}
   const e=r.em,d=D[e.d],left=emLeft(e);
   const cam=e.cam&&CAMEO_PT_BY[e.cam];
-  const pseudo={d:e.d,name:e.name,sex:e.sex,age:e.age,cam:e.cam||null,stab:e.phase==='alert'?e.dur:Math.max(.01,left),max:e.dur,out:e.res?(e.res.ok?{kind:'good'}:{kind:'crash'}):null};
+  const pseudo={d:e.d,name:e.name,sex:e.sex,age:e.age,cam:e.cam||null,stab:e.phase==='alert'||d.fake?e.dur:Math.max(.01,left),max:e.dur,out:e.res?(e.res.ok?{kind:'good'}:{kind:'crash'}):null};
   const lv=liveVitals(pseudo),pose=poseFor(pseudo),[stTxt,stCls]=STATUS[pose];
   let main='';
   if(e.phase==='alert')main=`<div class="arrive">${ic('siren')}&nbsp;Paramedics arriving. Get ready…</div>`;
@@ -4243,8 +4947,8 @@ function renderEmer(){
   else if(e.phase==='proc')main=`<span class="verdict good">${ic('check')}Treatment running</span><p class="label" style="margin-top:8px">Bedside procedures, against the clock. A failed attempt costs time.</p>${procList(d.proc,e.procDone,'em')}`;
   else{
     const res=e.res;
-    main=res.ok?`<span class="verdict good">${ic('check')}Patient saved</span><h2 style="margin:6px 0">${esc(d.n)}</h2>${tierBadge(d.t)}<div class="bd"><span>Points</span><span>${fmt(res.pts)}</span><span>Grant earned</span><span>₲${fmt(res.grant)}</span><span>Time left</span><span>${Math.ceil(res.left)} s</span><span>Reputation</span><span>+1</span></div>`
-      :`<span class="verdict bad">${ic('x')}${res.reason==='timeout'?'Out of time':'Wrong treatment'}</span><h2 style="margin:6px 0">${esc(d.n)}</h2>${tierBadge(d.t)}<p>Correct plan: <b>${esc(d.tx)}</b>. You lose 1 reputation.</p>`;
+    main=res.ok?`<span class="verdict good">${ic('check')}${d.fake?'False alarm, well called':'Patient saved'}</span><h2 style="margin:6px 0">${esc(d.n)}</h2>${tierBadge(d.t)}<div class="bd"><span>Points</span><span>${fmt(res.pts)}</span><span>Grant earned</span><span>₲${fmt(res.grant)}</span><span>Time left</span><span>${Math.ceil(res.left)} s</span><span>Reputation</span><span>+1</span></div>`
+      :`<span class="verdict bad">${ic('x')}${res.reason==='timeout'?'Out of time':d.fake?'Over-treated a false alarm':'Wrong treatment'}</span><h2 style="margin:6px 0">${esc(d.n)}</h2>${tierBadge(d.t)}<p>${d.fake?'This was never an emergency, and the treatment did harm. ':''}Correct plan: <b>${esc(d.tx)}</b>. You lose 1 reputation.</p>`;
     main+=`<button class="btn primary" data-act="closeem">Back to the floor</button>`;
   }
   const off=(163.4*(1-left/e.dur)).toFixed(1);
@@ -4259,7 +4963,7 @@ function renderEmer(){
      </div></div>
     </div>
     <div class="col">
-     <section class="panel cc"><span class="label">Handover from paramedics</span><q>${esc(d.cc)}</q>${cam?`<p class="quip">${esc(cam.quip)}</p>`:''}</section>
+     <section class="panel cc"><span class="label">Handover</span><q>${esc(d.ecc||d.cc)}</q>${cam?`<p class="quip">${esc(cam.quip)}</p>`:''}</section>
      <ul class="emclues" id="emclues">${emCluesHTML(e)}</ul>
      <div>${main}</div>
     </div>
@@ -4284,7 +4988,7 @@ const dailyScore=st=>Math.max(50,Math.min(1000,1000-60*dailyClues(st)-150*dailyW
 function dailyCase(date){
   const R=seeded('zebra-daily-'+date),pool=D.map((d,i)=>i).filter(i=>D[i].t>=1&&!D[i].late),di=pool[Math.floor(R()*pool.length)],d=D[di];
   const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1));
-  const firsts=sex==='M'?FIRST_M:FIRST_F,name=firsts[Math.floor(R()*firsts.length)]+' '+LAST[Math.floor(R()*LAST.length)];
+  const name=nameFrom(sex,R(),R());
   return{date,di,sex,age,name};
 }
 function dailyState(date){const st=DAILY[date]=DAILY[date]||pzFresh();st.rd=st.rd||{};return st}
@@ -4406,8 +5110,8 @@ function chalCases(seed,tags){
     let di=tags&&tags[k]!=null?D.findIndex(d=>nameTag(d.n)===tags[k]):-1;
     const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&!used.has(i)),fallback=pool[Math.floor(R()*pool.length)];
     if(di<0)di=fallback;used.add(di);const d=D[di];
-    const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1)),fs=sex==='M'?FIRST_M:FIRST_F;
-    return{di,sex,age,name:fs[Math.floor(R()*fs.length)]+' '+LAST[Math.floor(R()*LAST.length)]};
+    const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1));
+    return{di,sex,age,name:nameFrom(sex,R(),R())};
   });
 }
 function chalNew(){
@@ -4488,7 +5192,7 @@ function renderChalHome(){
 }
 
 /* ---- Cases players write ---- */
-const KKEY='zebra-shift.cases',SYSTEMS=[...new Set(D.map(d=>d.s))],RHYTHMS=[['sinus','Sinus rhythm'],['afib','Atrial fibrillation'],['stemi','ST elevation'],['peaked','Peaked T waves'],['twinv','T-wave inversion'],['brugada','Brugada pattern'],['osborn','Osborn waves'],['chb','Complete heart block'],['avblock','Dropped beats'],['alternans','Electrical alternans'],['pericarditis','Pericarditis']];
+const KKEY='zebra-shift.cases',SYSTEMS=[...new Set(D.map(d=>d.s))],RHYTHMS=[['sinus','Sinus rhythm'],['afib','Atrial fibrillation'],['stemi','ST elevation'],['peaked','Peaked T waves'],['twinv','T-wave inversion'],['brugada','Brugada pattern'],['osborn','Osborn waves'],['chb','Complete heart block'],['avblock','Dropped beats'],['alternans','Electrical alternans'],['pericarditis','Pericarditis'],['svt','SVT'],['vt','Ventricular tachycardia'],['torsades','Torsades de pointes']];
 let CASES={mine:[],got:[],play:{}};try{const c=JSON.parse(localStorage.getItem(KKEY)||'null');if(c)CASES={mine:c.mine||[],got:c.got||[],play:c.play||{}}}catch(e){}
 const saveCases=()=>{try{localStorage.setItem(KKEY,JSON.stringify(CASES))}catch(e){}};
 const caseFind=id=>CASES.mine.find(c=>c.id===id)||CASES.got.find(c=>c.id===id);
@@ -4995,6 +5699,7 @@ const ACHS=[
  {id:'caffeine',k:'f',ic:'coffee',n:'Running on caffeine',d:'Bring co-workers 10 coffees.',c:'gifts',g:10},
  {id:'misread3',k:'f',ic:'eye',n:'Optometry referral',d:'Misread three pictures in a row.',c:'missRun',g:3},
  // secret
+ {id:'standdown',k:'f',ic:'check',n:'Stand down',d:'Spot a false emergency and treat it gently.'},
  {id:'hollywood',k:'s',ic:'bolt',n:'Hollywood defib',d:'Shock a flatline. It never works outside the movies.'},
  {id:'poke',k:'s',ic:'dna',n:'Stop poking the zebra',d:'Tap the zebra logo ten times.'},
  {id:'psychic',k:'s',ic:'eye',n:'Psychic',d:'Solve the Case of the day without ordering a single clue.'},
@@ -5015,13 +5720,21 @@ function achGive(id){
   ACH.u[id]=Date.now();saveAch();achQ.push(ACH_BY[id]);if(!achT)achShowNext();
   if(window.ZSOnline&&ZSOnline.onAch)ZSOnline.onAch(achCount());
 }
+// Phones can freeze timers while scrolling, so the popup also carries its own expiry time, closes on tap,
+// and several unlocks at once are shown together on one card instead of queueing for a minute.
+let achUntil=0;
+function achHide(){const el=document.getElementById('achtoast');if(el)el.className='';clearTimeout(achT);achUntil=0;achT=setTimeout(achShowNext,350)}
 function achShowNext(){
-  let el=document.getElementById('achtoast');if(!el){el=document.createElement('div');el.id='achtoast';el.setAttribute('role','status');document.body.appendChild(el)}
-  const a=achQ.shift();if(!a){el.className='';achT=null;return}
-  el.innerHTML=`<span class="ai">${ic(a.ic)}</span><span><small>${a.k==='s'?'Secret achievement':a.k==='role'?'New specialty unlocked':'Achievement unlocked'}</small><b>${esc(a.n)}</b></span>`;
-  el.className='on '+a.k;sfx('jingle',a.k==='s'?3:2);
-  achT=setTimeout(()=>{el.className='';achT=setTimeout(achShowNext,350)},3200);
+  let el=document.getElementById('achtoast');if(!el){el=document.createElement('div');el.id='achtoast';el.setAttribute('role','status');el.title='Tap to close';el.addEventListener('click',achHide);document.body.appendChild(el)}
+  const a=achQ.shift();if(!a){el.className='';achT=null;achUntil=0;return}
+  const rest=achQ.length>=2?achQ.splice(0):[];
+  const head=rest.length?`${rest.length+1} achievements unlocked`:a.k==='s'?'Secret achievement':a.k==='role'?'New specialty unlocked':'Achievement unlocked';
+  el.innerHTML=`<span class="ai">${ic(a.ic)}</span><span><small>${head}</small><b>${esc(a.n)}</b>${rest.length?`<span class="more">${rest.map(x=>esc(x.n)).join(' · ')}</span>`:''}</span>`;
+  el.className='on '+a.k;sfx('jingle',a.k==='s'||rest.length?3:2);
+  const ms=rest.length?4200:3000;achUntil=Date.now()+ms;
+  clearTimeout(achT);achT=setTimeout(achHide,ms);
 }
+['scroll','touchend','visibilitychange'].forEach(ev=>(ev==='scroll'?window:document).addEventListener(ev,()=>{if(achUntil&&Date.now()>achUntil)achHide()},{passive:true}));
 const achSet=(name,v)=>{ACH.c[name]=Math.max(ACH.c[name]||0,v)};
 function achCheck(){for(const a of ACHS)if(a.c&&(ACH.c[a.c]||0)>=a.g)achGive(a.id);saveAch()}
 function achBook(){
@@ -6061,7 +6774,8 @@ function importCode(txt){
 }
 function renderCreate(){
   const d=S.draft,look=docLook(d);
-  const sw=(key,arr,label)=>arr.map((c,i)=>`<button class="sw" style="background:${Array.isArray(c)?c[1]:c}" data-set="${key}:${i}" aria-pressed="${d[key]===i}" aria-label="${label} ${Array.isArray(c)?c[0]:i+1}" title="${Array.isArray(c)?c[0]:''}"></button>`).join('');
+  const chooser=(label,key,arr,cur)=>`<div class="field"><span class="label">${label}</span><div class="opts">${arr.map(([k,l])=>`<button class="opt" data-set="${key}:${k}" aria-pressed="${cur===k}">${l}</button>`).join('')}</div></div>`;
+  const sw=(key,arr,label,order)=>(order||arr.map((c,i)=>i)).map(i=>[arr[i],i]).map(([c,i])=>`<button class="sw" style="background:${Array.isArray(c)?c[1]:c}" data-set="${key}:${i}" aria-pressed="${d[key]===i}" aria-label="${label} ${Array.isArray(c)?c[0]:i+1}" title="${Array.isArray(c)?c[0]:''}"></button>`).join('');
   return`<div class="pagehead" style="margin:10px 0 14px"><div><span class="label">${S.draft.editing?'Edit your doctor':'New career · slot '+(d.slot+1)}</span><h1>${S.draft.editing?'Your doctor':'Create your doctor'}</h1></div><button class="btn" data-act="cancelcreate">Back</button></div>
   <div class="create">
    <aside class="panel preview">${portrait(look,{label:'Doctor preview'})}<h2 id="pvname">${drName(d)}</h2><p style="margin:4px 0 0;color:var(--muted)">${PRON[d.gender]||'they/them'}<br>${SPECS[d.spec].n}<br>${DIFFS[d.diff].n}</p></aside>
@@ -6073,12 +6787,15 @@ function renderCreate(){
     <div class="field"><span class="label">Gender</span><div class="opts">${GENDERS.map(([k,l])=>`<button class="opt" data-set="gender:${k}" aria-pressed="${d.gender===k}">${l}</button>`).join('')}</div><p class="hint" style="margin:0">Co-workers will refer to you as ${PRON[d.gender]||'they/them'}.</p></div>
     ${specPicker(d)}
     <div class="field"><span class="label">Difficulty</span><div class="optcards">${Object.entries(DIFFS).map(([k,s])=>`<button class="optcard" data-set="diff:${k}" aria-pressed="${d.diff===k}"><b>${s.n}${k==='intern'?' <span class="chip y">Beginner friendly</span>':''}</b><span>${s.d}</span></button>`).join('')}</div></div>
-    <div class="field"><span class="label">Skin tone</span><div class="opts">${sw('skin',DSKIN,'Skin tone')}</div></div>
-    <div class="field"><span class="label">Hair style</span><div class="opts">${HSTYLES.map(([k,l])=>`<button class="opt" data-set="hair:${k}" aria-pressed="${d.hair===k}">${l}</button>`).join('')}</div></div>
-    <div class="field"><span class="label">Hair or headscarf colour</span><div class="opts">${sw('hc',HAIRC,'Hair colour')}</div></div>
-    <div class="field"><span class="label">Facial hair</span><div class="opts">${FACIAL.map(([k,l])=>`<button class="opt" data-set="facial:${k}" aria-pressed="${(d.facial||'none')===k}">${l}</button>`).join('')}</div></div>
+    <div class="field"><span class="label">Skin tone</span><div class="opts">${sw('skin',DSKIN,'Skin tone',DSKIN_ORDER)}</div></div>
+    ${chooser('Hair style','hair',HSTYLES,d.hair)}
+    <div class="field"><span class="label">Hair, headscarf or turban colour</span><div class="opts">${sw('hc',HAIRC,'Hair colour',HAIRC_ORDER)}</div></div>
+    ${chooser('Facial hair','facial',FACIAL,d.facial||'none')}
+    ${chooser('Expression','mood',MOODS,d.mood||'smile')}
+    ${chooser('Eyewear','eyewear',EYEWEAR,d.eyewear||(d.glasses?'round':'none'))}
+    ${chooser('Scrub cap','capStyle',CAPS,d.capStyle||(d.cap?'dots':'none'))}
     <div class="field"><span class="label">Scrubs</span><div class="opts">${sw('scrub',SCRUBS,'Scrubs')}</div></div>
-    <div class="field"><span class="label">Extras</span><div class="opts">${[['glasses','Glasses'],['cap','Surgical cap'],['steth','Stethoscope'],['coat','White coat'],['earrings','Earrings']].map(([k,l])=>`<button class="opt" data-tog="${k}" aria-pressed="${!!d[k]}">${l}</button>`).join('')}</div></div>
+    <div class="field"><span class="label">Extras</span><div class="opts">${EXTRAS.map(([k,l])=>`<button class="opt" data-tog="${k}" aria-pressed="${!!d[k]}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" data-act="confirmcreate">${ic(S.draft.editing?'check':'play')}${S.draft.editing?'Save changes':'Start career'}</button></div>
    </section></div>`;
 }
@@ -6263,7 +6980,7 @@ document.addEventListener('click',e=>{
     case'dailyshare':{const ta=$('#dshare');if(!ta)break;try{navigator.clipboard.writeText(ta.value).then(()=>toast('Result copied'),()=>{ta.select();toast('Press Ctrl+C to copy')})}catch(err){ta.select();toast('Press Ctrl+C to copy')}break}
     case'closechat':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();S.ui.chat=null;render();break;
     case'chatstop':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();break;
-    case'randname':if(S.draft){const g=S.draft.gender,pool=g==='f'?FIRST_F:g==='m'?FIRST_M:FIRST_F.concat(FIRST_M);S.draft.first=pick(pool);S.draft.last=pick(LAST);render()}break;
+    case'randname':if(S.draft){const g=S.draft.gender,sx=g==='f'?'F':g==='m'?'M':pick(['M','F']),nm=randName(sx).split(' ');S.draft.last=nm.pop();S.draft.first=nm.join(' ');render()}break;
     case'cpr':startCPR();break;
     case'cprgo':if(S.cpr){S.cpr.stage='cpr';S.cpr.t=0;S.cpr.taps=[];renderCPR()}break;
     case'cprtap':if(e.detail===0)cprTap();break;
@@ -6280,7 +6997,7 @@ document.addEventListener('click',e=>{
     case'cancelcreate':S.screen='menu';render();break;
     case'confirmcreate':{
       const d=S.draft,first=(d.first||'').trim(),last=(d.last||'').trim()||(first?'':'Reyes');
-      const doc={first,last,gender:PRON[d.gender]?d.gender:'nb',name:`${first} ${last}`.trim(),skin:d.skin,hair:d.hair,hc:d.hc,scrub:d.scrub,glasses:!!d.glasses,cap:!!d.cap,steth:!!d.steth,coat:!!d.coat,earrings:!!d.earrings,facial:d.facial||'none',spec:d.spec,diff:d.diff};
+      const doc={first,last,gender:PRON[d.gender]?d.gender:'nb',name:`${first} ${last}`.trim(),...docPublic(d),facial:d.facial||'none',spec:d.spec,diff:d.diff};doc.glasses=(doc.eyewear||'none')!=='none';doc.cap=(doc.capStyle||'none')!=='none';
       if(d.editing){const s=STORE.slots[d.slot];s.doctor=doc;s.updated=Date.now();writeStore();if(S.slot===d.slot)S.doctor=doc;S.screen='menu';toast('Doctor updated');render()}
       else{STORE.slots[d.slot]={doctor:doc,meta:freshMeta(),run:null,staff:freshStaff(),updated:Date.now()};writeStore();loadSlot(d.slot);toast('Welcome to the night shift, Dr. '+(last||first))}
       break}
@@ -6340,12 +7057,14 @@ function ecgSample(st,rhythm,hr){
   const t=st.t;
   if(rhythm==='asystole')return .015*Math.sin(t*1.7);
   if(rhythm==='vfib')return .35*Math.sin(t*2*Math.PI*4.6)+.2*Math.sin(t*2*Math.PI*7.3+1.3)*Math.sin(t*.9);
+  if(rhythm==='torsades')return .55*Math.sin(t*2*Math.PI*3.6)*(.25+.75*Math.abs(Math.sin(t*Math.PI*.45)));
   if(t>=st.next){st.bs=st.next;st.idx++;let rr=60/Math.max(20,hr);if(rhythm==='afib')rr*=.6+Math.random()*.8;st.rr=rr;st.next=st.bs+rr;st.drop=rhythm==='avblock'&&st.idx%3===0}
   const x=t-st.bs,k=Math.sqrt(Math.min(1.2,st.rr/.8));
   const g=(c,w,a)=>a*Math.exp(-(((x-c)/w)**2));
   let v=0;
+  if(rhythm==='vt')return g(.1,.045,.85)-g(.22,.06,.45);
   if(rhythm==='afib')v+=.035*Math.sin(t*2*Math.PI*6.3)+.025*Math.sin(t*2*Math.PI*9.1+.7);
-  else v+=g(.05,.022,.13);
+  else if(rhythm!=='svt')v+=g(.05,.022,.13);
   if(rhythm==='pericarditis')v-=g(.11,.02,.04);
   if(!st.drop){
     const qa=rhythm==='alternans'?(st.idx%2?.5:.3):1;

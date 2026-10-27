@@ -41,7 +41,7 @@
   function localStats() {
     const slots = STORE.slots.filter(Boolean), act = STORE.active != null && STORE.slots[STORE.active];
     const d = normDoc((act || slots[0] || {}).doctor);
-    const doctor = { first: d.first, last: d.last, gender: d.gender, spec: d.spec, skin: d.skin, hair: d.hair, hc: d.hc, scrub: d.scrub, glasses: !!d.glasses, cap: !!d.cap, steth: !!d.steth, coat: !!d.coat, earrings: !!d.earrings, facial: d.facial };
+    const doctor = Object.assign({ first: d.first, last: d.last, gender: d.gender, spec: d.spec, skin: d.skin, hair: d.hair, hc: d.hc, scrub: d.scrub, glasses: !!d.glasses, cap: !!d.cap, steth: !!d.steth, coat: !!d.coat, earrings: !!d.earrings, facial: d.facial }, typeof docPublic === 'function' ? docPublic(d) : {});
     const book = m => Object.keys((m && m.book) || {}).filter(n => IDX[n] != null).length;
     return {
       display: ('Dr. ' + (fullName(d) || 'Reyes')).slice(0, 60), doctor, spec: (SPECS[d.spec] || SPECS.em).n,

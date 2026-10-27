@@ -10,9 +10,10 @@ d=json.load(open('review/data.json'))
 D,MASK,READS,READ_AT,DDX,TIERS=d['D'],d['MASK'],d['READS'],d['READ_AT'],d['DDX'],d['TIERS']
 PROCS,DISPO=d['PROCS'],d['DISPO_NAME']
 NEW=set(d.get('NEW',[]))
+POOLN={'paeds':'Paediatrics','obgyn':'Obstetrics & Gynaecology','cardio':'Cardiology','neuro':'Neurology','tox':'Toxicology','id':'Infectious Diseases','surg':'Surgery'}
 KIND={'ecg':'12-lead ECG','abg':'Blood gas','xr':'X-ray','mic':'Microscopy'}
 CAT={'h':'History','e':'Exam','l':'Tests','i':'Imaging'}
-RHY={'sinus':'Sinus','afib':'AF','stemi':'ST elevation','peaked':'Peaked T','twinv':'T inversion','brugada':'Brugada','osborn':'Osborn waves','chb':'Complete heart block','avblock':'Dropped beats','alternans':'Electrical alternans','pericarditis':'Pericarditis'}
+RHY={'sinus':'Sinus','afib':'AF','stemi':'ST elevation','peaked':'Peaked T','twinv':'T inversion','brugada':'Brugada','osborn':'Osborn waves','chb':'Complete heart block','avblock':'Dropped beats','alternans':'Electrical alternans','pericarditis':'Pericarditis','svt':'SVT','vt':'Ventricular tachycardia','torsades':'Torsades de pointes'}
 
 TEAL=PatternFill('solid',fgColor='1C6973');NEWF=PatternFill('solid',fgColor='CDEFD8');YEL=PatternFill('solid',fgColor='FFF4C2');PALE=PatternFill('solid',fgColor='EEF4F3')
 HEAD=Font(bold=True,color='FFFFFF');WRAP=Alignment(wrap_text=True,vertical='top');thin=Side(style='thin',color='C6D4D3')
@@ -41,6 +42,7 @@ rows=[('Zebra Shift: medical review sheet',),
 ('• "Emergency differentials" are the other diagnoses offered when the case appears as a timed emergency.',),
 ('• Use the filter arrows in the header row to show one rarity, system or status at a time.',),
 (f'• The {len(NEW)} cases with a green name were added most recently. Start with those if you have already reviewed the rest.',),
+('• "Specialty pool" shows which specialist sees the case. Generalist specialties (EM, GP, Internal Medicine, Anaesthesia, Pathology) see every pool. "False alarm" cases arrive as emergencies but are benign.',),
 ]
 for r in rows: ws.append(r)
 ws.column_dimensions['A'].width=120
@@ -60,10 +62,10 @@ def sheet(name,headers,widths):
     return w
 
 # ---- Cases
-H=['#','Disease','Rarity','System','Age range','Sex','Presenting complaint','HR','BP','RR','SpO₂ %','Temp °C','Monitor rhythm',
+H=['#','Disease','Rarity','System','Specialty pool','Age range','Sex','Presenting complaint','HR','BP','RR','SpO₂ %','Temp °C','Monitor rhythm',
    'History','Exam','Tests','Imaging','Shown as a picture first','Correct treatment','Wrong treatment options','Destination','Bedside procedures',
    'Also accepted as','Teaching point','Trick presentation','Looks like (mimic)','Emergency differentials','Status','Your correction']
-W=[5,30,11,15,9,8,40,6,9,6,8,8,14,48,42,42,40,30,36,40,16,18,22,48,40,22,40,14,50]
+W=[5,30,11,15,16,9,8,40,6,9,6,8,8,14,48,42,42,40,30,36,40,16,18,22,48,40,22,40,14,50]
 ws=sheet('Cases',H,W);ws.add_data_validation(status)
 order=sorted(range(len(D)),key=lambda i:(D[i]['t'],D[i]['n']))
 for n,i in enumerate(order,1):
@@ -71,7 +73,7 @@ for n,i in enumerate(order,1):
     pics='\n'.join(f"{CAT[c]} clue {k+1}: {KIND[READS[key]['k']]} ({READS[key]['o'][0]})" for c,k,key in READ_AT.get(x['n'],[])) or '—'
     trick=f"Walks in with: \"{m['cc']}\"\nVitals: HR {m['v'][0]}, BP {m['v'][1]}, RR {m['v'][2]}, SpO₂ {m['v'][3]}, T {m['v'][4]}\nThen: {'cardiac arrest' if m.get('turn')=='arrest' else 'crashes' if m.get('turn')=='crash' else 'stays the same'}" if m else '—'
     sex={'A':'Any','M':'Male','F':'Female'}[x['x']]
-    row=[n,x['n'],TIERS[x['t']],x['s'],f"{x['a'][0]}–{x['a'][1]}",sex,x['cc'],v[0],v[1],v[2],v[3],v[4],RHY.get(x.get('ecg') or 'sinus','Sinus'),
+    row=[n,x['n'],TIERS[x['t']],x['s'],POOLN.get(x.get('sp'),'Core (everyone)')+(' · false alarm' if x.get('fake') else ''),f"{x['a'][0]}–{x['a'][1]}",sex,x['cc'],v[0],v[1],v[2],v[3],v[4],RHY.get(x.get('ecg') or 'sinus','Sinus'),
          num(x['h']),num(x['e']),num(x['l']),num(x['i']),pics,x['tx'],'\n'.join('• '+w for w in x['w']),DISPO.get(x.get('dispo') or '', x.get('dispo') or '—'),
          ', '.join(PROCS.get(p,p) for p in (x.get('proc') or [])) or '—',', '.join(x.get('al') or []) or '—',x['p'],trick,x.get('mim') or '—',', '.join(DDX.get(x['n'],[])) or '(picked automatically)','','']
     ws.append(row);r=ws.max_row
