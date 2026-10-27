@@ -1919,7 +1919,320 @@ const D=[
  l:['WBC 15.1; amylase mildly raised (380 U/L)','Lactate 2.6 mmol/L'],
  i:['Erect chest X-ray: free gas under the right hemidiaphragm','CT abdomen: free gas and fluid around the duodenum'],
  tx:'Nil by mouth, IV fluids, PPI, antibiotics and emergency surgical repair',w:['Urgent endoscopy to find the ulcer','Oral antacids and discharge','IV octreotide alone'],al:['perforation','perforated ulcer','perforated duodenal ulcer','pneumoperitoneum','perforated viscus'],ecg:'sinus',pose:'pain',dispo:'theatre',
- p:'Sudden peritonitis with shoulder-tip pain and free gas under the diaphragm means a perforated viscus. A mildly raised amylase does not make it pancreatitis.'}
+ p:'Sudden peritonitis with shoulder-tip pain and free gas under the diaphragm means a perforated viscus. A mildly raised amylase does not make it pancreatitis.'},
+// ---- Expansion (late: kept out of the Case of the day so existing daily dates do not change)
+{n:'Hyperosmolar Hyperglycaemic State',t:0,s:'Endocrine',a:[60,88],x:'A',late:true,cc:'Family: Very drowsy, and drinking water all week.',v:[112,'102/64',20,96,37.4],
+ h:['Two weeks of thirst and passing large amounts of urine','Type 2 diabetes on metformin; recent chest infection','Increasingly muddled over three days'],
+ e:['Dry mucous membranes, sunken eyes, slow capillary refill','GCS 12; no focal neurology'],
+ l:['Glucose 48 mmol/L; serum osmolality 362 mOsm/kg','Ketones 0.8 mmol/L; pH 7.34, bicarbonate 20 mmol/L'],
+ i:['CT head: no acute abnormality'],
+ tx:'Slow IV 0.9% saline rehydration, insulin only once glucose stops falling with fluids, VTE prophylaxis',w:['High-dose insulin infusion before any fluids','Oral metformin and discharge','IV 3% hypertonic saline'],al:['HHS','HONK','hyperosmolar','hyperosmolar hyperglycemic state'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Very high glucose and osmolality without much ketosis: replace fluid first and bring sodium and glucose down slowly.'},
+{n:'Peritonsillar Abscess',t:0,s:'Infectious',a:[16,40],x:'A',late:true,cc:"My throat is killing me and I can't open my mouth properly.",v:[104,'128/80',18,98,38.6],
+ h:['Sore throat for five days, much worse on the left','Can barely swallow saliva','Voice sounds muffled, like a hot potato in the mouth'],
+ e:['Trismus; left peritonsillar swelling pushing the uvula to the right','Tender left neck nodes; no stridor'],
+ l:['WBC 17.4, CRP 140 mg/L','Monospot negative'],
+ i:['Intraoral ultrasound: 2.5 cm fluid collection above the left tonsil'],
+ tx:'Needle aspiration or incision and drainage, IV antibiotics and steroids',w:['Oral amoxicillin and discharge','Nebulised adrenaline and observe','IV aciclovir'],al:['quinsy','PTA','peritonsillar'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Trismus, a hot-potato voice and a deviated uvula separate a quinsy from simple tonsillitis.'},
+{n:'Acute Urinary Retention',t:0,s:'Renal/GU',a:[65,88],x:'M',late:true,cc:"I can't pass water and my belly is bursting.",v:[98,'162/92',18,98,36.8],
+ h:['Unable to pass urine for 12 hours','Years of a poor stream and getting up four times a night','Started a cold remedy with pseudoephedrine two days ago'],
+ e:['Tender, dull suprapubic mass reaching halfway to the umbilicus','Smooth, evenly enlarged prostate on rectal exam'],
+ l:['Creatinine 118 µmol/L (baseline 95)','Urinalysis after catheter: no infection'],
+ i:['Bladder scan: 1,100 mL in the bladder'],
+ tx:'Urethral catheter, stop the decongestant, start tamsulosin and plan a trial without catheter',w:['IV furosemide to make him pass urine','Oral fluids and discharge','CT KUB and analgesia only'],al:['urinary retention','AUR','retention'],ecg:'sinus',pose:'pain',dispo:'home',
+ p:'Decongestants and anticholinergics tip an enlarged prostate into retention. Drain first, then find the trigger.'},
+{n:'Deep Vein Thrombosis',t:0,s:'Cardiovascular',a:[30,80],x:'A',late:true,cc:'My left calf is swollen and sore.',v:[88,'134/82',16,98,37.2],
+ h:['Calf swelling over three days','Long-haul flight home five days ago','Knee arthroscopy a month ago'],
+ e:['Left calf 4 cm bigger than the right, with pitting oedema','Tender along the deep veins; Wells score 3'],
+ l:['D-dimer 2,400 ng/mL','Platelets and clotting normal'],
+ i:['Compression ultrasound: non-compressible left popliteal vein'],
+ tx:'Anticoagulation with a DOAC (e.g. apixaban) for at least three months',w:['Oral flucloxacillin for cellulitis','Compression stockings only','Rest and elevation, no treatment'],al:['DVT','venous thrombosis','popliteal DVT'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'A swollen, tender calf after travel or surgery is a DVT until the ultrasound says otherwise.'},
+{n:'Inhaled Foreign Body',t:0,s:'Respiratory',a:[1,4],x:'A',late:true,cc:'Parent: Choked on a peanut and has been coughing and wheezing since.',v:[132,'98/60',36,93,37.0],
+ h:['Sudden coughing fit while eating peanuts on the sofa','No fever or cold beforehand','A new wheeze that was never there before'],
+ e:['Wheeze and reduced air entry on the right only','No stridor; talking in short phrases'],
+ l:['Blood gas: mild respiratory alkalosis','WBC normal'],
+ i:['Inspiratory and expiratory chest X-rays: the right lung stays over-inflated on breathing out (air trapping)'],
+ tx:'Keep calm and upright, oxygen, urgent rigid bronchoscopy to remove it',w:['Salbutamol nebuliser and discharge','Oral antibiotics for pneumonia','Blind finger sweep of the mouth'],al:['foreign body','foreign body aspiration','aspirated foreign body','FB aspiration','peanut'],ecg:'sinus',pose:'resp',dispo:'theatre',
+ p:'A one-sided wheeze in a toddler after a choking episode is an inhaled foreign body, even if the X-ray looks normal.'},
+{n:'Influenza',t:0,s:'Infectious',a:[18,75],x:'A',late:true,cc:"I feel like I've been hit by a truck.",v:[106,'122/76',20,96,39.2],
+ h:['Fever, headache and aching all over that came on within hours','Dry cough; three people at work are off sick','Mid-winter, and skipped the flu jab'],
+ e:['Flushed and sweaty; chest clear','Throat mildly red; no rash or neck stiffness'],
+ l:['Nasal swab PCR: influenza A','WBC 5.2, CRP 24 mg/L'],
+ i:['Chest X-ray: clear'],
+ tx:'Supportive care; oseltamivir if high risk or within 48 hours; isolate',w:['IV ceftriaxone for meningitis','Oral amoxicillin','Admit to ICU'],al:['flu','influenza A'],ecg:'sinus',pose:'shiver',dispo:'home',
+ p:'Sudden fever and aching in flu season is influenza. If they get worse after getting better, look for a bacterial pneumonia.'},
+{n:'Scaphoid Fracture',t:0,s:'MSK/Skin',a:[16,40],x:'A',late:true,cc:'I fell on my outstretched hand skateboarding.',v:[88,'126/78',16,99,36.7],
+ h:['Fell onto an outstretched hand with the wrist bent back','Pain at the base of the thumb','Can move the wrist, but gripping hurts'],
+ e:['Tender in the anatomical snuffbox','Pain when the thumb is pushed along its length; scaphoid tubercle tender'],
+ l:['Blood tests normal, as expected for an injury'],
+ i:['Scaphoid-view X-rays: thin fracture line across the scaphoid waist'],
+ tx:'Below-elbow cast or splint and fracture clinic follow-up',w:['Crepe bandage and discharge with no follow-up','Emergency open surgery tonight','Sling and physiotherapy only'],al:['scaphoid','FOOSH','broken scaphoid'],ecg:'sinus',pose:'pain',dispo:'home',
+ p:'Snuffbox tenderness is treated as a scaphoid fracture even when the first X-ray is normal: a missed one can lose its blood supply.'},
+{n:'Anterior Shoulder Dislocation',t:0,s:'MSK/Skin',a:[18,40],x:'A',late:true,cc:'My shoulder popped out playing rugby.',v:[110,'138/84',18,99,36.8],
+ h:['Arm forced up and back in a tackle','The shoulder has dislocated once before','Holding the arm against the body, refusing to move it'],
+ e:['Squared-off shoulder with a hollow under the acromion; arm held slightly out and turned out','Sensation intact over the badge area; radial pulse present'],
+ l:['Blood tests not needed'],
+ i:['Shoulder X-ray: humeral head sits in front of and below the socket'],
+ tx:'Analgesia, closed reduction, sling, post-reduction X-ray and nerve check',w:['Sling and discharge without reduction','Emergency open surgery','Physiotherapy only'],al:['shoulder dislocation','dislocated shoulder','anterior dislocation'],ecg:'sinus',pose:'pain',dispo:'home',
+ p:'Check the axillary nerve before and after reduction: numbness over the badge area means it is injured.'},
+{n:'Transient Ischaemic Attack',t:0,s:'Neuro',a:[55,85],x:'A',late:true,cc:"My right arm went weak for twenty minutes, but it's fine now.",v:[82,'168/94',16,97,36.6],
+ h:['Right arm and face weakness with slurred speech, fully gone after 20 minutes','High blood pressure; smokes','Not on any blood thinners'],
+ e:['No neurological deficit now','Left carotid bruit; regular pulse'],
+ l:['ECG: sinus rhythm','Glucose 6.1 mmol/L; cholesterol raised'],
+ i:['CT head: normal','Carotid Doppler: 80% narrowing of the left internal carotid artery'],
+ tx:'Aspirin 300 mg now, statin, specialist review within 24 hours and carotid endarterectomy within two weeks',w:['Symptoms have gone, so discharge','Thrombolysis now','Start warfarin today'],al:['TIA','mini-stroke','transient ischemic attack'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Symptoms that fully resolve are still a warning. A tight carotid narrowing on the matching side needs surgery within two weeks.'},
+{n:'Complete Heart Block',t:0,s:'Cardiovascular',a:[65,90],x:'A',late:true,cc:'I keep blacking out.',v:[34,'92/58',18,96,36.5],
+ h:['Two collapses today without warning','Tired and short of breath on the stairs for a week','Takes no rate-slowing medicines'],
+ e:['Slow, regular pulse of 34; cannon waves in the neck veins','First heart sound varies in loudness'],
+ l:['ECG: P waves and QRS complexes march independently; broad escape rhythm','Potassium 4.4; troponin normal'],
+ i:['Chest X-ray: mildly enlarged heart'],
+ tx:'Atropine, then transcutaneous pacing as a bridge to a permanent pacemaker',w:['IV amiodarone','IV metoprolol','Discharge with a Holter monitor'],al:['CHB','third-degree heart block','third degree AV block','complete AV block','Stokes-Adams'],ecg:'chb',pose:'drowsy',dispo:'icu',
+ p:'Collapses with a pulse in the 30s and P waves unlinked to the QRS need pacing. Atropine often fails with a broad escape rhythm.'},
+{n:'Non-ST-Elevation Myocardial Infarction',t:0,s:'Cardiovascular',a:[50,85],x:'A',late:true,cc:"I've had chest tightness on and off since this morning.",v:[92,'152/88',18,97,36.7],
+ h:['Central chest pressure at rest, 20 minutes at a time','Type 2 diabetes and high cholesterol','Pain gone after a GTN spray'],
+ e:['Sweaty; heart sounds normal','No signs of heart failure'],
+ l:['ECG: ST depression and T-wave inversion in V4–V6','High-sensitivity troponin 64, then 310 ng/L'],
+ i:['Bedside echo: mild lateral wall hypokinesis'],
+ tx:'Aspirin, ticagrelor, anticoagulation and coronary angiography within 72 hours',w:['Immediate thrombolysis','Antacids and discharge','Pericardiocentesis'],al:['NSTEMI','non-ST elevation MI','NSTE-ACS'],ecg:'twinv',pose:'chest',dispo:'ward',
+ p:'A rising troponin without ST elevation is an NSTEMI: no thrombolysis, but early angiography.'},
+{n:'Hyperemesis Gravidarum',t:0,s:'Obstetric',a:[20,38],x:'F',late:true,cc:"I can't keep anything down, not even water.",v:[112,'104/66',18,99,36.9],
+ h:['Nine weeks pregnant','Vomiting 15 times a day for a week; lost 4 kg','Dizzy when standing'],
+ e:['Dry mouth; blood pressure drops on standing','Abdomen soft and not tender'],
+ l:['Urine ketones 4+; potassium 2.9 mmol/L','TSH mildly low, free T4 slightly high (normal in early pregnancy)'],
+ i:['Ultrasound: twin pregnancy in the uterus'],
+ tx:'IV fluids with potassium, antiemetics (cyclizine, ondansetron) and thiamine',w:['Carbimazole for hyperthyroidism','Ginger tablets and discharge','Laparoscopy for appendicitis'],al:['hyperemesis','HG'],ecg:'sinus',pose:'hunched',dispo:'ward',
+ p:'Twins and molar pregnancy raise hCG and drive hyperemesis. Give thiamine before glucose to prevent Wernicke encephalopathy.'},
+{n:'Pelvic Inflammatory Disease',t:0,s:'Obstetric',a:[17,35],x:'F',late:true,cc:'Low tummy pain and a funny discharge.',v:[98,'118/74',18,99,38.3],
+ h:['Lower abdominal pain on both sides for four days','New sexual partner; no condoms','Pain during sex and bleeding afterwards'],
+ e:['Tender low down on both sides','Cervical motion tenderness with purulent discharge'],
+ l:['Pregnancy test negative','NAAT swab: Chlamydia trachomatis'],
+ i:['Pelvic ultrasound: no tubo-ovarian abscess'],
+ tx:'IM ceftriaxone, then doxycycline and metronidazole for 14 days; contact tracing',w:['Laparoscopic appendicectomy','Oral nitrofurantoin','Methotrexate'],al:['PID','salpingitis'],ecg:'sinus',pose:'pain',dispo:'home',
+ p:'Cervical motion tenderness with a negative pregnancy test is PID until proven otherwise. Treat partners too.'},
+{n:'Mallory–Weiss Tear',t:0,s:'Gastro/Hepatic',a:[18,50],x:'A',late:true,cc:'I vomited blood after a big night out.',v:[96,'124/80',16,99,36.8],
+ h:['Retched again and again after binge drinking, then vomited streaks of bright red blood','Only a small amount; no black stools','No known liver disease'],
+ e:['Abdomen soft; mild upper abdominal tenderness','No signs of chronic liver disease'],
+ l:['Hb 142 g/L; urea normal','Glasgow-Blatchford score 1'],
+ i:['Endoscopy: small linear tear at the gastro-oesophageal junction, not bleeding'],
+ tx:'Antiemetic, PPI and discharge if stable',w:['Terlipressin and variceal banding','Emergency laparotomy','IV octreotide'],al:['Mallory-Weiss','Mallory Weiss tear','mucosal tear'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'Blood after forceful retching in a well patient is usually a Mallory–Weiss tear, which heals on its own.'},
+{n:'Mechanical Low Back Pain',t:0,s:'MSK/Skin',a:[25,55],x:'A',late:true,cc:'I bent down to lift a box and my back went.',v:[90,'130/80',16,99,36.6],
+ h:['Sudden pain lifting a box this morning','No saddle numbness; passing urine normally','No fever, weight loss or history of cancer'],
+ e:['Spasm and tenderness of the muscles beside the spine','Normal leg power, reflexes and perianal sensation'],
+ l:['Blood tests not needed'],
+ i:['No imaging needed: no red flags'],
+ tx:'Simple analgesia, keep moving, and safety-net advice on red flags',w:['Urgent MRI and neurosurgical referral','Bed rest for two weeks','IV antibiotics'],al:['back pain','lumbar strain','low back pain'],ecg:'sinus',pose:'pain',dispo:'home',
+ p:'No red flags, no scan. Teach the cauda equina warning signs before they go home.'},
+// ---- Uncommon (expansion)
+{n:'Infective Endocarditis',t:1,s:'Cardiovascular',a:[25,75],x:'A',late:true,cc:'Fevers and night sweats for three weeks.',v:[108,'116/62',18,97,38.8],
+ h:['Injects heroin','Weight loss and drenching night sweats','Painless red spots on the palms'],
+ e:['New pansystolic murmur, loudest at the left lower sternal edge','Splinter haemorrhages and Janeway lesions'],
+ l:['Three sets of blood cultures: Staphylococcus aureus','CRP 190 mg/L; blood on urine dipstick'],
+ i:['Echo: 1.5 cm vegetation on the tricuspid valve','Chest X-ray: several cavitating septic emboli'],
+ tx:'Blood cultures before antibiotics, then IV flucloxacillin for 4–6 weeks; cardiology and cardiac surgery review',w:['Oral amoxicillin for a week','Anticoagulation for the emboli','Discharge with outpatient follow-up'],al:['endocarditis','IE','tricuspid endocarditis','SBE'],ecg:'sinus',pose:'shiver',dispo:'ward',
+ p:'Fever with a new murmur is endocarditis until proven otherwise. Injecting drug use favours the tricuspid valve.'},
+{n:'Acute Severe Ulcerative Colitis',t:1,s:'Gastro/Hepatic',a:[18,45],x:'A',late:true,cc:"I'm going to the toilet with blood twelve times a day.",v:[112,'110/70',20,98,38.1],
+ h:['Known ulcerative colitis; stopped mesalazine two months ago','Bloody diarrhoea 10–12 times a day, including at night','Crampy lower abdominal pain'],
+ e:['Tender on the left side; not distended','Pale and dehydrated'],
+ l:['CRP 96 mg/L, Hb 98 g/L, albumin 28 g/L','Stool culture and C. difficile toxin negative'],
+ i:['Abdominal X-ray: colon 5 cm, not dilated'],
+ tx:'Admit, IV hydrocortisone, VTE prophylaxis and stool chart; rescue therapy or colectomy if no response',w:['Codeine and loperamide to slow the diarrhoea','Oral ciprofloxacin only','Colonoscopy with full bowel prep today'],al:['UC flare','ulcerative colitis','acute severe colitis','ASUC','colitis flare'],ecg:'sinus',pose:'hunched',dispo:'ward',
+ p:'Six or more bloody stools a day with fever or a fast pulse is acute severe colitis. Avoid antidiarrhoeals, which can trigger toxic megacolon.'},
+{n:'Sigmoid Volvulus',t:1,s:'Gastro/Hepatic',a:[70,92],x:'A',late:true,cc:"My belly has blown up like a balloon and I can't open my bowels.",v:[104,'128/76',20,96,36.9],
+ h:['Lives in a care home; long-standing constipation','No bowel movement or wind for three days','Takes antipsychotic medication'],
+ e:['Hugely distended, drum-like abdomen','Empty rectum; no peritonism'],
+ l:['Lactate 1.6 mmol/L','Potassium 3.2 mmol/L'],
+ i:['Abdominal X-ray: huge "coffee bean" loop rising out of the pelvis'],
+ tx:'Decompression by flexible sigmoidoscopy with a flatus tube; surgery if the bowel is ischaemic',w:['Oral laxatives and discharge','IV erythromycin','Barium meal'],al:['volvulus','coffee bean sign'],ecg:'sinus',pose:'hunched',dispo:'ward',
+ p:'A coffee-bean loop pointing to the right upper quadrant in an elderly, constipated patient is a sigmoid volvulus.'},
+{n:'Rhabdomyolysis',t:1,s:'MSK/Skin',a:[18,40],x:'A',late:true,cc:'My legs are agony and my pee looks like cola.',v:[108,'138/84',18,99,37.6],
+ h:['First spin class in years, two days ago','Took a lot of ibuprofen for the pain','Urine dark brown since yesterday'],
+ e:['Thighs swollen and very tender','Compartments soft; foot pulses present'],
+ l:['Creatine kinase 85,000 U/L','Dipstick: blood 3+ but no red cells on microscopy; creatinine 162 µmol/L'],
+ i:['Renal ultrasound: normal kidneys, no obstruction'],
+ tx:'Generous IV fluids aiming for good urine output, stop NSAIDs, watch potassium and kidney function',w:['Oral ibuprofen and rest','IV furosemide only','Discharge and repeat bloods in a week'],al:['rhabdo','exertional rhabdomyolysis'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Blood on the dipstick with no red cells under the microscope means myoglobin: rhabdomyolysis.'},
+{n:'Slipped Capital Femoral Epiphysis',t:1,s:'MSK/Skin',a:[10,15],x:'A',late:true,cc:'Parent: Limping for three weeks, and now says the knee hurts.',v:[86,'112/70',16,99,36.7],
+ h:['Knee pain and a limp for three weeks; no injury','Recent growth spurt; overweight','No fever'],
+ e:['Hip rests turned out, and turns out further when the hip is bent','Knee examination completely normal'],
+ l:['CRP and WBC normal'],
+ i:['Frog-leg lateral hip X-ray: femoral head slipped backwards off the neck'],
+ tx:'Stop weight-bearing now and urgent orthopaedic pinning',w:['Knee physiotherapy','Crutches and review in a month','IV antibiotics for septic arthritis'],al:['SCFE','SUFE','slipped upper femoral epiphysis'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Knee pain in a teenager can come from the hip. Always examine the hip.'},
+{n:'IgA Vasculitis (Henoch–Schönlein Purpura)',t:1,s:'Immune',a:[4,11],x:'A',late:true,cc:'Parent: A rash on the legs, and a sore tummy.',v:[96,'102/64',20,99,37.4],
+ h:['Sore throat two weeks ago','Rash on the backs of the legs and bottom','Painful, swollen ankles'],
+ e:['Raised purple rash over the buttocks and legs that does not blanch','Swollen, tender ankles; mild abdominal tenderness'],
+ l:['Platelets 320 (normal); clotting normal','Urine dipstick: blood 2+ and protein 1+'],
+ i:['Abdominal ultrasound: no intussusception'],
+ tx:'Supportive care and analgesia; check blood pressure and urine for months for kidney involvement',w:['Platelet transfusion','High-dose IV immunoglobulin','Oral antibiotics and discharge'],al:['HSP','Henoch-Schonlein purpura','IgA vasculitis','Henoch-Schönlein'],ecg:'sinus',pose:'alert',dispo:'home',
+ p:'Purpura on the legs with a normal platelet count, sore joints and tummy pain in a child is IgA vasculitis.'},
+{n:'Postpartum Haemorrhage',t:1,s:'Obstetric',a:[20,40],x:'F',late:true,cc:'Midwife: Still bleeding heavily since the birth.',v:[128,'86/50',24,97,36.6],
+ h:['Delivered a 4.4 kg baby an hour ago after a long labour','Placenta delivered complete','Soaking through pads in minutes'],
+ e:['Soft, boggy uterus above the umbilicus','Pale and clammy'],
+ l:['Hb 76 g/L; fibrinogen 1.8 g/L','Crossmatch sent'],
+ i:['Bedside ultrasound: no retained placenta'],
+ tx:'Call for help, rub up the uterus, oxytocin, ergometrine, tranexamic acid and blood products; theatre if it continues',w:['IV furosemide','Observe and repeat Hb in the morning','Oral iron and discharge'],al:['PPH','uterine atony','postpartum hemorrhage'],ecg:'sinus',pose:'drowsy',dispo:'theatre',
+ p:'Most PPH is a uterus that will not contract. Rub it up and give uterotonics while you resuscitate.'},
+{n:'ACE-Inhibitor Angioedema',t:1,s:'Immune',a:[45,80],x:'A',late:true,cc:'My lips and tongue have swollen up.',v:[96,'146/88',20,96,36.8],
+ h:['Has taken ramipril for three years','No new foods, stings or medicines','No itching or hives'],
+ e:['Swollen lips and tongue; voice slightly hoarse','No hives or wheeze'],
+ l:['Mast cell tryptase normal','C4 normal'],
+ i:['Nasendoscopy: swelling at the tongue base; airway open for now'],
+ tx:'Stop the ACE inhibitor for good, watch the airway with anaesthetics on standby; icatibant if severe',w:['Continue ramipril and add an antihistamine','Switch to enalapril','Adrenaline auto-injector and discharge'],al:['angioedema','ACE inhibitor angioedema','ACEi angioedema','bradykinin angioedema'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Angioedema without hives on an ACE inhibitor is driven by bradykinin. Adrenaline and antihistamines help little, and it can start years after the first dose.'},
+{n:'Tricyclic Antidepressant Overdose',t:1,s:'Toxicology',a:[18,60],x:'A',late:true,cc:'Paramedics: Took a box of amitriptyline. Getting drowsier.',v:[132,'88/54',14,95,37.5],
+ h:['Took 40 amitriptyline tablets four hours ago','Low mood after a break-up','Short seizure in the ambulance'],
+ e:['Big pupils, dry flushed skin, full bladder','GCS 10'],
+ l:['ECG: broad QRS of 140 ms with a tall R wave in aVR','Blood gas: pH 7.29'],
+ i:['Chest X-ray: no aspiration'],
+ tx:'IV sodium bicarbonate, protect the airway, benzodiazepines for seizures',w:['IV physostigmine to reverse the anticholinergic effects','IV amiodarone for the broad complexes','Activated charcoal and discharge'],al:['TCA overdose','amitriptyline overdose','tricyclic overdose','tricyclic toxicity'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A broad QRS and a big R in aVR after a tricyclic overdose means sodium-channel block: give sodium bicarbonate.'},
+{n:'Salicylate Overdose',t:1,s:'Toxicology',a:[16,60],x:'A',late:true,cc:'I took a lot of aspirin and now my ears are ringing.',v:[112,'124/76',30,98,37.8],
+ h:['Took 60 aspirin tablets six hours ago','Ringing in the ears and nausea','Feels hot and is breathing fast'],
+ e:['Deep, fast breathing; sweaty','Alert but restless'],
+ l:['Blood gas: respiratory alkalosis plus a high anion-gap metabolic acidosis','Salicylate level 620 mg/L'],
+ i:['Chest X-ray: clear'],
+ tx:'IV sodium bicarbonate to alkalinise the urine, replace potassium; haemodialysis if severe',w:['N-acetylcysteine only','Sedate and ventilate at a normal rate','Discharge after six hours'],al:['aspirin overdose','salicylate poisoning','salicylism'],ecg:'sinus',pose:'agitated',dispo:'icu',
+ p:'Tinnitus, fast breathing and a mixed alkalosis-acidosis point to aspirin. If you must ventilate, keep the rate high.'},
+{n:'Central Retinal Artery Occlusion',t:1,s:'Ophthalmic',a:[60,85],x:'A',late:true,cc:'I suddenly lost the sight in my left eye.',v:[84,'158/92',16,97,36.7],
+ h:['Painless, sudden loss of vision in the left eye 90 minutes ago','Atrial fibrillation; stopped their anticoagulant last month','No headache or jaw pain'],
+ e:['Can only see hand movements; relative afferent pupillary defect','Fundoscopy: pale retina with a cherry-red spot'],
+ l:['ESR 14 mm/h, CRP 3 mg/L (not giant cell arteritis)','ECG: atrial fibrillation'],
+ i:['Carotid Doppler: no significant narrowing'],
+ tx:'Urgent ophthalmology and stroke pathway (an eye stroke); restart anticoagulation',w:['Pilocarpine drops for glaucoma','Optician appointment and discharge','High-dose IV steroids for arteritis'],al:['CRAO','retinal artery occlusion','eye stroke'],ecg:'afib',pose:'alert',dispo:'ward',
+ p:'Painless sudden loss of vision in one eye with a cherry-red spot is a stroke of the retina. Rule out GCA, then look for the clot source.'},
+{n:'Orbital Cellulitis',t:1,s:'Ophthalmic',a:[3,14],x:'A',late:true,cc:'Parent: The eye has swollen shut and it hurts to move it.',v:[118,'104/66',22,99,38.9],
+ h:['Cold with a blocked nose last week','Eyelid swelling worse over 24 hours','Seeing double'],
+ e:['Bulging eye with painful, restricted movements','Colour vision reduced in that eye'],
+ l:['WBC 19.2, CRP 156 mg/L','Blood cultures taken'],
+ i:['CT orbits: ethmoid sinusitis with a subperiosteal abscess'],
+ tx:'IV antibiotics (e.g. ceftriaxone and metronidazole), urgent ENT and eye review; drain the abscess',w:['Oral co-amoxiclav and discharge','Antihistamine eye drops','Warm compresses only'],al:['postseptal cellulitis','post-septal cellulitis'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Pain on eye movement, a bulging eye or reduced vision separate orbital from preseptal cellulitis. It needs a CT and IV antibiotics.'},
+// ---- Rare (expansion)
+{n:'Acute Lymphoblastic Leukaemia',t:2,s:'Haematologic',a:[3,10],x:'A',late:true,cc:'Parent: Pale and tired for weeks, and bruising everywhere.',v:[124,'98/60',24,98,38.0],
+ h:['Bruises without injury; nosebleeds','Bone pain that wakes them at night','Fevers on and off for three weeks'],
+ e:['Pale; petechiae and bruises on the legs','Enlarged liver, spleen and lymph nodes'],
+ l:['Hb 68 g/L, platelets 18, WBC 86 ×10⁹/L','Blood film: many lymphoblasts'],
+ i:['Chest X-ray: no mediastinal mass'],
+ tx:'Paediatric oncology referral, bone marrow biopsy, fluids and allopurinol to prevent tumour lysis',w:['Oral iron and review in a month','Oral steroids for ITP and discharge','IV immunoglobulin for ITP'],al:['ALL','acute lymphoblastic leukemia','leukaemia','leukemia'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Bruising, pallor and fever with bone pain and a big liver and spleen in a child is leukaemia until the film says otherwise. No steroids before the diagnosis.'},
+{n:'Pneumocystis Pneumonia',t:2,s:'Infectious',a:[25,55],x:'A',late:true,cc:"I've been getting more breathless for three weeks, and my mouth is sore.",v:[112,'118/72',28,88,38.2],
+ h:['Dry cough and breathlessness worsening over three weeks','Lost 8 kg without trying','Never had an HIV test'],
+ e:['Oral thrush','Saturations fall from 92% to 82% on walking; chest almost clear'],
+ l:['HIV test positive; CD4 count 62 cells/µL','LDH raised; beta-D-glucan positive'],
+ i:['Chest X-ray: ground-glass shadowing around both hila'],
+ tx:'High-dose co-trimoxazole plus steroids (oxygen is low); start antiretrovirals within two weeks',w:['Ceftriaxone and azithromycin only','Inhaled steroids','Anticoagulation for a PE'],al:['PCP','PJP','pneumocystis','Pneumocystis jirovecii pneumonia'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Desaturation on walking with an almost clear chest and ground glass around the hila suggests PCP. Test everyone for HIV.'},
+{n:'Tumour Lysis Syndrome',t:2,s:'Metabolic',a:[20,70],x:'A',late:true,cc:"I started chemo two days ago and now I'm hardly passing urine.",v:[104,'142/86',20,97,37.1],
+ h:['First chemotherapy for Burkitt lymphoma two days ago','Muscle cramps and tingling around the mouth','Passing very little urine'],
+ e:['Positive Chvostek sign','Ankle swelling'],
+ l:['Potassium 6.9, phosphate 3.1, urate 0.89, calcium 1.7 mmol/L','Creatinine 312 µmol/L (normal before chemo)'],
+ i:['Renal ultrasound: no obstruction'],
+ tx:'Treat the high potassium, generous IV fluids, rasburicase; dialysis if needed',w:['Allopurinol alone and carry on with chemo','Oral potassium supplements','IV furosemide only'],al:['TLS','tumour lysis','tumor lysis syndrome'],ecg:'peaked',pose:'drowsy',dispo:'icu',
+ p:'High potassium, phosphate and urate with low calcium after chemotherapy is tumour lysis: fluids and rasburicase, and protect the heart.'},
+{n:'Metastatic Spinal Cord Compression',t:2,s:'Neuro',a:[55,80],x:'M',late:true,cc:'My back has hurt for weeks and now my legs feel heavy.',v:[88,'134/80',16,97,36.8],
+ h:['Prostate cancer diagnosed two years ago','Mid-back pain for six weeks, worse lying down','Legs weak and wobbly since yesterday; constipated'],
+ e:['Stiff, weak legs with brisk reflexes and upgoing plantars','Sensory level at T8'],
+ l:['PSA 180 ng/mL','Calcium 2.9 mmol/L'],
+ i:['Whole-spine MRI: T8 metastasis compressing the spinal cord'],
+ tx:'Dexamethasone 16 mg, urgent oncology and spinal surgery or radiotherapy within 24 hours',w:['Physiotherapy and analgesia','Lumbar puncture','Routine outpatient MRI'],al:['MSCC','cord compression','spinal cord compression'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'New back pain in someone with cancer needs a whole-spine MRI. Leg weakness makes it an emergency.'},
+{n:'Hypertrophic Cardiomyopathy',t:2,s:'Cardiovascular',a:[14,30],x:'A',late:true,cc:'I collapsed during football training.',v:[78,'118/72',16,99,36.7],
+ h:['Collapsed at the peak of a sprint and came round in seconds','An uncle died suddenly aged 32','Chest pain on exertion now and then'],
+ e:['Ejection systolic murmur that gets louder on standing or straining','Double apex beat'],
+ l:['ECG: very large voltages with deep T-wave inversion','Troponin normal'],
+ i:['Echo: 2.6 cm thick septum with outflow obstruction'],
+ tx:'No competitive sport, beta-blocker, cardiology review for an ICD, and screen the family',w:['Reassure: a simple faint','IV GTN for the chest pain','More fluids and back to sport'],al:['HCM','HOCM','hypertrophic obstructive cardiomyopathy'],ecg:'twinv',pose:'alert',dispo:'ward',
+ p:'Collapse during exercise is never a simple faint. A murmur that gets louder on standing suggests HOCM.'},
+{n:"Legionnaires' Disease",t:2,s:'Infectious',a:[45,80],x:'A',late:true,cc:'High fever, a cough, and now diarrhoea and confusion.',v:[96,'112/68',26,91,39.8],
+ h:['Back from a hotel holiday with an old air-conditioning system','Smoker','Watery diarrhoea and headache'],
+ e:['Confused; crackles at the left base','Pulse slow for such a high fever'],
+ l:['Sodium 126 mmol/L; ALT raised','Urine Legionella antigen positive'],
+ i:['Chest X-ray: left lower lobe consolidation'],
+ tx:'Clarithromycin or levofloxacin; notify public health',w:['IV amoxicillin alone','Oseltamivir only','Fluid restriction and discharge'],al:['legionella','Legionnaires','legionellosis'],ecg:'sinus',pose:'confused',dispo:'ward',
+ p:'Pneumonia with low sodium, diarrhoea, confusion and a hotel stay: think Legionella, which penicillins do not cover.'},
+{n:'Splenic Rupture',t:2,s:'Gastro/Hepatic',a:[16,25],x:'A',late:true,cc:'Sudden pain on the left side and I feel faint.',v:[124,'92/58',22,98,37.6],
+ h:['Diagnosed with glandular fever two weeks ago','Tackled playing rugby this afternoon','Pain at the tip of the left shoulder'],
+ e:['Tender left upper abdomen with guarding','Pale and clammy; dizzy on sitting up'],
+ l:['Hb 88 g/L','Monospot positive'],
+ i:['FAST scan: free fluid around the spleen','CT: splenic laceration with active bleeding'],
+ tx:'Resuscitate with blood, urgent surgical review for embolisation or splenectomy',w:['Analgesia and discharge','Upper GI endoscopy','Oral antibiotics'],al:['ruptured spleen','splenic injury','splenic laceration'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'No contact sport for weeks after glandular fever: the enlarged spleen can rupture. Left shoulder-tip pain (Kehr sign) means blood under the diaphragm.'},
+{n:'Beta-Blocker Overdose',t:2,s:'Toxicology',a:[25,70],x:'A',late:true,cc:'Paramedics: Took a whole bottle of propranolol. Heart rate dropping.',v:[38,'74/40',14,96,36.2],
+ h:['Swallowed 60 propranolol tablets two hours ago','Long history of depression','Dizzy, then a seizure'],
+ e:['Cold and clammy; GCS 12','Slow, faint pulse'],
+ l:['ECG: sinus bradycardia with first-degree heart block','Glucose 3.1 mmol/L'],
+ i:['Chest X-ray: no aspiration'],
+ tx:'Atropine, IV glucagon, high-dose insulin with glucose; pacing or ECMO if it fails',w:['IV amiodarone','Flumazenil','Activated charcoal and discharge'],al:['beta blocker overdose','propranolol overdose','beta-blocker poisoning'],ecg:'avblock',pose:'drowsy',dispo:'icu',
+ p:'A slow pulse, low blood pressure and low glucose after an overdose suggests a beta-blocker. Glucagon and high-dose insulin work around the blocked receptors.'},
+// ---- Zebra (expansion)
+{n:'Toxic Epidermal Necrolysis',t:3,s:'MSK/Skin',a:[20,70],x:'A',late:true,cc:'My skin is peeling off in sheets.',v:[118,'102/62',22,96,38.6],
+ h:['Started allopurinol for gout three weeks ago','Flu-like illness a few days before the rash','Painful mouth ulcers and sore red eyes'],
+ e:['Dusky red skin with blisters; skin slides off with light pressure (Nikolsky sign) over 40% of the body','Raw erosions on the lips, mouth and eyes'],
+ l:['Skin biopsy: full-thickness death of the epidermis','Urea raised; bicarbonate 18 mmol/L (SCORTEN 3)'],
+ i:['Chest X-ray: clear'],
+ tx:'Stop the culprit drug, transfer to a burns unit or ICU, fluids, wound and eye care',w:['Continue allopurinol and add an antihistamine','Oral flucloxacillin and discharge','Emollients and discharge'],al:['TEN','SJS/TEN','Stevens-Johnson','Lyell syndrome'],ecg:'sinus',pose:'pain',dispo:'icu',
+ p:'Painful skin that peels off, with mouth ulcers, weeks after a new drug is SJS/TEN. Stop the drug and treat it like a burn.'},
+{n:'Malignant Hyperthermia',t:3,s:'Metabolic',a:[10,40],x:'A',late:true,cc:'Anaesthetist: Temperature climbing fast in recovery, and the jaw is like iron.',v:[148,'96/58',30,92,40.4],
+ h:['General anaesthetic with sevoflurane and suxamethonium for knee surgery','A cousin once had a "reaction to the anaesthetic"','Jaw spasm when the anaesthetic started'],
+ e:['Generalised muscle rigidity','Hot, sweaty, mottled skin'],
+ l:['End-tidal CO₂ 9.5 kPa despite faster ventilation; potassium 6.4 mmol/L','Creatine kinase 24,000 U/L; mixed acidosis'],
+ i:['Chest X-ray: no aspiration'],
+ tx:'Stop the volatile agent, IV dantrolene, active cooling and treat the high potassium',w:['IV paracetamol only','More suxamethonium','Haloperidol'],al:['MH','malignant hyperpyrexia'],ecg:'sinus',pose:'rigid',dispo:'icu',
+ p:'Rising CO₂ and rigid muscles after a volatile anaesthetic or suxamethonium is malignant hyperthermia: dantrolene, and test the family.'},
+{n:'Fat Embolism Syndrome',t:3,s:'Respiratory',a:[18,40],x:'A',late:true,cc:'Ward nurse: Fine after the broken thigh bone, now confused and breathless.',v:[124,'118/70',30,86,38.3],
+ h:['Closed femoral shaft fracture from a motorbike crash two days ago','Still in traction, waiting for fixation','Confusion came on over a few hours'],
+ e:['Petechial rash over the chest, armpits and conjunctivae','Confused, with no focal signs'],
+ l:['Platelets falling (88); fat droplets in the urine','Blood gas: PaO₂ 7.1 kPa'],
+ i:['Chest X-ray: fluffy shadowing in both lungs','MRI brain: "starfield" pattern of tiny bright spots'],
+ tx:'Supportive care: oxygen or ventilation, fluids, and early fixation of the fracture',w:['Thrombolysis for a PE','IV aciclovir for encephalitis','Platelet transfusion and discharge'],al:['FES','fat embolism'],ecg:'sinus',pose:'confused',dispo:'icu',
+ p:'Breathlessness, confusion and petechiae one to three days after a long-bone fracture is fat embolism syndrome.'},
+{n:'Death Cap Mushroom Poisoning',t:3,s:'Toxicology',a:[25,70],x:'A',late:true,cc:"We picked wild mushrooms. I was sick, felt better, and now I'm yellow.",v:[108,'104/64',20,98,37.2],
+ h:['Ate foraged mushrooms in a stew three days ago','Severe vomiting and watery diarrhoea began 10 hours after the meal','Felt better for a day, then turned yellow'],
+ e:['Jaundiced, with a tender enlarged liver','Mild confusion and a liver flap'],
+ l:['ALT 6,800 U/L; INR 3.4','Urine alpha-amanitin detected'],
+ i:['Liver ultrasound: no obstruction'],
+ tx:'Activated charcoal, IV silibinin or N-acetylcysteine, and call the liver transplant centre',w:['Antiemetics and discharge: food poisoning','Atropine for muscarinic poisoning','ERCP for gallstones'],al:['amanita','death cap','amatoxin poisoning','Amanita phalloides','mushroom poisoning'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'Gut symptoms starting more than six hours after eating mushrooms, a false recovery, then liver failure: amatoxin.'},
+{n:'Lead Poisoning',t:3,s:'Toxicology',a:[2,6],x:'A',late:true,cc:'Parent: Tummy aches, constipation, and grumpier than ever.',v:[104,'104/64',20,99,36.8],
+ h:['Lives in an old house being renovated; flaking paint','Eats things that are not food (pica)','Has lost words they used to say'],
+ e:['Pale; vague abdominal tenderness','Irritable, with no focal neurology'],
+ l:['Blood film: microcytic anaemia with basophilic stippling','Blood lead level 72 µg/dL'],
+ i:['Abdominal X-ray: radio-opaque flecks in the bowel; dense "lead lines" at the knee growth plates'],
+ tx:'Remove the source, chelation (succimer, or EDTA if severe), and notify public health',w:['Oral iron alone','Laxatives and discharge','Appendicectomy'],al:['lead','plumbism','lead toxicity'],ecg:'sinus',pose:'hunched',dispo:'ward',
+ p:'Microcytic anaemia with basophilic stippling, tummy pain and pica in a toddler from an old house is lead.'},
+{n:'Decompression Sickness',t:3,s:'Metabolic',a:[20,55],x:'A',late:true,cc:'I came up from a dive and now my joints ache and my legs feel numb.',v:[96,'128/78',18,97,36.9],
+ h:['Two deep dives today; came up fast after running low on air','Shoulder and knee pain started an hour after surfacing','Tingling and weakness in both legs'],
+ e:['Mottled, itchy rash on the trunk','Patchy leg weakness and numbness'],
+ l:['Blood gas normal; haematocrit raised','Creatine kinase mildly raised'],
+ i:['Chest X-ray: no pneumothorax'],
+ tx:'100% oxygen, lie flat, IV fluids and urgent hyperbaric recompression',w:['Analgesia and discharge','Fly home today for treatment','Steroids for transverse myelitis'],al:['DCS','the bends','decompression illness','DCI'],ecg:'sinus',pose:'pain',dispo:'icu',
+ p:'Joint pain, a rash or neurology within hours of a dive is decompression illness: oxygen and recompression, and no flying.'},
+// ---- Unicorn (expansion)
+{n:'Tetrodotoxin (Pufferfish) Poisoning',t:4,s:'Toxicology',a:[25,70],x:'A',late:true,cc:"My lips went numb at dinner and now I can't lift my arms.",v:[58,'88/52',10,90,36.4],
+ h:['Ate home-prepared pufferfish (fugu) 40 minutes ago','Tingling started in the lips and tongue','Weakness spreading up from the legs'],
+ e:['Floppy paralysis climbing upwards; slurred speech','Fixed dilated pupils, yet fully aware of everything'],
+ l:['Blood gas: rising CO₂','Tetrodotoxin detected in serum and urine (result comes back days later)'],
+ i:['CT head: normal'],
+ tx:'Protect the airway and ventilate until it wears off (24–48 hours); activated charcoal',w:['Antivenom','Botulinum antitoxin','IV immunoglobulin for Guillain–Barré'],al:['TTX','fugu','pufferfish poisoning','tetrodotoxin','puffer fish'],ecg:'sinus',pose:'resp',dispo:'icu',proc:['intubate'],
+ p:'Lip numbness, then rising paralysis, soon after eating pufferfish is tetrodotoxin. Ventilate: patients can be paralysed yet fully conscious.'},
+{n:'Thallium Poisoning',t:4,s:'Toxicology',a:[25,60],x:'A',late:true,cc:'My feet burn like fire and my hair is coming out in clumps.',v:[112,'148/90',18,98,37.1],
+ h:['Severe tummy pain and vomiting two weeks ago','Burning pain in the feet, then the hands','Their partner recently took out life insurance on them'],
+ e:['Patchy hair loss; hair pulls out easily','Feet exquisitely tender; reflexes reduced'],
+ l:['24-hour urine thallium hugely raised','Nerve conduction: axonal sensorimotor neuropathy'],
+ i:['Abdominal X-ray: radio-opaque material in the bowel'],
+ tx:'Oral Prussian blue, laxatives, haemodialysis if severe, and tell the police',w:['IV immunoglobulin for Guillain–Barré','Topical minoxidil','Vitamin B12 injections'],al:['thallium','thallium toxicity','rat poison'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Painful neuropathy plus hair loss weeks after a gut illness is thallium until proven otherwise. Prussian blue binds it.'},
+{n:'Tick Paralysis',t:4,s:'Neuro',a:[2,8],x:'A',late:true,cc:"Parent: Wobbly yesterday, and today can't stand.",v:[96,'98/62',20,96,36.8],
+ h:['Camping in the woods last week','Unsteady walking yesterday; cannot stand today','No fever or recent infection'],
+ e:['Weakness climbing upwards with absent reflexes; sensation normal','Swollen tick hidden in the hair behind the ear'],
+ l:['CSF: normal protein and cells','Creatine kinase normal'],
+ i:['MRI spine: normal'],
+ tx:'Remove the whole tick: strength returns within hours',w:['IV immunoglobulin for Guillain–Barré','Plasma exchange','Antibiotics for Lyme disease'],al:['tick bite paralysis','tick'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Rising paralysis with normal CSF in a child back from the woods: search the scalp for a tick before giving immunoglobulin.'}
 ];
 // rhythm + bed pose for the original cases
 const EXTRA={'Acute Appendicitis':['sinus','pain'],'Community-Acquired Pneumonia':['sinus','shiver'],'ST-Elevation Myocardial Infarction':['stemi','chest'],'Acute Asthma Exacerbation':['sinus','resp'],'Acute Pyelonephritis':['sinus','shiver'],'Diabetic Ketoacidosis':['sinus','drowsy'],'Ureteric Colic':['sinus','pain'],'Cellulitis':['sinus','alert'],'Acute Cholecystitis':['sinus','pain'],'Pulmonary Embolism':['sinus','resp'],'Ischaemic Stroke':['afib','confused'],'Anaphylaxis':['sinus','resp'],'Acute Gout':['sinus','alert'],'Acute Pancreatitis':['sinus','hunched'],'Subarachnoid Haemorrhage':['twinv','drowsy'],'Aortic Dissection':['sinus','chest'],'Meningococcal Meningitis':['sinus','drowsy'],'Ruptured Ectopic Pregnancy':['sinus','pain'],'Thyroid Storm':['afib','agitated'],'Tension Pneumothorax':['sinus','resp'],'Ruptured Abdominal Aortic Aneurysm':['sinus','pain'],'Carbon Monoxide Poisoning':['sinus','confused'],'Testicular Torsion':['sinus','pain'],'Bleeding Peptic Ulcer':['sinus','drowsy'],'Acute Angle-Closure Glaucoma':['sinus','hunched'],'Addisonian Crisis':['peaked','drowsy'],'HSV Encephalitis':['sinus','confused'],'Guillain–Barré Syndrome':['sinus','alert'],'Necrotising Fasciitis':['sinus','pain'],'Phaeochromocytoma Crisis':['sinus','agitated'],'Thrombotic Thrombocytopenic Purpura':['sinus','confused'],'Kawasaki Disease':['sinus','shiver'],'Falciparum Malaria':['sinus','shiver'],'Boerhaave Syndrome':['sinus','chest'],'Methanol Poisoning':['sinus','confused'],'Cauda Equina Syndrome':['sinus','alert'],'Acute Intermittent Porphyria':['sinus','pain'],"Wilson's Disease":['sinus','confused'],'Tetanus':['sinus','rigid'],'Foodborne Botulism':['sinus','drowsy'],'Haemophagocytic Lymphohistiocytosis':['sinus','shiver'],'Rabies':['sinus','agitated'],'Hereditary Angioedema':['sinus','resp'],"Weil's Disease":['sinus','shiver'],'Scurvy':['sinus','alert'],'Creutzfeldt–Jakob Disease':['sinus','confused'],'Primary Amoebic Meningoencephalitis':['sinus','unconscious'],'Anti-NMDA Receptor Encephalitis':['sinus','agitated'],'Inhalational Anthrax':['sinus','resp'],'Grayanotoxin (Mad Honey) Poisoning':['avblock','drowsy']};
@@ -2013,6 +2326,21 @@ const DDX={
 const REL={'Cardiovascular':['Respiratory','Gastro/Hepatic'],'Respiratory':['Cardiovascular','Infectious','Immune'],'Neuro':['Toxicology','Metabolic','Endocrine','Infectious'],'Gastro/Hepatic':['Renal/GU','Obstetric','Cardiovascular'],'Renal/GU':['Gastro/Hepatic','Obstetric'],'Endocrine':['Metabolic','Toxicology','Neuro'],'Infectious':['Respiratory','Neuro','Haematologic','Immune'],'Haematologic':['Infectious','Immune'],'Immune':['Respiratory','Infectious','MSK/Skin'],'Toxicology':['Neuro','Metabolic','Endocrine'],'MSK/Skin':['Infectious','Immune'],'Obstetric':['Gastro/Hepatic','Renal/GU'],'Ophthalmic':['Neuro'],'Metabolic':['Endocrine','Toxicology','Neuro'],'Psychiatric':['Toxicology','Neuro','Endocrine']};
 D.forEach(d=>{const x=EXTRA[d.n];d.ecg=d.ecg||(x?x[0]:'sinus');d.pose=d.pose||(x?x[1]:'alert');d.dispo=d.dispo||DISPO[d.n]||'ward';d.proc=d.proc||PROC[d.n]||[]});
 const EXTRA_EMERG=['Urosepsis with Septic Shock','Acute Pulmonary Oedema','Variceal Upper GI Bleed','Hyperkalaemia','Organophosphate Poisoning','Heat Stroke','Dengue Shock Syndrome','Cholera','Accidental Hypothermia','Status Epilepticus','Eclampsia','Extradural Haematoma','Placental Abruption',"Ludwig's Angina",'Hantavirus Pulmonary Syndrome','Intussusception','Methaemoglobinaemia','Neutropenic Sepsis','Spinal Epidural Abscess','Myxoedema Coma','MDMA-Associated Hyponatraemia'];
+EXTRA_EMERG.push('Hyperosmolar Hyperglycaemic State','Inhaled Foreign Body','Complete Heart Block','Postpartum Haemorrhage','ACE-Inhibitor Angioedema','Tricyclic Antidepressant Overdose','Tumour Lysis Syndrome','Splenic Rupture','Beta-Blocker Overdose','Toxic Epidermal Necrolysis','Malignant Hyperthermia','Tetrodotoxin (Pufferfish) Poisoning');
+Object.assign(DDX,{
+ 'Hyperosmolar Hyperglycaemic State':['Diabetic Ketoacidosis','Hypoglycaemia','Ischaemic Stroke','Urosepsis with Septic Shock','Chronic Subdural Haematoma'],
+ 'Inhaled Foreign Body':['Acute Asthma Exacerbation','Croup','Acute Epiglottitis','Anaphylaxis','Community-Acquired Pneumonia'],
+ 'Complete Heart Block':['Vasovagal Syncope','Digoxin Toxicity','Beta-Blocker Overdose','Hyperkalaemia','Lyme Carditis'],
+ 'Postpartum Haemorrhage':['Placental Abruption','Ruptured Ectopic Pregnancy','Eclampsia','Toxic Shock Syndrome','Urosepsis with Septic Shock'],
+ 'ACE-Inhibitor Angioedema':['Anaphylaxis','Hereditary Angioedema',"Ludwig's Angina",'Acute Epiglottitis','Peritonsillar Abscess'],
+ 'Tricyclic Antidepressant Overdose':['Serotonin Syndrome','Opioid Overdose','Status Epilepticus','Neuroleptic Malignant Syndrome','Salicylate Overdose'],
+ 'Tumour Lysis Syndrome':['Hyperkalaemia','Hypercalcaemia of Malignancy','Neutropenic Sepsis','Rhabdomyolysis','Diabetic Ketoacidosis'],
+ 'Splenic Rupture':['Ruptured Ectopic Pregnancy','Ruptured Abdominal Aortic Aneurysm','Perforated Peptic Ulcer','Acute Pancreatitis','Infectious Mononucleosis'],
+ 'Beta-Blocker Overdose':['Complete Heart Block','Digoxin Toxicity','Opioid Overdose','Hyperkalaemia','Tricyclic Antidepressant Overdose'],
+ 'Toxic Epidermal Necrolysis':['Toxic Shock Syndrome','Necrotising Fasciitis','Meningococcal Meningitis','Anaphylaxis','Rocky Mountain Spotted Fever'],
+ 'Malignant Hyperthermia':['Neuroleptic Malignant Syndrome','Serotonin Syndrome','Heat Stroke','Thyroid Storm','MDMA-Associated Hyponatraemia'],
+ 'Tetrodotoxin (Pufferfish) Poisoning':['Foodborne Botulism','Ciguatera Fish Poisoning','Guillain–Barré Syndrome','Neurotoxic Snakebite (Krait)','Myasthenic Crisis']
+});
 const IDX=Object.fromEntries(D.map((d,i)=>[d.n,i]));
 const DISPO_OPTS=[['home','Discharge home','door'],['ward','Admit to ward','bed'],['icu','Admit to ICU','heart'],['theatre','Theatre / cath lab','scalpel']];
 const DISPO_NAME=Object.fromEntries(DISPO_OPTS.map(o=>[o[0],o[1]]));
@@ -2711,7 +3039,7 @@ function spawn(){
 // Cases a special guest can arrive with, limited to what this shift can already roll
 function cameoPool(r,emerg){
   const maxT=Math.min(4,1+Math.floor(r.shift/2));
-  return CAMEO_PT.filter(c=>IDX[c.d]!=null&&!r.cameos.includes(c.id)&&D[IDX[c.d]].t<=maxT&&(!emerg||EMERG.has(c.d)));
+  return CAMEO_PT.filter(c=>IDX[c.d]!=null&&!r.cameos.includes(c.id)&&!(S.meta.camRecent||[]).includes(c.id)&&!seenLately(c.d)&&D[IDX[c.d]].t<=maxT&&(!emerg||EMERG.has(c.d)));
 }
 function placePatient(p,front){
   const r=S.run,i=r.beds.findIndex(b=>!b);
@@ -2729,6 +3057,18 @@ function tierWeights(shift,minT){
   const base=[50,30,14,5,1],f=1+.3*(Math.min(shift,7)-1);
   return base.map((b,t)=>t<minT?0:b*Math.pow(f,t));
 }
+// Remember recent patients across runs, so the same diseases do not keep coming back
+function freshPick(pool,key){
+  const m=S.meta;m.recent=m.recent||{};const rec=m.recent[key]=m.recent[key]||[];
+  const recent=new Set(rec.slice(-Math.floor(pool.length*.6)));
+  let avail=pool.filter(i=>!recent.has(D[i].n));if(!avail.length)avail=pool;
+  const di=pick(avail);rec.push(D[di].n);if(rec.length>80)rec.splice(0,rec.length-80);
+  noteSeen(D[di].n);return di;
+}
+function noteSeen(n){const m=S.meta;m.recent=m.recent||{};const a=m.recent.all=m.recent.all||[];a.push(n);if(a.length>60)a.shift()}
+const seenLately=n=>((S.meta.recent||{}).all||[]).includes(n);
+// Special guests rest for a few runs after they visit
+function camSeen(id){const m=S.meta;noteSeen(CAMEO_PT_BY[id].d);m.camRecent=(m.camRecent||[]).filter(x=>x!==id);m.camRecent.push(id);if(m.camRecent.length>8)m.camRecent.shift()}
 function rollTier(shift,minT){
   const w=tierWeights(shift,minT),tot=w.reduce((a,b)=>a+b,0);
   let x=Math.random()*tot,t=0;for(;t<4;t++){if(x<w[t])break;x-=w[t]}
@@ -2738,20 +3078,17 @@ function makePatient(grand){
   const r=S.run;
   r.cameos=r.cameos||[];r.buff=r.buff||{};
   let di=null,cam=null;
-  if(!grand&&Math.random()<.16){const opts=cameoPool(r,false);if(opts.length){cam=pick(opts);di=IDX[cam.d];r.cameos.push(cam.id)}}
+  if(!grand&&Math.random()<.1){const opts=cameoPool(r,false);if(opts.length){cam=pick(opts);di=IDX[cam.d];r.cameos.push(cam.id);camSeen(cam.id)}}
   const sp=S.doctor&&SPECS[S.doctor.spec];
   if(di==null&&sp&&sp.focus&&Math.random()<.35){
     const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0,maxT=Math.max(minT,Math.min(4,1+Math.floor(r.shift/2)));
-    const fp=D.map((d,i)=>i).filter(i=>sp.focus(D[i])&&D[i].t>=minT&&D[i].t<=maxT);if(fp.length)di=pick(fp);
+    const fp=D.map((d,i)=>i).filter(i=>sp.focus(D[i])&&D[i].t>=minT&&D[i].t<=maxT);if(fp.length)di=freshPick(fp,'f'+S.doctor.spec);
   }
   if(di==null){
     const minT=grand?Math.min(3,1+Math.floor((r.shift-1)/2)):0;
     const t=rollTier(r.shift,minT);
     const pool=D.map((d,i)=>i).filter(i=>D[i].t===t);
-    r.used[t]=r.used[t]||[];
-    let avail=pool.filter(i=>!r.used[t].includes(i));
-    if(!avail.length){r.used[t]=[];avail=pool}
-    di=pick(avail);r.used[t].push(di);
+    di=freshPick(pool,'t'+t);
   }
   const d=D[di],m=mods(),b=r.buff;
   const sex=cam?cam.sex:d.x==='A'?(Math.random()<.5?'M':'F'):d.x;
@@ -3084,14 +3421,15 @@ function triggerEmergency(){
   const t=rollTier(r.shift,0);
   r.cameos=r.cameos||[];r.buff=r.buff||{};
   let di,cam=null;
-  const co=Math.random()<.22?cameoPool(r,true):[];
+  const co=Math.random()<.12?cameoPool(r,true):[];
   const spe=S.doctor&&SPECS[S.doctor.spec],fe=spe&&spe.focus&&Math.random()<.3?D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&spe.focus(D[i])):[];
-  if(co.length){cam=pick(co);di=IDX[cam.d];r.cameos.push(cam.id)}
-  else if(fe.length)di=pick(fe);
+  if(co.length){cam=pick(co);di=IDX[cam.d];r.cameos.push(cam.id);camSeen(cam.id)}
+  else if(fe.length)di=freshPick(fe,'emf'+S.doctor.spec);
   else{
     let pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n)&&D[i].t===t);
-    if(!pool.length)pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n));
-    di=pick(pool);
+    let key='em'+t;
+    if(!pool.length){pool=D.map((d,i)=>i).filter(i=>EMERG.has(D[i].n));key='em'}
+    di=freshPick(pool,key);
   }
   const d=D[di];
   const sex=cam?cam.sex:d.x==='A'?(Math.random()<.5?'M':'F'):d.x;

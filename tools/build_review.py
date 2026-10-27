@@ -9,11 +9,12 @@ from PIL import Image
 d=json.load(open('review/data.json'))
 D,MASK,READS,READ_AT,DDX,TIERS=d['D'],d['MASK'],d['READS'],d['READ_AT'],d['DDX'],d['TIERS']
 PROCS,DISPO=d['PROCS'],d['DISPO_NAME']
+NEW=set(d.get('NEW',[]))
 KIND={'ecg':'12-lead ECG','abg':'Blood gas','xr':'X-ray','mic':'Microscopy'}
 CAT={'h':'History','e':'Exam','l':'Tests','i':'Imaging'}
 RHY={'sinus':'Sinus','afib':'AF','stemi':'ST elevation','peaked':'Peaked T','twinv':'T inversion','brugada':'Brugada','osborn':'Osborn waves','chb':'Complete heart block','avblock':'Dropped beats','alternans':'Electrical alternans','pericarditis':'Pericarditis'}
 
-TEAL=PatternFill('solid',fgColor='1C6973');YEL=PatternFill('solid',fgColor='FFF4C2');PALE=PatternFill('solid',fgColor='EEF4F3')
+TEAL=PatternFill('solid',fgColor='1C6973');NEWF=PatternFill('solid',fgColor='CDEFD8');YEL=PatternFill('solid',fgColor='FFF4C2');PALE=PatternFill('solid',fgColor='EEF4F3')
 HEAD=Font(bold=True,color='FFFFFF');WRAP=Alignment(wrap_text=True,vertical='top');thin=Side(style='thin',color='C6D4D3')
 BOX=Border(left=thin,right=thin,top=thin,bottom=thin)
 num=lambda a:'\n'.join(f'{i+1}. {x}' for i,x in enumerate(a)) if a else '—'
@@ -24,8 +25,8 @@ ws=wb.active;ws.title='How to review'
 rows=[('Zebra Shift: medical review sheet',),
 ('',),
 ('What is here',),
-('• Cases: all 154 patients, with every clue, the correct and wrong treatments, the destination, the teaching point, and how trick cases first present.',),
-('• Pictures: all 37 ECGs, blood gases, X-rays and slides as the player sees them, with the answer options and the explanation shown afterwards.',),
+(f'• Cases: all {len(D)} patients, with every clue, the correct and wrong treatments, the destination, the teaching point, and how trick cases first present.',),
+(f'• Pictures: all {len(READS)} ECGs, blood gases, X-rays and slides as the player sees them, with the answer options and the explanation shown afterwards.',),
 ('',),
 ('How to mark it',),
 ('1. Use the Status column: OK, Needs change, or leave it blank if you have not looked yet.',),
@@ -39,6 +40,7 @@ rows=[('Zebra Shift: medical review sheet',),
 ('• "Trick presentation" is how some patients first walk in, looking like a simpler problem, before the real picture appears.',),
 ('• "Emergency differentials" are the other diagnoses offered when the case appears as a timed emergency.',),
 ('• Use the filter arrows in the header row to show one rarity, system or status at a time.',),
+(f'• The {len(NEW)} cases with a green name were added most recently. Start with those if you have already reviewed the rest.',),
 ]
 for r in rows: ws.append(r)
 ws.column_dimensions['A'].width=120
@@ -77,6 +79,7 @@ for n,i in enumerate(order,1):
     ws.cell(row=r,column=len(H)).fill=YEL
     if n%2==0:
         for c in ws[r][:len(H)-1]: c.fill=PALE
+    if x['n'] in NEW: ws.cell(row=r,column=2).fill=NEWF;ws.cell(row=r,column=2).font=Font(bold=True)
     status.add(ws.cell(row=r,column=len(H)-1))
 ws.auto_filter.ref=f"A1:{ws.cell(row=1,column=len(H)).column_letter}{ws.max_row}"
 red=PatternFill('solid',fgColor='F9D6D3');grn=PatternFill('solid',fgColor='D5EDDC')
