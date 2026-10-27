@@ -42,6 +42,7 @@ rows=[('Zebra Shift: medical review sheet',),
 ('• "Emergency differentials" are the other diagnoses offered when the case appears as a timed emergency.',),
 ('• Use the filter arrows in the header row to show one rarity, system or status at a time.',),
 (f'• The {len(NEW)} cases with a green name were added most recently. Start with those if you have already reviewed the rest.',),
+('• "Standards cross-match" lists every emergency in the five Indonesian specialist standards you sent and where it lives in the game. Green rows were added from those documents; red rows are not in the game yet, with the reason.',),
 ('• "Specialty pool" shows which specialist sees the case. Generalist specialties (EM, GP, Internal Medicine, Anaesthesia, Pathology) see every pool. "False alarm" cases arrive as emergencies but are benign.',),
 ]
 for r in rows: ws.append(r)
@@ -112,5 +113,28 @@ L=wp.cell(row=1,column=len(H2)-1).column_letter
 wp.conditional_formatting.add(f"{L}2:{L}{wp.max_row}",FormulaRule(formula=[f'{L}2="Needs change"'],fill=red))
 wp.conditional_formatting.add(f"{L}2:{L}{wp.max_row}",FormulaRule(formula=[f'{L}2="OK"'],fill=grn))
 wp.auto_filter.ref=f"A1:{wp.cell(row=1,column=len(H2)).column_letter}{wp.max_row}"
+# ---- Standards cross-match: emergencies from the Indonesian specialist standards against the game's cases
+import sys,os;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from crossmatch import ROWS
+TODAY=set(d.get('TODAY',[]))
+BYN={x['n']:x for x in D}
+miss=[c for r in ROWS for c in r[3] if c not in BYN]
+assert not miss,('cross-match names not in the game',miss)
+def where(n):
+    x=BYN[n]
+    if n in TODAY: return 'Added from these documents'
+    return (POOLN.get(x.get('sp'))+' pool') if x.get('sp') else 'Core game'
+HX=['Document','Section','Condition as written','Game case(s)','Where it is in the game','Note','Status','Your correction']
+wx=sheet('Standards cross-match',HX,[30,30,40,44,34,40,14,40]);wx.add_data_validation(status)
+GRN=PatternFill('solid',fgColor='CDEFD8');RED=PatternFill('solid',fgColor='F6D6D3')
+for doc,sec,cond,cases,note in ROWS:
+    wx.append([doc,sec,cond,'\n'.join(cases) or '—','\n'.join(sorted(set(where(c) for c in cases))) or 'Not in the game',note,'',''])
+    r=wx.max_row
+    for c in wx[r]: c.alignment=WRAP;c.border=BOX
+    wx.cell(row=r,column=len(HX)).fill=YEL
+    if not cases: wx.cell(row=r,column=5).fill=RED
+    elif any(c in TODAY for c in cases): wx.cell(row=r,column=5).fill=GRN
+    status.add(wx.cell(row=r,column=len(HX)-1))
+wx.auto_filter.ref=f"A1:H{wx.max_row}"
 out='/home/user/Dan-Claude/review/zebra-shift-medical-review.xlsx'
 import os;os.makedirs(os.path.dirname(out),exist_ok=True);wb.save(out);print('saved',out,os.path.getsize(out))

@@ -1684,7 +1684,7 @@ const D=[
  e:['Brisk reflexes with clonus','Right upper quadrant tenderness'],
  l:['Urine protein 3+','Platelets 90; ALT raised'],
  i:['Ultrasound: live fetus, no abruption'],
- tx:'IV magnesium sulfate, control BP, plan urgent delivery',w:['Phenytoin as first line','Diazepam and discharge','Wait for the due date'],al:['pre-eclampsia','eclampsia'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ tx:'IV magnesium sulfate, control BP, plan urgent delivery',w:['Phenytoin as first line','Diazepam and discharge','Wait for the due date'],al:['eclampsia','eklamsia','eclamptic seizure'],ecg:'sinus',pose:'drowsy',dispo:'icu',
  p:'Magnesium is the drug of choice for eclamptic seizures. Delivery is the cure.'},
 {n:'Extradural Haematoma',t:1,s:'Neuro',a:[16,40],x:'M',cc:'Hit by a cricket ball, now hard to wake.',v:[52,'188/100',10,96,36.8],
  h:['Hit on the side of the head two hours ago','Knocked out briefly, then felt fine and chatted','Now vomiting and drowsy'],
@@ -2716,7 +2716,308 @@ const D=[
  l:['Hb 88 g/L','Blood gas: lactate 5.0 mmol/L'],
  i:['FAST and chest X-ray: large left haemothorax'],
  tx:'Resuscitate with blood, insert a large chest drain; thoracotomy if over 1,500 mL drains at once',w:['Needle decompression only','Observe and repeat the X-ray tomorrow','IV fluids and discharge'],al:['haemothorax','hemothorax','traumatic haemothorax','hemotoraks'],ecg:'sinus',pose:'resp',dispo:'theatre',proc:['chestdrain'],
- p:'Dull to percussion with flat neck veins after chest trauma is blood, not air. Drain it, and watch how much comes out.'}
+ p:'Dull to percussion with flat neck veins after chest trauma is blood, not air. Drain it, and watch how much comes out.'},
+// ---- Added from the Indonesian specialist standards (KKI 62/2019 paediatrics, SNP SpJP 2018 cardiology,
+// SK neurologi 2015, Kurikulum SpOG FKUI 2025, KKI 73/2020 surgery). days: age in days for babies.
+// Paediatrics: neonatal and child emergencies
+{n:'Neonatal Sepsis',t:1,s:'Infectious',a:[0,0],days:[2,20],x:'A',late:true,sp:'paeds',cc:'Parent: Not feeding, floppy and cold to touch.',v:[182,'58/32',64,90,35.6],
+ h:['Born at 35 weeks after waters broke 30 hours before delivery','Mother had a fever in labour','Feeding poorly since yesterday'],
+ e:['Mottled, floppy and lethargic; capillary refill 5 seconds','Bulging fontanelle'],
+ l:['CRP 86 mg/L; WBC 3.1 ×10⁹/L; glucose 2.1 mmol/L','Blood culture: group B Streptococcus'],
+ i:['Chest X-ray: patchy shadowing on the right'],
+ tx:'Fluid bolus, correct glucose, IV ampicillin and gentamicin (add cefotaxime if meningitis), lumbar puncture when stable',w:['Oral amoxicillin and home','Observe on the postnatal ward','Phototherapy for jaundice'],al:['sepsis neonatorum','neonatal sepsis','early-onset sepsis','GBS sepsis'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A baby who stops feeding, goes floppy or gets cold may have sepsis. Treat quickly; fever is often absent in newborns.'},
+{n:'Neonatal Tetanus',t:2,s:'Infectious',a:[0,0],days:[5,14],x:'A',late:true,sp:'paeds',cc:'Parent: Stopped sucking two days ago, and now goes stiff when touched.',v:[168,'78/44',52,93,37.8],
+ h:['Born at home; cord cut with a bamboo blade and dressed with ash','Mother was never vaccinated against tetanus','Sucked well for the first five days'],
+ e:['Trismus and a fixed grin; spasms triggered by touch or noise','Arched back (opisthotonus); infected umbilical stump'],
+ l:['Glucose normal; CSF normal','Wound culture not needed for the diagnosis'],
+ i:['No imaging needed'],
+ tx:'Human tetanus immunoglobulin, metronidazole, cord care, diazepam for spasms in a dark quiet room; vaccinate the mother',w:['Antibiotics for meningitis and discharge','Phenobarbital alone for seizures','Calcium gluconate for hypocalcaemia'],al:['tetanus neonatorum','neonatal tetanus'],ecg:'sinus',pose:'rigid',dispo:'icu',proc:['intubate'],
+ p:'A newborn who feeds well, then stops sucking and develops spasms around day 7 has neonatal tetanus. Clean cord care and maternal vaccination prevent it.'},
+{n:'Vitamin K Deficiency Bleeding',t:2,s:'Haematologic',a:[0,0],days:[20,75],x:'A',late:true,sp:'paeds',cc:'Parent: Vomiting and drowsy, and the fontanelle is bulging.',v:[176,'70/38',44,96,36.9],
+ h:['Born at home and given no vitamin K injection','Exclusively breastfed','Small nosebleeds last week'],
+ e:['Drowsy with a tense, bulging fontanelle','Pale; bruises at the heel-prick site'],
+ l:['PT and APTT very prolonged; platelets normal','Hb 72 g/L'],
+ i:['CT head: intracranial haemorrhage'],
+ tx:'IV vitamin K and fresh frozen plasma (or prothrombin complex), neurosurgical review; give vitamin K at every birth',w:['Platelet transfusion only','Lumbar puncture for meningitis','Oral iron and discharge'],al:['VKDB','PDVK','haemorrhagic disease of the newborn','vitamin K deficiency'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A breastfed baby who missed vitamin K at birth can bleed into the brain weeks later. Prolonged PT with normal platelets is the clue.'},
+{n:'Acute Bilirubin Encephalopathy',t:1,s:'Gastro/Hepatic',a:[0,0],days:[3,7],x:'A',late:true,sp:'paeds',cc:'Parent: Very yellow, very sleepy, and now crying in a high pitch.',v:[158,'72/40',48,97,37.2],
+ h:['Discharged on day 2 with "mild jaundice"','Mother is blood group O, baby is A','Feeding poorly since yesterday'],
+ e:['Deep jaundice down to the soles of the feet','Arching of the neck and back; high-pitched cry'],
+ l:['Total serum bilirubin 480 µmol/L (28 mg/dL)','Direct Coombs test positive'],
+ i:['MRI brain (later): bright globus pallidus'],
+ tx:'Urgent exchange transfusion and intensive phototherapy, IV fluids; IVIG for immune haemolysis',w:['Sunlight exposure at home','Stop breastfeeding and wait','Oral phenobarbital only'],al:['kernicterus','bilirubin encephalopathy','ensefalopati bilirubin','severe neonatal jaundice'],ecg:'sinus',pose:'rigid',dispo:'icu',
+ p:'Jaundice with lethargy, a high-pitched cry and arching is bilirubin entering the brain. Exchange transfusion is the emergency treatment.'},
+{n:'Congenital Diaphragmatic Hernia',t:2,s:'Respiratory',a:[0,0],days:[1,1],x:'A',late:true,sp:'paeds',cc:'Midwife: Blue and grunting straight after birth; the belly looks flat.',v:[178,'48/26',72,64,36.4],
+ h:['No antenatal scans','Cyanosed from birth','Mask ventilation made it worse'],
+ e:['Scaphoid abdomen; heart sounds louder on the right','Absent breath sounds on the left'],
+ l:['Blood gas: pH 7.08, pCO₂ 9.8 kPa','Pre- and post-ductal saturation difference of 15%'],
+ i:['Chest X-ray: bowel loops in the left chest, heart pushed to the right'],
+ tx:'Intubate (no bag-mask ventilation), nasogastric tube to decompress the bowel, gentle ventilation, then surgery once stable',w:['Bag-mask ventilation','Chest drain into the left chest','Immediate surgery before stabilising'],al:['CDH','diaphragmatic hernia','hernia diafragmatika'],ecg:'sinus',pose:'resp',dispo:'icu',proc:['intubate'],
+ p:'A scaphoid abdomen with bowel in the chest is a diaphragmatic hernia. Avoid bag-mask ventilation, which inflates the bowel.'},
+{n:'Oesophageal Atresia with Tracheo-Oesophageal Fistula',t:2,s:'Gastro/Hepatic',a:[0,0],days:[1,2],x:'A',late:true,sp:'paeds',cc:'Midwife: Frothy saliva, and choking and blue with the first feed.',v:[164,'64/38',62,88,36.8],
+ h:['Polyhydramnios in pregnancy','Drooling frothy saliva since birth','Coughed and went blue at the first feed'],
+ e:['Copious secretions; crackles in the right lung','Distended abdomen'],
+ l:['Blood gas: mild respiratory acidosis','Glucose normal'],
+ i:['Chest X-ray: nasogastric tube coiled in the upper pouch; gas in the stomach (distal fistula)'],
+ tx:'Nil by mouth, continuous suction of the upper pouch (Replogle tube), head up, then surgical repair; screen for VACTERL',w:['Keep feeding with a smaller teat','Pass the tube harder until it goes down','Barium swallow'],al:['oesophageal atresia','esophageal atresia','TEF','tracheoesophageal fistula','atresia esofagus'],ecg:'sinus',pose:'resp',dispo:'theatre',
+ p:'Frothy saliva and choking at the first feed: try to pass a tube. If it coils in the chest, it is oesophageal atresia.'},
+{n:'Malrotation with Midgut Volvulus',t:2,s:'Gastro/Hepatic',a:[0,0],days:[3,25],x:'A',late:true,sp:'paeds',cc:'Parent: Vomiting green since this morning.',v:[176,'70/40',46,97,37.0],
+ h:['Was feeding well until today','Vomit is bright green (bilious)','Passing blood-stained stool'],
+ e:['Irritable; abdomen becoming distended and tender','Cool peripheries'],
+ l:['Lactate 4.6 mmol/L','Metabolic acidosis'],
+ i:['Upper GI contrast: duodenojejunal flexure on the right with a "corkscrew" duodenum'],
+ tx:'Resuscitate, nasogastric decompression and emergency Ladd\'s procedure',w:['Change the formula and discharge','Treat as gastroenteritis','Pyloromyotomy'],al:['malrotation','midgut volvulus','malrotasi'],ecg:'sinus',pose:'drowsy',dispo:'theatre',
+ p:'Bilious vomiting in a baby is malrotation with volvulus until proven otherwise. The bowel can die within hours.'},
+{n:'Hypertrophic Pyloric Stenosis',t:1,s:'Gastro/Hepatic',a:[0,0],days:[21,56],x:'M',late:true,sp:'paeds',cc:'Parent: Projectile vomiting after every feed, and still hungry.',v:[162,'84/52',40,99,36.9],
+ h:['Firstborn boy','Forceful non-bilious vomiting for a week','Hungry straight after vomiting; fewer wet nappies'],
+ e:['Visible peristalsis across the upper abdomen','Olive-shaped mass in the right upper abdomen after a test feed'],
+ l:['Blood gas: hypochloraemic hypokalaemic metabolic alkalosis (Cl 86, K 2.9, bicarbonate 34)','Glucose normal'],
+ i:['Ultrasound: pyloric muscle 5 mm thick and 20 mm long'],
+ tx:'Correct fluids and electrolytes first, then pyloromyotomy',w:['Emergency pyloromyotomy before correcting the alkalosis','Change to soy formula','Antireflux medication'],al:['pyloric stenosis','IHPS','stenosis pilorus'],ecg:'sinus',pose:'alert',dispo:'theatre',
+ p:'Projectile non-bilious vomiting in a hungry 3–6-week-old boy with metabolic alkalosis is pyloric stenosis. Fix the alkalosis before theatre.'},
+{n:'Necrotising Enterocolitis',t:2,s:'Gastro/Hepatic',a:[0,0],days:[7,21],x:'A',late:true,sp:'paeds',cc:'Nurse: Preterm baby with a swollen belly and blood in the nappy.',v:[184,'50/28',58,90,36.1],
+ h:['Born at 29 weeks','Formula feeds increased yesterday','Bile-stained aspirates'],
+ e:['Distended, tense abdomen with red shiny skin','Episodes of apnoea and bradycardia'],
+ l:['Platelets 48 ×10⁹/L; metabolic acidosis','CRP 120 mg/L'],
+ i:['Abdominal X-ray: pneumatosis intestinalis (gas in the bowel wall)'],
+ tx:'Stop feeds, nasogastric decompression, IV antibiotics and fluids; surgery if perforated',w:['Increase feeds to settle the baby','Oral antibiotics only','Glycerine suppository and observe'],al:['NEC','necrotizing enterocolitis','enterokolitis nekrotikans'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A preterm baby with abdominal distension, bloody stool and gas in the bowel wall has NEC. Stop the feeds.'},
+{n:'Djenkol Bean Poisoning',t:2,s:'Renal/GU',a:[6,40],x:'A',late:true,sp:'paeds',cc:'Cannot pee, and terrible pain in the belly and back after eating jengkol.',v:[110,'138/86',22,99,36.9],
+ h:['Ate a large plate of raw jengkol beans yesterday','Passing only drops of urine with blood','Pain in the loins and lower abdomen'],
+ e:['Breath and urine smell strongly of djenkol','Tender loins'],
+ l:['Urine microscopy: needle-shaped djenkolic acid crystals and red cells','Creatinine 220 µmol/L'],
+ i:['Ultrasound: no obstructing stone; swollen kidneys'],
+ tx:'IV fluids and sodium bicarbonate to alkalinise the urine (dissolves the crystals), analgesia; dialysis if anuric',w:['Antibiotics for a kidney infection','Emergency nephrostomy','Fluid restriction'],al:['jengkol poisoning','djenkolism','intoksikasi jengkol','jengkol','djenkol'],ecg:'sinus',pose:'pain',dispo:'ward',
+ p:'Kidney failure, bloody urine and a pungent smell after eating jengkol beans is djenkolism. Djenkolic acid crystallises in acid urine, so alkalinise.'},
+{n:'Near Drowning',t:1,s:'Respiratory',a:[2,14],x:'A',late:true,sp:'paeds',cc:'Parent: Pulled out of the pool after a few minutes. Coughing and breathless.',v:[148,'96/58',38,88,35.4],
+ h:['Found face-down in the pool, unsupervised, for 2–3 minutes','Bystander CPR for 1 minute, then coughed and cried','Vomited pool water'],
+ e:['Crackles in both lungs; working hard to breathe','GCS 14; cold'],
+ l:['Blood gas: pH 7.26, pO₂ 7.6 kPa','Electrolytes normal'],
+ i:['Chest X-ray: patchy bilateral infiltrates'],
+ tx:'Oxygen, CPAP or ventilation as needed, rewarm, observe for at least 8 hours; check the cervical spine if diving',w:['Discharge now they have stopped coughing','Prophylactic antibiotics only','Heimlich manoeuvre to drain the water'],al:['drowning','near-drowning','tenggelam'],ecg:'sinus',pose:'resp',dispo:'ward',
+ p:'Drowning is a hypoxic injury. Children who were submerged need oxygen and observation even when they look well, because lung injury can worsen.'},
+{n:'Non-Accidental Injury',t:2,s:'Neuro',a:[0,0],days:[60,240],x:'A',late:true,sp:'paeds',cc:'Parent: Rolled off the sofa and now will not wake properly.',v:[96,'112/68',22,97,36.8],
+ h:['The story changed twice between nurse and doctor','Delay of 12 hours before coming in','Not yet able to roll over'],
+ e:['Drowsy with a bulging fontanelle','Bruises on the chest and ears of different ages'],
+ l:['Clotting normal; platelets normal','Skeletal survey: healing posterior rib fractures'],
+ i:['CT head: subdural haematomas of different ages; fundoscopy shows widespread retinal haemorrhages'],
+ tx:'Treat the injuries, admit to keep the child safe, follow child-protection procedures and refer to social services',w:['Discharge home with head injury advice','Treat as a bleeding disorder and discharge','Confront and accuse the parents in the waiting room'],al:['NAI','child abuse','abusive head trauma','shaken baby','kekerasan pada anak'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'A story that does not fit the child\'s development, delay in seeking help, and bruises or fractures of different ages need a child-protection referral.'},
+{n:'Salt-Wasting Congenital Adrenal Hyperplasia',t:2,s:'Endocrine',a:[0,0],days:[7,21],x:'A',late:true,sp:'paeds',cc:'Parent: Vomiting and floppy, and losing weight.',v:[184,'54/30',50,97,36.4],
+ h:['Vomiting for three days; weight 15% below birth weight','Genitalia looked unusual at birth','Cousin died suddenly as a baby'],
+ e:['Severely dehydrated and lethargic','Ambiguous genitalia with clitoromegaly, or hyperpigmented scrotum'],
+ l:['Sodium 118, potassium 7.8 mmol/L; glucose 2.4 mmol/L','17-hydroxyprogesterone very high'],
+ i:['Pelvic ultrasound: uterus present'],
+ tx:'IV 0.9% saline bolus, IV hydrocortisone and dextrose; treat the hyperkalaemia; later fludrocortisone',w:['Treat as gastroenteritis with oral fluids','Potassium supplements','Pyloromyotomy'],al:['CAH','congenital adrenal hyperplasia','adrenal crisis neonate','21-hydroxylase deficiency','hiperplasia adrenal kongenital'],ecg:'peaked',pose:'drowsy',dispo:'icu',
+ p:'A vomiting baby with low sodium, high potassium and low glucose is in adrenal crisis until proven otherwise. Give hydrocortisone.'},
+{n:'Critical Coarctation of the Aorta',t:2,s:'Cardiovascular',a:[0,0],days:[3,14],x:'A',late:true,sp:'paeds',cc:'Parent: Grey, breathing fast and will not feed.',v:[188,'92/58',70,92,36.6],
+ h:['Discharged well on day 2','Got worse over 24 hours','Normal antenatal scans'],
+ e:['Weak or absent femoral pulses; blood pressure 92/58 in the right arm, 50/30 in the leg','Large liver; gallop rhythm'],
+ l:['Lactate 6.2 mmol/L; metabolic acidosis','Pre-ductal saturation 96%, post-ductal 82%'],
+ i:['Echo: tight coarctation with a closing ductus arteriosus'],
+ tx:'IV prostaglandin E1 to reopen the duct, inotropes, ventilation as needed, then surgical repair',w:['Oxygen at 100% and wait','IV antibiotics for sepsis only','Discharge with a cardiology appointment'],al:['coarctation','CoA','duct-dependent','koarktasio aorta','ductal-dependent lesion'],ecg:'sinus',pose:'resp',dispo:'icu',
+ p:'A baby who collapses in the first two weeks with weak femoral pulses has a duct-dependent heart lesion. Prostaglandin reopens the duct.'},
+{n:'Maple Syrup Urine Disease Crisis',t:3,s:'Metabolic',a:[0,0],days:[4,12],x:'A',late:true,sp:'paeds',cc:'Parent: Feeding poorly, now drowsy and the nappies smell sweet.',v:[156,'74/44',36,97,36.7],
+ h:['Well for the first three days','Poor feeding and vomiting','Parents are first cousins'],
+ e:['Lethargic; alternating floppiness and stiffness','Sweet, burnt-sugar smell to the urine and earwax'],
+ l:['Plasma amino acids: leucine and alloisoleucine very high','Urine ketones strongly positive; ammonia mildly raised'],
+ i:['MRI brain: oedema of the brainstem and cerebellar white matter'],
+ tx:'Stop protein, high-calorie IV glucose with insulin, specialist leucine-free formula, haemofiltration if severe',w:['Treat as sepsis alone','Increase normal formula','Phototherapy'],al:['MSUD','maple syrup urine disease','inborn error of metabolism','KMB'],ecg:'sinus',pose:'drowsy',dispo:'icu',
+ p:'A baby well for a few days who then becomes encephalopathic, with a sweet smell, has maple syrup urine disease. Stop protein and push calories.'},
+// Obstetrics & Gynaecology
+{n:'Severe Pre-eclampsia',t:0,s:'Obstetric',a:[18,42],x:'F',late:true,sp:'obgyn',cc:'Headache and flashing lights. I am 36 weeks pregnant.',v:[96,'172/114',20,96,36.9],
+ h:['36 weeks pregnant with her first baby','Severe frontal headache and flashing lights','Swollen face and hands this week'],
+ e:['Brisk reflexes with clonus','Crackles at both lung bases'],
+ l:['Urine protein:creatinine ratio 310 mg/mmol','Platelets 140; ALT 48 U/L; creatinine 98 µmol/L'],
+ i:['Fetal ultrasound: baby small for dates, reduced liquor'],
+ tx:'IV labetalol or nifedipine to lower blood pressure, magnesium sulphate to prevent fits, careful fluids, and plan delivery',w:['Paracetamol and discharge','IV fluid bolus for the oedema','Ergometrine for the birth'],al:['pre-eclampsia','preeclampsia','PEB','preeklamsia berat','severe preeclampsia'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Severe hypertension with headache or visual symptoms in pregnancy needs blood pressure control and magnesium to stop eclampsia. Delivery is the cure.'},
+{n:'Shoulder Dystocia',t:1,s:'Obstetric',a:[20,40],x:'F',late:true,sp:'obgyn',cc:'Midwife: Head delivered and pulled back in. The shoulders are stuck!',v:[122,'138/84',26,99,37.0],
+ h:['Gestational diabetes; baby estimated at 4.3 kg','Long second stage','Head delivered one minute ago'],
+ e:['"Turtle sign": the head retracts against the perineum','No restitution of the head'],
+ l:['No time for tests'],
+ i:['No time for imaging'],
+ tx:'Call for help, McRoberts manoeuvre with suprapubic pressure, then internal rotation or delivery of the posterior arm',w:['Pull harder on the head','Fundal pressure','Wait for the next contraction'],al:['shoulder dystocia','distosia bahu'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'The turtle sign means shoulder dystocia. McRoberts and suprapubic pressure solve most; never pull hard on the head or push on the fundus.'},
+{n:'Retained Placenta',t:1,s:'Obstetric',a:[20,42],x:'F',late:true,sp:'obgyn',cc:'Midwife: Baby born an hour ago, but the placenta still has not come.',v:[112,'106/66',20,99,36.9],
+ h:['Vaginal birth 60 minutes ago','Oxytocin given at delivery','Bleeding steadily since'],
+ e:['Uterus high and bulky','Cord does not lengthen with gentle traction'],
+ l:['Hb 94 g/L','Crossmatch 2 units'],
+ i:['Ultrasound: placenta still in the uterus'],
+ tx:'IV access and crossmatch, empty the bladder, then manual removal of the placenta under anaesthetic with antibiotics',w:['Pull firmly on the cord','Wait another three hours','Discharge to the postnatal ward'],al:['retensio plasenta','retained placenta','manual placenta'],ecg:'sinus',pose:'alert',dispo:'theatre',
+ p:'A placenta not delivered 30–60 minutes after birth is retained. Manual removal stops the bleeding; pulling hard on the cord can invert the uterus.'},
+{n:'Puerperal Sepsis',t:1,s:'Obstetric',a:[18,42],x:'F',late:true,sp:'obgyn',cc:'Fever and bad-smelling bleeding a week after giving birth.',v:[124,'94/56',26,96,39.3],
+ h:['Gave birth eight days ago after prolonged labour and many examinations','Foul-smelling lochia','Lower abdominal pain'],
+ e:['Tender, bulky uterus','Offensive discharge from the cervix'],
+ l:['WBC 22; lactate 3.8 mmol/L','High vaginal swab: group A Streptococcus'],
+ i:['Ultrasound: no retained products'],
+ tx:'Sepsis bundle: blood cultures, broad-spectrum IV antibiotics (e.g. co-amoxiclav plus gentamicin or clindamycin), fluids; remove any retained products',w:['Oral antibiotics and home','Paracetamol and review in a week','Restart the oxytocin'],al:['puerperal sepsis','endometritis','sepsis puerperalis','postpartum sepsis'],ecg:'sinus',pose:'shiver',dispo:'ward',
+ p:'Fever and foul lochia after childbirth is puerperal sepsis. Group A strep can kill fast; treat as sepsis.'},
+{n:'Imperforate Hymen with Haematocolpos',t:2,s:'Obstetric',a:[12,15],x:'F',late:true,sp:'obgyn',cc:'Parent: Monthly tummy pains for months, and now she cannot pee.',v:[102,'116/72',18,99,36.8],
+ h:['No periods yet, despite breast development two years ago','Cyclical lower abdominal pain every month','Urinary retention today'],
+ e:['Lower abdominal mass','Bulging bluish membrane at the vaginal opening'],
+ l:['Pregnancy test negative','Urinalysis normal'],
+ i:['Pelvic ultrasound: vagina distended with blood (haematocolpos)'],
+ tx:'Catheterise, then hymenotomy to drain the blood',w:['Hormone treatment to start periods','Laparoscopy for ovarian torsion','Analgesia and review in six months'],al:['haematocolpos','hematocolpos','imperforate hymen','hematometra','hymen imperforata'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Monthly pelvic pain without periods in a girl who has otherwise gone through puberty is an outflow obstruction: look for a bulging hymen.'},
+{n:'Haemorrhage from Cervical Cancer',t:1,s:'Obstetric',a:[35,70],x:'F',late:true,sp:'obgyn',cc:'Heavy bleeding that will not stop, and a smelly discharge for months.',v:[124,'88/54',24,98,37.1],
+ h:['Bleeding after sex for six months','Never had a cervical screening test','Weight loss'],
+ e:['Pale and clammy','Friable, bleeding mass replacing the cervix'],
+ l:['Hb 62 g/L','Creatinine raised (ureteric obstruction)'],
+ i:['MRI pelvis: cervical tumour spreading into the parametrium'],
+ tx:'Resuscitate with blood, vaginal packing soaked in a haemostatic solution, tranexamic acid; urgent radiotherapy or embolisation',w:['Hysterectomy tonight','Cervical biopsy and discharge','Oral iron and outpatient review'],al:['cervical cancer','cervical cancer bleeding','kanker serviks','carcinoma cervix'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Massive bleeding from advanced cervical cancer is controlled with packing, then radiotherapy or embolisation, not emergency surgery.'},
+// Cardiology
+{n:'Unstable Angina',t:0,s:'Cardiovascular',a:[45,80],x:'A',late:true,sp:'cardio',cc:'Chest pain at rest this morning. It used to come only on the stairs.',v:[86,'148/88',16,97,36.7],
+ h:['Angina on exertion for a year, now coming at rest','Three episodes this week, each 15 minutes','Smoker with high cholesterol'],
+ e:['Comfortable now','Normal heart sounds'],
+ l:['ECG: transient ST depression during pain','High-sensitivity troponin normal at 0 and 3 hours'],
+ i:['Coronary angiography: tight proximal LAD narrowing'],
+ tx:'Admit, aspirin and second antiplatelet, anticoagulation, beta-blocker, nitrates, and early angiography',w:['Discharge with a GTN spray','Thrombolysis','Exercise test today'],al:['UA','unstable angina','angina pektoris tidak stabil','UAP','crescendo angina'],ecg:'twinv',pose:'chest',dispo:'ward',
+ p:'New, worsening or rest angina with a normal troponin is unstable angina: an acute coronary syndrome that needs admission.'},
+{n:'Atrial Flutter',t:0,s:'Cardiovascular',a:[50,85],x:'A',late:true,sp:'cardio',cc:'My heart is racing, steady and fast, since last night.',v:[150,'124/80',18,96,36.8],
+ h:['Palpitations for 12 hours','Known COPD','No chest pain'],
+ e:['Regular pulse of exactly 150','Mild breathlessness'],
+ l:['ECG: sawtooth flutter waves in II, III and aVF with 2:1 block','Thyroid function normal'],
+ i:['Echo: normal function'],
+ tx:'Rate control (beta-blocker), anticoagulation by stroke risk, and cardioversion or ablation',w:['IV adenosine to cure it','Verapamil plus beta-blocker together','No anticoagulation is ever needed'],al:['flutter','atrial flutter','AFL'],ecg:'flutter',pose:'alert',dispo:'ward',
+ p:'A regular rate of exactly 150 should make you look for flutter waves. Adenosine only reveals them; it does not cure flutter.'},
+{n:'Cardiogenic Shock',t:1,s:'Cardiovascular',a:[50,85],x:'A',late:true,sp:'cardio',cc:'Paramedics: Heart attack six hours ago, now grey and confused.',v:[118,'72/48',30,88,36.0],
+ h:['Central chest pain since this morning; delayed coming in','Diabetic','Breathless and confused'],
+ e:['Cold, clammy, mottled skin','Crackles to the mid-zones; third heart sound'],
+ l:['ECG: anterior ST elevation','Lactate 6.1 mmol/L; troponin very high'],
+ i:['Echo: severely impaired left ventricle, no mechanical complication'],
+ tx:'Emergency revascularisation (PCI), noradrenaline with an inotrope such as dobutamine, ventilation as needed; mechanical support if refractory',w:['Large IV fluid boluses until the pressure rises','IV beta-blocker','Treat as sepsis'],al:['cardiogenic shock','syok kardiogenik','pump failure'],ecg:'stemi',pose:'drowsy',dispo:'theatre',
+ p:'Low blood pressure with cold, clammy skin and wet lungs after a heart attack is cardiogenic shock. Open the artery.'},
+{n:'Sick Sinus Syndrome',t:1,s:'Cardiovascular',a:[65,90],x:'A',late:true,sp:'cardio',cc:'Dizzy spells, and sometimes my heart races and then nearly stops.',v:[38,'108/70',16,97,36.6],
+ h:['Dizzy spells and two near-faints','Episodes of fast palpitations','Takes no rate-slowing drugs'],
+ e:['Pulse slow and irregular','Otherwise normal'],
+ l:['Holter: atrial fibrillation alternating with sinus pauses of 4 seconds','Thyroid function normal'],
+ i:['Echo: normal'],
+ tx:'Permanent pacemaker, then rate control and anticoagulation for the fast phases',w:['Beta-blocker alone','Discharge with reassurance','Amiodarone loading'],al:['SSS','sick sinus','tachy-brady syndrome','sinus node dysfunction','disfungsi nodus sinus'],ecg:'avblock',pose:'alert',dispo:'ward',
+ p:'Alternating fast and slow rhythms with pauses is tachy-brady syndrome. Rate control is only safe once a pacemaker is in.'},
+{n:'Traumatic Aortic Injury',t:2,s:'Cardiovascular',a:[20,60],x:'A',late:true,sp:'cardio',cc:'Paramedics: High-speed car crash. Chest pain and back pain.',v:[112,'98/62',24,94,36.4],
+ h:['Head-on collision at 100 km/h','Hit the steering wheel','Pain between the shoulder blades'],
+ e:['Different blood pressure in the two arms','Seatbelt bruise across the chest'],
+ l:['Hb 110 g/L','Lactate 3.0 mmol/L'],
+ i:['Chest X-ray: widened mediastinum','CT angiogram: aortic injury at the isthmus with a contained haematoma'],
+ tx:'Keep systolic pressure 100–120 with beta-blockade, and urgent endovascular stent graft',w:['Raise the blood pressure with fluids','Discharge with analgesia','Thrombolysis'],al:['aortic transection','blunt aortic injury','traumatic aortic rupture','trauma aorta'],ecg:'sinus',pose:'chest',dispo:'theatre',
+ p:'A rapid-deceleration injury with a widened mediastinum may be a contained aortic tear. Keep the pressure low and repair it fast.'},
+{n:'Anticoagulant-Associated Bleeding',t:0,s:'Haematologic',a:[60,90],x:'A',late:true,sp:'cardio',cc:'I have been vomiting blood and my stools are black. I take warfarin.',v:[118,'92/58',22,97,36.6],
+ h:['On warfarin for a mechanical heart valve','Recent course of an antibiotic','Black stools for two days'],
+ e:['Pale and clammy','Bruises on both arms'],
+ l:['INR 8.6; Hb 74 g/L','Urea raised'],
+ i:['Endoscopy: bleeding duodenal ulcer'],
+ tx:'Stop warfarin, give IV vitamin K and prothrombin complex concentrate, transfuse, endoscopic treatment; plan safe restart with cardiology',w:['Hold one dose of warfarin and discharge','Give platelets only','Restart warfarin at double dose'],al:['warfarin bleeding','over-anticoagulation','anticoagulant bleeding','perdarahan antikoagulan','high INR bleed'],ecg:'sinus',pose:'drowsy',dispo:'ward',
+ p:'Major bleeding on warfarin needs vitamin K plus prothrombin complex. Antibiotic courses are a common cause of a sudden INR rise.'},
+{n:'Pulmonary Arterial Hypertension Crisis',t:2,s:'Cardiovascular',a:[20,50],x:'F',late:true,sp:'cardio',cc:'I collapsed on the stairs and my lips go blue.',v:[118,'92/66',28,86,36.7],
+ h:['Breathless on exertion for a year','Fainted while climbing stairs','Took diet pills years ago'],
+ e:['Loud second heart sound; right ventricular heave','Raised neck veins; liver large; ankle oedema'],
+ l:['NT-proBNP very raised','ECG: right axis deviation and right ventricular strain'],
+ i:['Echo: dilated right ventricle; estimated pulmonary pressure 85 mmHg'],
+ tx:'Specialist care: oxygen, careful diuresis, pulmonary vasodilators; avoid intubation and fluid overload if possible',w:['Large IV fluid bolus','Beta-blocker for the fast pulse','Discharge with an inhaler'],al:['PAH','pulmonary hypertension','hipertensi pulmoner','right heart failure'],ecg:'sinus',pose:'resp',dispo:'icu',
+ p:'Exertional syncope with a loud P2 and a failing right ventricle suggests pulmonary hypertension. The right ventricle tolerates neither fluid overload nor intubation well.'},
+// Neurology
+{n:'Acute Subdural Haematoma',t:1,s:'Neuro',a:[60,90],x:'A',late:true,sp:'neuro',cc:'Family: Fell down the stairs, was talking, now hard to wake.',v:[58,'188/96',10,95,36.6],
+ h:['Fell down the stairs three hours ago','Takes aspirin and clopidogrel','Talked at first, then became drowsy'],
+ e:['GCS 9; right pupil dilated and sluggish','Left-sided weakness'],
+ l:['Platelet function impaired','INR normal'],
+ i:['CT head: right crescent-shaped acute subdural haematoma with midline shift'],
+ tx:'Protect the airway, give platelets if on antiplatelets, mannitol or hypertonic saline, and urgent craniotomy',w:['Observe overnight','Lumbar puncture','Thrombolysis'],al:['ASDH','acute subdural','acute subdural hematoma','perdarahan subdural akut'],ecg:'sinus',pose:'unconscious',dispo:'theatre',proc:['intubate'],
+ p:'Raised blood pressure, slow pulse and irregular breathing (Cushing\'s triad) with a blown pupil means coning. A crescent-shaped bleed is subdural.'},
+{n:'Traumatic Spinal Cord Injury',t:1,s:'Neuro',a:[18,50],x:'A',late:true,sp:'neuro',cc:'Paramedics: Fell from a scaffold. Cannot move the legs.',v:[52,'82/46',18,96,36.2],
+ h:['Fell 4 metres onto the back','Neck pain','No feeling below the chest'],
+ e:['Flaccid legs, absent reflexes, sensory level at T4','Warm, pink feet despite low blood pressure (neurogenic shock)'],
+ l:['Lactate normal','Hb normal'],
+ i:['CT spine: T3–T4 fracture-dislocation','MRI: cord contusion'],
+ tx:'Spinal immobilisation, fluids then vasopressors for neurogenic shock, atropine for bradycardia, urgent spinal surgery',w:['Sit the patient up to help breathing','Large-volume fluids only','Walk the patient to test strength'],al:['spinal cord injury','SCI','neurogenic shock','cedera medula spinalis'],ecg:'sinus',pose:'alert',dispo:'theatre',
+ p:'Low blood pressure with a slow pulse and warm skin after spinal trauma is neurogenic shock. Still look for bleeding first.'},
+{n:'Cerebral Malaria',t:2,s:'Infectious',a:[3,45],x:'A',late:true,sp:'neuro',cc:'Family: Fever for a week, now fitting and not waking.',v:[124,'104/64',30,95,39.8],
+ h:['Returned from Papua two weeks ago','Fever and rigors for a week','Two seizures today'],
+ e:['GCS 7; no neck stiffness','Retinal whitening and haemorrhages on fundoscopy'],
+ l:['Thick film: Plasmodium falciparum, 8% parasitaemia','Glucose 2.4 mmol/L; lactate 5.2 mmol/L'],
+ i:['CT head: diffuse brain swelling'],
+ tx:'IV artesunate, treat seizures and low glucose, protect the airway; avoid steroids',w:['Oral chloroquine','Dexamethasone for the swelling','Antibiotics for meningitis alone'],al:['cerebral malaria','malaria serebral','severe malaria'],ecg:'sinus',pose:'unconscious',dispo:'icu',
+ p:'Coma with falciparum parasites is cerebral malaria. Give IV artesunate and check the glucose often.'},
+{n:'Hypokalaemic Periodic Paralysis',t:1,s:'Neuro',a:[15,35],x:'M',late:true,sp:'neuro',cc:'Woke up and could not move my arms or legs.',v:[78,'124/78',16,98,36.7],
+ h:['Big carbohydrate meal and heavy exercise yesterday','Similar milder episode last year','Father had the same problem'],
+ e:['Flaccid weakness of all four limbs, worse proximally','Reflexes reduced; sensation normal'],
+ l:['Potassium 1.9 mmol/L','Thyroid function normal'],
+ i:['ECG: U waves and flattened T waves'],
+ tx:'Careful potassium replacement with cardiac monitoring (risk of rebound high potassium), avoid triggers; acetazolamide for prevention',w:['IVIG for Guillain–Barré','Large IV dextrose infusion','Steroids'],al:['hypokalemic periodic paralysis','familial periodic paralysis','paralisis periodik hipokalemik','HypoPP'],ecg:'sinus',pose:'alert',dispo:'ward',
+ p:'Sudden flaccid weakness on waking after a carbohydrate load, with very low potassium, is periodic paralysis. Check the thyroid too.'},
+{n:'Hepatic Encephalopathy',t:1,s:'Gastro/Hepatic',a:[40,75],x:'A',late:true,sp:'neuro',cc:'Family: Confused and sleepy for two days. He drinks heavily.',v:[96,'106/64',18,96,37.2],
+ h:['Known alcohol-related cirrhosis','Constipated for five days','Recent upper GI bleed'],
+ e:['Flapping tremor (asterixis); jaundice; spider naevi','Disorientated; drowsy'],
+ l:['Ammonia raised; sodium 129 mmol/L','Ascitic tap: no infection'],
+ i:['CT head: no bleed'],
+ tx:'Find and treat the trigger, lactulose to two or three soft stools a day, rifaximin; avoid sedatives',w:['Benzodiazepines for agitation','High-protein restriction to zero for weeks','Discharge with a laxative'],al:['HE','hepatic encephalopathy','portosystemic encephalopathy','ensefalopati hepatik'],ecg:'sinus',pose:'confused',dispo:'ward',
+ p:'Confusion with asterixis in cirrhosis is hepatic encephalopathy. Always look for the trigger: bleeding, infection, constipation or drugs.'},
+{n:'Malignant Middle Cerebral Artery Infarction',t:2,s:'Neuro',a:[40,60],x:'A',late:true,sp:'neuro',cc:'Family: Weak on one side yesterday; today much sleepier.',v:[64,'176/96',14,95,37.3],
+ h:['Large left-sided stroke 30 hours ago','Outside the window for clot treatment','Getting drowsier'],
+ e:['Right hemiplegia, aphasia and gaze deviation','GCS falling to 9; vomiting'],
+ l:['Glucose 8.1 mmol/L','Clotting normal'],
+ i:['CT head: whole left MCA territory infarcted with swelling and midline shift'],
+ tx:'Decompressive hemicraniectomy within 48 hours (in younger patients), head up, treat raised pressure',w:['Thrombolysis now','Lumbar puncture','Discharge for rehabilitation'],al:['malignant MCA','malignant MCA infarction','space-occupying infarct','stroke iskemik luas'],ecg:'sinus',pose:'drowsy',dispo:'theatre',
+ p:'A large MCA stroke can swell and cone over 2–4 days. Decompressive surgery saves lives in younger patients.'},
+// Surgery and trauma
+{n:'Pelvic Fracture with Haemorrhagic Shock',t:1,s:'MSK/Skin',a:[18,70],x:'A',late:true,sp:'surg',cc:'Paramedics: Motorbike versus truck. Pelvis pain, pressure dropping.',v:[138,'74/40',30,94,35.8],
+ h:['Motorbike crash 40 minutes ago','Pain in the pelvis and groin','No external bleeding'],
+ e:['Pelvis unstable; leg lengths unequal','Pale, cold and confused'],
+ l:['Hb 76 g/L; lactate 6.8 mmol/L','Crossmatch 6 units; activate massive transfusion'],
+ i:['Pelvic X-ray: open-book pelvic fracture','FAST: no free fluid in the abdomen'],
+ tx:'Pelvic binder, massive transfusion with tranexamic acid, then angiographic embolisation or preperitoneal packing',w:['Repeatedly rock the pelvis to check stability','Large crystalloid volumes only','Urinary catheter before checking the meatus'],al:['pelvic fracture','open book pelvis','haemorrhagic shock','fraktur pelvis'],ecg:'sinus',pose:'drowsy',dispo:'theatre',
+ p:'An unstable pelvis can hide litres of blood. Bind it once, transfuse, and do not spring it again.'},
+{n:'Major Burns with Inhalation Injury',t:1,s:'MSK/Skin',a:[18,60],x:'A',late:true,sp:'surg',cc:'Paramedics: House fire. Trapped in a smoke-filled room.',v:[124,'108/66',28,92,36.4],
+ h:['Trapped in a burning room for 10 minutes','Hoarse voice','Coughing black sputum'],
+ e:['Singed nasal hairs, soot in the mouth, stridor beginning','Full-thickness burns to 40% of the body'],
+ l:['Carboxyhaemoglobin 18%','Lactate 3.4 mmol/L'],
+ i:['Nasendoscopy: swollen, sooty airway'],
+ tx:'Early intubation before the airway swells, 100% oxygen, Parkland fluid resuscitation, burns-unit transfer',w:['Wait for stridor to worsen before intubating','Fluid restriction','Apply ice to the burns'],al:['burns','inhalation injury','major burns','luka bakar','trauma inhalasi'],ecg:'sinus',pose:'resp',dispo:'icu',proc:['intubate'],
+ p:'Hoarseness, soot and singed hair after a fire mean airway burns. Intubate early, before swelling makes it impossible.'},
+{n:'Posterior Urethral Injury',t:1,s:'Renal/GU',a:[18,60],x:'M',late:true,sp:'surg',cc:'Fell astride a beam. There is blood at the tip of my penis and I cannot pee.',v:[104,'118/72',20,98,36.8],
+ h:['Pelvic crush in a fall at work','Unable to pass urine','Blood at the urethral opening'],
+ e:['Blood at the urethral meatus; scrotal and perineal bruising','High-riding prostate on rectal exam'],
+ l:['Hb 112 g/L','Urine cannot be obtained'],
+ i:['Retrograde urethrogram: contrast leaking from the posterior urethra'],
+ tx:'Do not pass a urethral catheter; suprapubic catheter (cystostomy) and urology referral',w:['Force a urethral catheter','Encourage oral fluids','Discharge with antibiotics'],al:['urethral injury','urethral rupture','trauma uretra','posterior urethral rupture'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Blood at the meatus after pelvic trauma means a urethral injury until a urethrogram says otherwise. No urethral catheter.'},
+{n:'Penetrating Abdominal Trauma',t:1,s:'Gastro/Hepatic',a:[18,45],x:'A',late:true,sp:'surg',cc:'Paramedics: Stabbed in the belly. Bowel is coming out.',v:[128,'86/52',26,96,36.5],
+ h:['Stab wound to the left upper abdomen 30 minutes ago','Knife not retained','Feels faint'],
+ e:['Loops of small bowel eviscerated through the wound','Generalised tenderness and guarding'],
+ l:['Hb 92 g/L; lactate 4.1 mmol/L','Crossmatch 4 units'],
+ i:['FAST: free fluid in the left upper quadrant'],
+ tx:'Cover the bowel with moist sterile dressings, resuscitate with blood, antibiotics and tetanus cover, and emergency laparotomy',w:['Push the bowel back in and suture','CT scan before any resuscitation','Observe and repeat FAST tomorrow'],al:['abdominal stab wound','penetrating abdominal injury','evisceration','trauma tajam abdomen'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Evisceration, peritonitis or shock after a stab wound means laparotomy. Cover the bowel; do not push it back.'},
+{n:'Flail Chest',t:1,s:'Respiratory',a:[25,75],x:'A',late:true,sp:'surg',cc:'Paramedics: Crushed by a car. Part of the chest moves the wrong way.',v:[118,'124/78',32,88,36.6],
+ h:['Pinned against a wall by a reversing car','Severe chest pain on breathing','Struggling to breathe'],
+ e:['A segment of the right chest wall moves in while breathing in (paradoxical movement)','Crepitus over several ribs'],
+ l:['Blood gas: pO₂ 7.9 kPa','Hb normal'],
+ i:['Chest X-ray: four consecutive ribs broken in two places, with lung contusion'],
+ tx:'Oxygen, strong analgesia (epidural or nerve block), ventilation if needed; rib fixation in selected cases',w:['Strap the chest tightly','Restrict analgesia to avoid sedation','Discharge with oral painkillers'],al:['flail chest','flail segment','fraktur kosta multipel'],ecg:'sinus',pose:'resp',dispo:'icu',
+ p:'Several ribs broken in two places make a flail segment. The underlying lung contusion and pain cause the hypoxia; treat the pain well.'},
+{n:'Gas Gangrene',t:2,s:'Infectious',a:[20,70],x:'A',late:true,sp:'surg',cc:'My leg wound from the motorbike crash is swollen, black and crackling.',v:[132,'86/48',28,95,38.9],
+ h:['Dirty open wound from a crash in a rice field two days ago','Pain far worse than the wound looks','Wound not cleaned properly'],
+ e:['Bronze-black skin with foul, brown "dishwater" discharge','Crepitus spreading up the thigh'],
+ l:['WBC 26; CK very high; haemolysis','Gram stain: large Gram-positive rods without many white cells'],
+ i:['X-ray: gas tracking through the muscle'],
+ tx:'Emergency radical debridement or amputation, IV penicillin with clindamycin, resuscitation; hyperbaric oxygen if available',w:['Oral antibiotics and dressing change','Elevate the leg and review tomorrow','Close the wound tightly'],al:['gas gangrene','clostridial myonecrosis','Clostridium perfringens','gangren gas'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'Crepitus, bronze skin and pain out of proportion in a dirty wound is gas gangrene. It spreads by the hour; operate.'},
+{n:'Crush Syndrome',t:2,s:'MSK/Skin',a:[18,70],x:'A',late:true,sp:'surg',cc:'Rescue team: Pulled out of earthquake rubble after 12 hours. Legs were trapped.',v:[124,'92/54',24,96,36.0],
+ h:['Legs trapped under a collapsed wall for 12 hours','Freed one hour ago','Dark urine since rescue'],
+ e:['Swollen, tense, numb legs','Weak pulses in the feet'],
+ l:['Potassium 7.1 mmol/L; CK 120,000 U/L','Creatinine rising; urine dipstick blood 3+ without red cells'],
+ i:['ECG: peaked T waves'],
+ tx:'Generous IV saline (ideally started before release), treat hyperkalaemia urgently, watch for compartment syndrome; dialysis if needed',w:['Potassium-containing fluids','Fluid restriction','Release the tourniquets and discharge'],al:['crush syndrome','crush injury','rhabdomyolysis from crush','sindrom crush'],ecg:'peaked',pose:'pain',dispo:'icu',
+ p:'Releasing a crushed limb floods the blood with potassium and myoglobin. Fluids first, and treat the potassium before it stops the heart.'},
+{n:'Open Tibial Fracture',t:0,s:'MSK/Skin',a:[16,60],x:'A',late:true,sp:'surg',cc:'My shin bone is poking through the skin after the motorbike crash.',v:[112,'128/80',20,98,36.8],
+ h:['Motorbike crash an hour ago','Wound contaminated with road dirt','Tetanus vaccinations not up to date'],
+ e:['Bone visible through a 5 cm wound on the shin','Foot pulses present; sensation intact'],
+ l:['Hb 128 g/L','Group and save'],
+ i:['X-ray: displaced fracture of the tibial shaft'],
+ tx:'IV antibiotics within the hour, tetanus cover, photograph and dress the wound, splint, then debridement and fixation in theatre',w:['Close the wound in the ED and discharge','Oral antibiotics only','Delay antibiotics until theatre'],al:['open fracture','compound fracture','fraktur terbuka','tibial fracture'],ecg:'sinus',pose:'pain',dispo:'theatre',
+ p:'An open fracture needs antibiotics within the hour and tetanus cover. Washout and fixation follow in theatre.'}
 ];
 // rhythm + bed pose for the original cases
 const EXTRA={'Acute Appendicitis':['sinus','pain'],'Community-Acquired Pneumonia':['sinus','shiver'],'ST-Elevation Myocardial Infarction':['stemi','chest'],'Acute Asthma Exacerbation':['sinus','resp'],'Acute Pyelonephritis':['sinus','shiver'],'Diabetic Ketoacidosis':['sinus','drowsy'],'Ureteric Colic':['sinus','pain'],'Cellulitis':['sinus','alert'],'Acute Cholecystitis':['sinus','pain'],'Pulmonary Embolism':['sinus','resp'],'Ischaemic Stroke':['afib','confused'],'Anaphylaxis':['sinus','resp'],'Acute Gout':['sinus','alert'],'Acute Pancreatitis':['sinus','hunched'],'Subarachnoid Haemorrhage':['twinv','drowsy'],'Aortic Dissection':['sinus','chest'],'Meningococcal Meningitis':['sinus','drowsy'],'Ruptured Ectopic Pregnancy':['sinus','pain'],'Thyroid Storm':['afib','agitated'],'Tension Pneumothorax':['sinus','resp'],'Ruptured Abdominal Aortic Aneurysm':['sinus','pain'],'Carbon Monoxide Poisoning':['sinus','confused'],'Testicular Torsion':['sinus','pain'],'Bleeding Peptic Ulcer':['sinus','drowsy'],'Acute Angle-Closure Glaucoma':['sinus','hunched'],'Addisonian Crisis':['peaked','drowsy'],'HSV Encephalitis':['sinus','confused'],'Guillain–Barré Syndrome':['sinus','alert'],'Necrotising Fasciitis':['sinus','pain'],'Phaeochromocytoma Crisis':['sinus','agitated'],'Thrombotic Thrombocytopenic Purpura':['sinus','confused'],'Kawasaki Disease':['sinus','shiver'],'Falciparum Malaria':['sinus','shiver'],'Boerhaave Syndrome':['sinus','chest'],'Methanol Poisoning':['sinus','confused'],'Cauda Equina Syndrome':['sinus','alert'],'Acute Intermittent Porphyria':['sinus','pain'],"Wilson's Disease":['sinus','confused'],'Tetanus':['sinus','rigid'],'Foodborne Botulism':['sinus','drowsy'],'Haemophagocytic Lymphohistiocytosis':['sinus','shiver'],'Rabies':['sinus','agitated'],'Hereditary Angioedema':['sinus','resp'],"Weil's Disease":['sinus','shiver'],'Scurvy':['sinus','alert'],'Creutzfeldt–Jakob Disease':['sinus','confused'],'Primary Amoebic Meningoencephalitis':['sinus','unconscious'],'Anti-NMDA Receptor Encephalitis':['sinus','agitated'],'Inhalational Anthrax':['sinus','resp'],'Grayanotoxin (Mad Honey) Poisoning':['avblock','drowsy']};
@@ -2854,6 +3155,33 @@ Object.assign(DDX,{
  'Breath-Holding Spell':['Simple Febrile Seizure','Inhaled Foreign Body','Status Epilepticus','Intussusception','Croup'],
  'Panic Attack':['ST-Elevation Myocardial Infarction','Pulmonary Embolism','Thyroid Storm','Acute Asthma Exacerbation','Hypoglycaemia'],
  'Vasovagal Syncope':['Complete Heart Block','Hypertrophic Cardiomyopathy','Pulmonary Embolism','Ruptured Ectopic Pregnancy','Subarachnoid Haemorrhage']
+});
+EXTRA_EMERG.push("Neonatal Sepsis","Neonatal Tetanus","Vitamin K Deficiency Bleeding","Congenital Diaphragmatic Hernia","Malrotation with Midgut Volvulus","Critical Coarctation of the Aorta","Salt-Wasting Congenital Adrenal Hyperplasia","Near Drowning","Severe Pre-eclampsia","Shoulder Dystocia","Retained Placenta","Haemorrhage from Cervical Cancer","Cardiogenic Shock","Traumatic Aortic Injury","Anticoagulant-Associated Bleeding","Acute Subdural Haematoma","Traumatic Spinal Cord Injury","Cerebral Malaria","Pelvic Fracture with Haemorrhagic Shock","Major Burns with Inhalation Injury","Penetrating Abdominal Trauma","Flail Chest","Crush Syndrome","Gas Gangrene");
+Object.assign(DDX,{
+ "Neonatal Sepsis":["Malrotation with Midgut Volvulus", "Critical Coarctation of the Aorta", "Salt-Wasting Congenital Adrenal Hyperplasia", "Necrotising Enterocolitis", "Maple Syrup Urine Disease Crisis"],
+ "Neonatal Tetanus":["Neonatal Sepsis", "Acute Bilirubin Encephalopathy", "Maple Syrup Urine Disease Crisis", "Status Epilepticus", "Meningococcal Meningitis"],
+ "Vitamin K Deficiency Bleeding":["Non-Accidental Injury", "Neonatal Sepsis", "Acute Bilirubin Encephalopathy", "Immune Thrombocytopenia", "Haemophilia A with Haemarthrosis"],
+ "Congenital Diaphragmatic Hernia":["Oesophageal Atresia with Tracheo-Oesophageal Fistula", "Tension Pneumothorax", "Critical Coarctation of the Aorta", "Neonatal Sepsis", "Bronchiolitis"],
+ "Malrotation with Midgut Volvulus":["Hypertrophic Pyloric Stenosis", "Necrotising Enterocolitis", "Intussusception", "Neonatal Sepsis", "Salt-Wasting Congenital Adrenal Hyperplasia"],
+ "Critical Coarctation of the Aorta":["Neonatal Sepsis", "Tetralogy of Fallot Hypercyanotic Spell", "Salt-Wasting Congenital Adrenal Hyperplasia", "Supraventricular Tachycardia", "Bronchiolitis"],
+ "Salt-Wasting Congenital Adrenal Hyperplasia":["Hypertrophic Pyloric Stenosis", "Neonatal Sepsis", "Malrotation with Midgut Volvulus", "Maple Syrup Urine Disease Crisis", "Acute Diarrhoea with Severe Dehydration"],
+ "Near Drowning":["Inhaled Foreign Body", "Acute Asthma Exacerbation", "Accidental Hypothermia", "Status Epilepticus", "Community-Acquired Pneumonia"],
+ "Severe Pre-eclampsia":["Eclampsia", "HELLP Syndrome", "Hypertensive Emergency", "Acute Fatty Liver of Pregnancy", "Cerebral Venous Sinus Thrombosis"],
+ "Shoulder Dystocia":["Umbilical Cord Prolapse", "Uterine Rupture", "Postpartum Haemorrhage", "Placental Abruption", "Retained Placenta"],
+ "Retained Placenta":["Postpartum Haemorrhage", "Uterine Rupture", "Placenta Praevia", "Amniotic Fluid Embolism", "Puerperal Sepsis"],
+ "Haemorrhage from Cervical Cancer":["Placenta Praevia", "Septic Abortion", "Hydatidiform Mole", "Ruptured Ectopic Pregnancy", "Anticoagulant-Associated Bleeding"],
+ "Cardiogenic Shock":["ST-Elevation Myocardial Infarction", "Cardiac Tamponade", "Pulmonary Embolism", "Urosepsis with Septic Shock", "Aortic Dissection"],
+ "Traumatic Aortic Injury":["Aortic Dissection", "Cardiac Tamponade", "Tension Pneumothorax", "Massive Haemothorax", "Flail Chest"],
+ "Anticoagulant-Associated Bleeding":["Bleeding Peptic Ulcer", "Variceal Upper GI Bleed", "Mallory–Weiss Tear", "Prosthetic Valve Thrombosis", "Intracerebral Haemorrhage"],
+ "Acute Subdural Haematoma":["Extradural Haematoma", "Intracerebral Haemorrhage", "Chronic Subdural Haematoma", "Subarachnoid Haemorrhage", "Acute Alcohol Intoxication"],
+ "Traumatic Spinal Cord Injury":["Pelvic Fracture with Haemorrhagic Shock", "Cauda Equina Syndrome", "Guillain–Barré Syndrome", "Transverse Myelitis", "Splenic Rupture"],
+ "Cerebral Malaria":["Meningococcal Meningitis", "HSV Encephalitis", "Hypoglycaemia", "Japanese Encephalitis", "Status Epilepticus"],
+ "Pelvic Fracture with Haemorrhagic Shock":["Splenic Rupture", "Ruptured Abdominal Aortic Aneurysm", "Posterior Urethral Injury", "Traumatic Spinal Cord Injury", "Massive Haemothorax"],
+ "Major Burns with Inhalation Injury":["Carbon Monoxide Poisoning", "Cyanide Poisoning", "Anaphylaxis", "Acute Epiglottitis", "Methaemoglobinaemia"],
+ "Penetrating Abdominal Trauma":["Splenic Rupture", "Perforated Peptic Ulcer", "Massive Haemothorax", "Pelvic Fracture with Haemorrhagic Shock", "Ruptured Abdominal Aortic Aneurysm"],
+ "Flail Chest":["Tension Pneumothorax", "Massive Haemothorax", "Traumatic Aortic Injury", "Cardiac Tamponade", "Pulmonary Embolism"],
+ "Crush Syndrome":["Compartment Syndrome", "Rhabdomyolysis", "Hyperkalaemia", "Acute Limb Ischaemia", "Gas Gangrene"],
+ "Gas Gangrene":["Necrotising Fasciitis", "Fournier's Gangrene", "Crush Syndrome", "Compartment Syndrome", "Cellulitis"]
 });
 const FAKE=D.map((d,i)=>i).filter(i=>D[i].fake);
 const IDX=Object.fromEntries(D.map((d,i)=>[d.n,i]));
@@ -3506,6 +3834,10 @@ const POSES={
  dead:{br:0,a:-90,J:LYING,eyes:'closed',mouth:'flat',bl:[104,324,90],armUnder:1}
 };
 const STATUS={alert:['Alert and talking',''],resting:['Alert, comfortable',''],chest:['Alert, clutching chest','warn'],resp:['Alert, fighting for breath','warn'],pain:['Alert, groaning in pain','warn'],hunched:['Alert, hunched over','warn'],agitated:['Agitated','warn'],confused:['Confused','warn'],shiver:['Rigors, shivering','warn'],drowsy:['Drowsy, responds to voice','crit'],unconscious:['Unresponsive (GCS 6)','crit'],rigid:['Rigid, posturing','crit'],code:['Cardiac arrest','crit'],dead:['Deceased','crit']};
+// Babies (age 0) show their age in days, or months after eight weeks
+function ageDays(p){if(p.days)return p.days;const d=D[p.d];return d&&d.days?d.days[0]+hash(p.name||'')%(d.days[1]-d.days[0]+1):7}
+function ageTxt(p){if(p.age>0)return p.age+(p.age<6?'y':'');const dd=ageDays(p);return dd<60?dd+' d':Math.round(dd/30)+' mo'}
+function ageWords(p){if(p.age>0)return p.age+'-year-old';const dd=ageDays(p);return dd<60?dd+'-day-old':Math.round(dd/30)+'-month-old'}
 function hidden(p){return!!(p.masked&&!p.turned)}
 function poseFor(p){
   if(p.phase==='arrest'||(p.out&&p.out.kind==='crash'))return'code';
@@ -3782,7 +4114,7 @@ function makePatient(grand){
   const age=cam?cam.age:sp&&sp.kids&&d.a[0]<16?d.a[0]+rnd(Math.min(d.a[1],15)-d.a[0]+1):d.a[0]+rnd(d.a[1]-d.a[0]+1);
   const st=Math.max(3,10+m.stab+(b.stab||0));
   const mk=MASK[d.n],masked=!!mk&&Math.random()<.7;
-  const p={id:r.nid++,d:di,name:cam?cam.n:randName(sex),sex,age,cam:cam?cam.id:null,
+  const p={id:r.nid++,d:di,name:cam?cam.n:randName(sex),sex,age,days:d.days?d.days[0]+rnd(d.days[1]-d.days[0]+1):0,cam:cam?cam.id:null,
     mrn:String(rnd(90)+10)+'-'+String(rnd(900)+100)+'-'+String(rnd(900)+100),bay:0,grand,
     rev:{h:0,e:0,l:0,i:0},stab:st,max:st,guesses:[],showSys:m.sys,showTier:m.tier,letter:m.letter,dxName:m.nameDx,freeHUsed:0,freeWrongUsed:0,last:null,tx:null,txWrong:[],wrongTx:0,
     procs:d.proc.slice(),procDone:[],procFails:0,phase:'case',masked,maskT:45+Math.random()*50,turned:false,defused:false,decay:0,wait:0,arrestT:0,prev:null,rhythm:null,rosc:false,caught:false,bounce:false,out:null,doneT:0};
@@ -4002,7 +4334,7 @@ const shortName=w=>w.n.replace(/^Dr\. /,'').replace(/^The /,'').split(' ')[0];
 function floorBrief(){
   const r=S.run;if(!r||r.phase!=='floor')return'The shift is between handovers; no patients are waiting.';
   const rows=r.beds.map((p,i)=>{
-    if(!p)return null;const d=D[p.d],cc=hidden(p)?MASK[d.n].cc:d.cc,who=`${p.age}-year-old ${p.sex==='M'?'man':'woman'}`;
+    if(!p)return null;const d=D[p.d],cc=hidden(p)?MASK[d.n].cc:d.cc,who=`${ageWords(p)} ${p.age<1?(p.sex==='M'?'baby boy':'baby girl'):p.age<16?(p.sex==='M'?'boy':'girl'):p.sex==='M'?'man':'woman'}`;
     if(p.phase==='dead')return`Bay ${i+1}: ${who}, died tonight (${d.n}).`;
     if(p.phase!=='case'&&p.phase!=='arrest')return`Bay ${i+1}: ${who}, already diagnosed with ${d.n} and being treated.`;
     const cl=[];['h','e','l','i'].forEach(c=>{for(let k=0;k<p.rev[c];k++)cl.push(d[c][k])});
@@ -4122,7 +4454,7 @@ function triggerEmergency(){
   const d=D[di];
   const sex=cam?cam.sex:d.x==='A'?(Math.random()<.5?'M':'F'):d.x;
   const extra=r.buff.emTime||0;r.buff.emTime=0;
-  r.em={d:di,name:cam?cam.n:randName(sex),sex,age:cam?cam.age:d.a[0]+rnd(d.a[1]-d.a[0]+1),cam:cam?cam.id:null,
+  r.em={d:di,name:cam?cam.n:randName(sex),sex,age:cam?cam.age:d.a[0]+rnd(d.a[1]-d.a[0]+1),days:d.days?d.days[0]+rnd(d.days[1]-d.days[0]+1):0,cam:cam?cam.id:null,
     phase:'alert',el:0,pen:0,dur:Math.max(25,45+m.emTime+extra+(d.proc.length?12:0)),wrong:[],opts:ddxFor(di),tx:shuffle([d.tx,...shuffle(d.w).slice(0,2)]),res:null,procDone:[]};
   sfx('siren');sfx('alarm');save();render();
 }
@@ -4677,7 +5009,7 @@ function bedCard(p,i){
   return`<button class="bedcard ${scl}" data-bed="${i}">
    <header><b>Bay ${i+1}</b><span class="esi" style="--esi:${ESI[a][1]}">ESI ${a} · ${ESI[a][0]}</span>${p.grand?'<span class="gr">Grand Rounds</span>':''}${p.cam?'<span class="gr vip">Special guest</span>':''}${p.bounce?'<span class="gr" style="background:var(--alarm);color:#fff">Bounce-back</span>':''}</header>
    <div class="bcscene">${bedScene(p,pose)}</div>
-   <div class="bcwho"><b>${esc(p.name)}</b><span>${p.age}${p.age<6?'y':''} ${p.sex}</span></div>
+   <div class="bcwho"><b>${esc(p.name)}</b><span>${ageTxt(p)} ${p.sex}</span></div>
    <p class="bccc">${known?`${ic(SYS_IC[d.s])}${esc(d.n)}`:`“${esc(hidden(p)?MASK[d.n].cc:d.cc)}”`}</p>
    <div class="sbar"><i style="width:${Math.max(0,p.stab/p.max*100)}%" class="${p.stab/p.max<=.3?'low':p.stab/p.max<=.6?'mid':''}"></i></div>
    <p class="bcst">${ic(sic)}<span>${st}${p.phase==='arrest'?` · <b id="arr${i}">${Math.ceil(p.arrestT)}</b> s`:''}</span></p>
@@ -4750,14 +5082,14 @@ function renderPatient(i){
   const pv=(l,v,col,a)=>`<span class="${a?'ab':''}" style="color:var(${col})"><small>${l}</small><b>${v}</b></span>`;
   const latest=(()=>{if(p.phase!=='case'||!p.last)return'';const c=p.last[0],k=p.last.slice(1),txt=k==='*'?d[c].slice(0,p.rev[c]).map((_,j)=>clueText(d,c,j,p.rd)).join('; '):clueText(d,c,+k,p.rd);return txt?`<p class="pinnew">${ic(CAT_IC[c])}<span><b>New:</b> ${esc(txt)}</span></p>`:''})();
   const pin=`<div class="pinbar o1" aria-label="Patient summary">
-    <div class="pinrow">${portrait(look,{cls:'mini',gown:true,child:p.age<13,label:'Patient'})}<div class="pinwho"><b>${esc(p.name)}</b><span>${p.age}${p.age<6?'y':''} ${p.sex} · Bay ${i+1} · ESI ${acuity(p)}</span></div><span class="pinst ${stCls}"><i></i>${stTxt}</span></div>
+    <div class="pinrow">${portrait(look,{cls:'mini',gown:true,child:p.age<13,label:'Patient'})}<div class="pinwho"><b>${esc(p.name)}</b><span>${ageTxt(p)} ${p.sex} · Bay ${i+1} · ESI ${acuity(p)}</span></div><span class="pinst ${stCls}"><i></i>${stTxt}</span></div>
     <div class="pinmon"><canvas class="ecg" data-rhythm="${lv.rhythm}" data-hr="${lv.hr}" aria-hidden="true"></canvas><div class="pinvit">${pv('HR',lv.hr,'--mon-hr',ab.hr)}${pv('BP',lv.bp,'--mon-bp',ab.bp)}${pv('SpO₂',lv.sp,'--mon-sp',ab.sp)}${pv('RR',lv.rr,'--mon-rr',ab.rr)}${pv('T',Number(lv.t).toFixed(1),'--mon-t',ab.t)}</div></div>
     <p class="pincc">“${esc(cc)}”</p>${flags?`<div class="flags">${flags}</div>`:''}
     <div class="segs pinseg ${lvl}" aria-label="Stability ${Math.max(0,p.stab)} of ${p.max}">${segs}</div>${latest}</div>`;
   return`${strip}<div class="bay">
    <div class="col">
     ${pin}
-    <div class="band dk">${portrait(look,{gown:true,child:p.age<13,mood:pose==='resting'?'smile':ratio>.6?'flat':'frown',eyes:['unconscious','code','drowsy','dead'].includes(pose)?'closed':'open',fever:bv[4]>=38,shock:sys<90,sweat:ratio<.45&&p.phase!=='done',label:'Patient portrait'})}<div class="who"><b>${esc(p.name)}</b><span>${p.age}${p.age<6?'y':''} ${p.sex} · MRN ${p.mrn} · Bay ${i+1} · ESI ${acuity(p)}</span></div>${p.grand?'<span class="gr">Grand Rounds</span>':''}${cam?`<span class="gr vip">${esc(cam.tag)}</span>`:''}<div class="barcode" aria-hidden="true"></div></div>
+    <div class="band dk">${portrait(look,{gown:true,child:p.age<13,mood:pose==='resting'?'smile':ratio>.6?'flat':'frown',eyes:['unconscious','code','drowsy','dead'].includes(pose)?'closed':'open',fever:bv[4]>=38,shock:sys<90,sweat:ratio<.45&&p.phase!=='done',label:'Patient portrait'})}<div class="who"><b>${esc(p.name)}</b><span>${ageTxt(p)} ${p.sex} · MRN ${p.mrn} · Bay ${i+1} · ESI ${acuity(p)}</span></div>${p.grand?'<span class="gr">Grand Rounds</span>':''}${cam?`<span class="gr vip">${esc(cam.tag)}</span>`:''}<div class="barcode" aria-hidden="true"></div></div>
     <div class="panel scene o2">${bedScene(p,pose)}<span class="avpu ${stCls}"><i></i>${stTxt}</span></div>
     <div class="monitor dk"><canvas class="ecg" data-rhythm="${lv.rhythm}" data-hr="${lv.hr}" aria-hidden="true"></canvas><div class="vitals">
      ${vit('hr','HR',lv.hr,lv.hr==='VF'?'':'bpm','--mon-hr')}${vit('bp','NIBP',lv.bp,'','--mon-bp')}${vit('sp','SpO₂',lv.sp,lv.sp==='--'?'':'%','--mon-sp')}${vit('rr','RR',lv.rr,'/min','--mon-rr')}${vit('t','TEMP',Number(lv.t).toFixed(1),'°C','--mon-t')}
@@ -4937,7 +5269,7 @@ function renderEmer(){
   }
   const off=(163.4*(1-left/e.dur)).toFixed(1);
   el.innerHTML=`<div class="emov" role="dialog" aria-modal="true" aria-label="Emergency"><div class="emcard ${e.phase==='done'?'done':''} ${left<10&&e.phase!=='done'?'hurry':''}">
-   <div class="emhead">${ic('siren')}<div><h2>EMERGENCY · RESUS 1</h2><p>${cam?'Special guest: ':''}${esc(e.name)}, ${e.age}${e.age<6?'y':''} ${e.sex} · success restores 1 reputation</p><p class="emvit mono">HR ${lv.hr} · BP ${lv.bp} · SpO₂ ${lv.sp} · RR ${lv.rr} · T ${Number(lv.t).toFixed(1)}</p></div>
+   <div class="emhead">${ic('siren')}<div><h2>EMERGENCY · RESUS 1</h2><p>${cam?'Special guest: ':''}${esc(e.name)}, ${ageTxt(e)} ${e.sex} · success restores 1 reputation</p><p class="emvit mono">HR ${lv.hr} · BP ${lv.bp} · SpO₂ ${lv.sp} · RR ${lv.rr} · T ${Number(lv.t).toFixed(1)}</p></div>
     <div class="ring"><svg viewBox="0 0 62 62"><circle cx="31" cy="31" r="26" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle id="emring" cx="31" cy="31" r="26" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="163.4" stroke-dashoffset="${e.phase==='alert'?0:off}" stroke-linecap="round"/></svg><b id="emtime">${e.phase==='alert'?e.dur:Math.ceil(left)}</b></div></div>
    <div class="embody">
     <div class="col">
@@ -5176,7 +5508,7 @@ function renderChalHome(){
 }
 
 /* ---- Cases players write ---- */
-const KKEY='zebra-shift.cases',SYSTEMS=[...new Set(D.map(d=>d.s))],RHYTHMS=[['sinus','Sinus rhythm'],['afib','Atrial fibrillation'],['stemi','ST elevation'],['peaked','Peaked T waves'],['twinv','T-wave inversion'],['brugada','Brugada pattern'],['osborn','Osborn waves'],['chb','Complete heart block'],['avblock','Dropped beats'],['alternans','Electrical alternans'],['pericarditis','Pericarditis'],['svt','SVT'],['vt','Ventricular tachycardia'],['torsades','Torsades de pointes']];
+const KKEY='zebra-shift.cases',SYSTEMS=[...new Set(D.map(d=>d.s))],RHYTHMS=[['sinus','Sinus rhythm'],['afib','Atrial fibrillation'],['stemi','ST elevation'],['peaked','Peaked T waves'],['twinv','T-wave inversion'],['brugada','Brugada pattern'],['osborn','Osborn waves'],['chb','Complete heart block'],['avblock','Dropped beats'],['alternans','Electrical alternans'],['pericarditis','Pericarditis'],['svt','SVT'],['flutter','Atrial flutter'],['vt','Ventricular tachycardia'],['torsades','Torsades de pointes']];
 let CASES={mine:[],got:[],play:{}};try{const c=JSON.parse(localStorage.getItem(KKEY)||'null');if(c)CASES={mine:c.mine||[],got:c.got||[],play:c.play||{}}}catch(e){}
 const saveCases=()=>{try{localStorage.setItem(KKEY,JSON.stringify(CASES))}catch(e){}};
 const caseFind=id=>CASES.mine.find(c=>c.id===id)||CASES.got.find(c=>c.id===id);
@@ -7048,6 +7380,7 @@ function ecgSample(st,rhythm,hr){
   let v=0;
   if(rhythm==='vt')return g(.1,.045,.85)-g(.22,.06,.45);
   if(rhythm==='afib')v+=.035*Math.sin(t*2*Math.PI*6.3)+.025*Math.sin(t*2*Math.PI*9.1+.7);
+  else if(rhythm==='flutter')v+=.09*(.5-((t*5)%1));
   else if(rhythm!=='svt')v+=g(.05,.022,.13);
   if(rhythm==='pericarditis')v-=g(.11,.02,.04);
   if(!st.drop){
