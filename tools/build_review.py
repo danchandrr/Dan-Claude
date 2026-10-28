@@ -10,12 +10,14 @@ d=json.load(open('review/data.json'))
 D,MASK,READS,READ_AT,DDX,TIERS=d['D'],d['MASK'],d['READS'],d['READ_AT'],d['DDX'],d['TIERS']
 PROCS,DISPO=d['PROCS'],d['DISPO_NAME']
 NEW=set(d.get('NEW',[]))
+# pictures added in the latest round, the case picture lists before it, and notes on values added beyond the case text
+NEWPICS=set(d.get('NEWPICS',[]));OLDCASEPICS=d.get('OLDCASEPICS',{});NOTES=d.get('NOTES',{})
 POOLN={'paeds':'Paediatrics','obgyn':'Obstetrics & Gynaecology','cardio':'Cardiology','neuro':'Neurology','tox':'Toxicology','id':'Infectious Diseases','surg':'Surgery'}
-KIND={'ecg':'12-lead ECG','abg':'Blood gas','xr':'X-ray','mic':'Microscopy'}
+KIND={'ecg':'12-lead ECG','abg':'Blood gas','lab':'Lab panel','xr':'X-ray','us':'Ultrasound','mic':'Microscopy'}
 CAT={'h':'History','e':'Exam','l':'Tests','i':'Imaging'}
 RHY={'sinus':'Sinus','afib':'AF','stemi':'ST elevation','peaked':'Peaked T','twinv':'T inversion','brugada':'Brugada','osborn':'Osborn waves','chb':'Complete heart block','avblock':'Dropped beats','alternans':'Electrical alternans','pericarditis':'Pericarditis','svt':'SVT','vt':'Ventricular tachycardia','torsades':'Torsades de pointes'}
 
-TEAL=PatternFill('solid',fgColor='1C6973');NEWF=PatternFill('solid',fgColor='CDEFD8');YEL=PatternFill('solid',fgColor='FFF4C2');PALE=PatternFill('solid',fgColor='EEF4F3')
+TEAL=PatternFill('solid',fgColor='1C6973');BLUE=PatternFill('solid',fgColor='D3E4F8');ORNG=PatternFill('solid',fgColor='FCE1C8');NEWF=PatternFill('solid',fgColor='CDEFD8');YEL=PatternFill('solid',fgColor='FFF4C2');PALE=PatternFill('solid',fgColor='EEF4F3')
 HEAD=Font(bold=True,color='FFFFFF');WRAP=Alignment(wrap_text=True,vertical='top');thin=Side(style='thin',color='C6D4D3')
 BOX=Border(left=thin,right=thin,top=thin,bottom=thin)
 num=lambda a:'\n'.join(f'{i+1}. {x}' for i,x in enumerate(a)) if a else '—'
@@ -27,7 +29,7 @@ rows=[('Zebra Shift: medical review sheet',),
 ('',),
 ('What is here',),
 (f'• Cases: all {len(D)} patients, with every clue, the correct and wrong treatments, the destination, the teaching point, and how trick cases first present.',),
-(f'• Pictures: all {len(READS)} ECGs, blood gases, X-rays and slides as the player sees them, with the answer options and the explanation shown afterwards.',),
+(f'• Pictures: all {len(READS)} ECGs, blood gases, lab panels, X-rays, ultrasound scans and slides as the player sees them, with the answer options and the explanation shown afterwards.',),
 ('',),
 ('How to mark it',),
 ('1. Use the Status column: OK, Needs change, or leave it blank if you have not looked yet.',),
@@ -42,6 +44,9 @@ rows=[('Zebra Shift: medical review sheet',),
 ('• "Emergency differentials" are the other diagnoses offered when the case appears as a timed emergency.',),
 ('• Use the filter arrows in the header row to show one rarity, system or status at a time.',),
 (f'• The {len(NEW)} cases with a green name were added most recently. Start with those if you have already reviewed the rest.',),
+(f'• Blue marks the latest round: the {len(NEWPICS)} new pictures on the Pictures sheet, and on the Cases sheet the "Shown as a picture first" cell of every case that gained a picture.',),
+('• "Reviewer note" (orange) on the Pictures sheet says which values I added beyond what the case text states, and where a shared picture differs from a case report. Check those first.',),
+('• ECGs and scans are drawn by the game, not taken from patients. Judge whether the pattern is convincing and correct, rather than exact millimetres.',),
 ('• "Standards cross-match" lists every emergency in the five Indonesian specialist standards you sent and where it lives in the game. Green rows were added from those documents; red rows are not in the game yet, with the reason.',),
 ('• "Specialty pool" shows which specialist sees the case. Generalist specialties (EM, GP, Internal Medicine, Anaesthesia, Pathology) see every pool. "False alarm" cases arrive as emergencies but are benign.',),
 ]
@@ -83,6 +88,7 @@ for n,i in enumerate(order,1):
     if n%2==0:
         for c in ws[r][:len(H)-1]: c.fill=PALE
     if x['n'] in NEW: ws.cell(row=r,column=2).fill=NEWF;ws.cell(row=r,column=2).font=Font(bold=True)
+    if OLDCASEPICS and OLDCASEPICS.get(x['n'],'—')!=pics: ws.cell(row=r,column=19).fill=BLUE
     status.add(ws.cell(row=r,column=len(H)-1))
 ws.auto_filter.ref=f"A1:{ws.cell(row=1,column=len(H)).column_letter}{ws.max_row}"
 red=PatternFill('solid',fgColor='F9D6D3');grn=PatternFill('solid',fgColor='D5EDDC')
@@ -91,8 +97,8 @@ ws.conditional_formatting.add(f"{L}2:{L}{ws.max_row}",FormulaRule(formula=[f'{L}
 ws.conditional_formatting.add(f"{L}2:{L}{ws.max_row}",FormulaRule(formula=[f'{L}2="OK"'],fill=grn))
 
 # ---- Pictures
-H2=['#','Picture ID','Type','Title shown','Used in case','Replaces this written clue','What the player sees','Correct answer','Other options shown','Explanation shown after answering','Status','Your correction']
-W2=[5,12,12,24,28,40,84,38,40,50,14,50]
+H2=['#','Picture ID','Type','Title shown','Used in case','Replaces this written clue','What the player sees','Correct answer','Other options shown','Explanation shown after answering','Reviewer note','Status','Your correction']
+W2=[5,12,12,24,28,40,84,38,40,50,36,14,50]
 wp=sheet('Pictures',H2,W2);wp.freeze_panes='C2';wp.add_data_validation(status)
 used={}
 for dn,lst in READ_AT.items():
@@ -101,13 +107,15 @@ for dn,lst in READ_AT.items():
 for n,key in enumerate(READS,1):
     r=READS[key];u=used.get(key,[])
     title=r.get('x2') or KIND[r['k']]
-    wp.append([n,key,KIND[r['k']],title,'\n'.join(a for a,_ in u) or '—','\n'.join(b for _,b in u) or '—','',r['o'][0],'\n'.join('• '+o for o in r['o'][1:]),r['x'],'',''])
+    wp.append([n,key,KIND[r['k']],title,'\n'.join(a for a,_ in u) or '—','\n'.join(b for _,b in u) or '—','',r['o'][0],'\n'.join('• '+o for o in r['o'][1:]),r['x'],NOTES.get(key,''),'',''])
     row=wp.max_row
     for c in wp[row]: c.alignment=WRAP;c.border=BOX
     wp.cell(row=row,column=len(H2)).fill=YEL
     status.add(wp.cell(row=row,column=len(H2)-1))
-    im=Image.open(f'review/pics/{key}.png');target=600 if r['k']=='ecg' else 300
-    sc=target/im.width;xi=XLImage(f'review/pics/{key}.png');xi.width=int(im.width*sc);xi.height=int(im.height*sc)
+    if key in NEWPICS: wp.cell(row=row,column=2).fill=BLUE;wp.cell(row=row,column=2).font=Font(bold=True)
+    if NOTES.get(key): wp.cell(row=row,column=11).fill=ORNG
+    pic=f'review/pics/{key}.jpg';im=Image.open(pic);target=600 if r['k']=='ecg' else 340 if r['k'] in ('abg','lab') else 300
+    sc=target/im.width;xi=XLImage(pic);xi.width=int(im.width*sc);xi.height=int(im.height*sc)
     wp.add_image(xi,f"G{row}");wp.row_dimensions[row].height=max(60,xi.height*0.75+8)
 L=wp.cell(row=1,column=len(H2)-1).column_letter
 wp.conditional_formatting.add(f"{L}2:{L}{wp.max_row}",FormulaRule(formula=[f'{L}2="Needs change"'],fill=red))
