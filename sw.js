@@ -1,6 +1,6 @@
 // Zebra Shift service worker: keeps the game playable offline.
 // Bump VERSION whenever index.html changes so players get the new build.
-const VERSION = 'zebra-shift-v21';
+const VERSION = 'zebra-shift-v22';
 const SHELL = [
   './',
   './index.html',
@@ -31,13 +31,16 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // The game page: try the network for updates, fall back to the cached copy offline
+  // Pages: try the network for updates, fall back to the cached copy offline.
+  // Only the game itself is stored as index.html; articles and other pages keep their own entry.
   if (req.mode === 'navigate') {
+    const scope = new URL(self.registration.scope).pathname;
+    const isGame = url.pathname === scope || url.pathname === scope + 'index.html';
     e.respondWith(fetch(req).then(res => {
       const copy = res.clone();
-      caches.open(VERSION).then(c => c.put('./index.html', copy));
+      if (res.ok) caches.open(VERSION).then(c => c.put(isGame ? './index.html' : req, copy));
       return res;
-    }).catch(() => caches.match('./index.html')));
+    }).catch(() => caches.match(isGame ? './index.html' : req).then(hit => hit || caches.match('./index.html'))));
     return;
   }
 

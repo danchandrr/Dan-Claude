@@ -527,6 +527,20 @@ button.bedcard:hover{border-color:var(--scrub)}
 .disclaimer{margin:18px 0 0;max-width:46ch;font-size:12.5px;line-height:1.45;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
 .disclaimer b{color:var(--ink)}
 .dailycard{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:14px 16px;margin-bottom:14px;border-color:color-mix(in srgb,var(--scrub) 40%,var(--line))}
+.hunt{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;align-items:start}
+.hcard{display:flex;flex-direction:column;gap:12px;padding:16px 18px}.hside{padding:14px 16px}.hhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hpt{display:flex;gap:10px;align-items:center}.hpt small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:12.5px;margin-top:2px}
+.hcc{display:block;font-family:var(--f-display);font-weight:600;font-size:20px;line-height:1.3;quotes:"\201C" "\201D"}
+.hclues{margin:0;padding-left:20px;display:grid;gap:4px}
+.hscore{font-family:var(--f-display);font-size:56px;line-height:1;margin:2px 0}.hscore small{font-size:24px;color:var(--muted)}
+.hgrid{font-size:26px;letter-spacing:4px;margin:0}
+.hladder{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.hladder li{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel-2);font-weight:700}
+.hladder .hn{font-family:var(--f-mono);color:var(--muted);width:1.3em}.hladder li svg{margin-left:auto;width:18px;height:18px}
+.hladder li.ok{border-color:var(--ok);color:var(--ok)}.hladder li.miss{border-color:var(--alarm);color:var(--alarm)}.hladder li.cur{border-color:var(--scrub);background:var(--scrub-soft)}
+@media (max-width:760px){.hunt{grid-template-columns:minmax(0,1fr)}.hside{order:-1;padding:10px 12px}.hsidehint{display:none}
+ .hladder{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;direction:rtl}.hladder li{direction:ltr;flex-direction:column;gap:2px;padding:6px 2px;font-size:10px;justify-content:center;text-align:center}
+ .hladder .hn{width:auto}.hladder .hl{font-size:9.5px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hladder li svg{margin:0;width:14px;height:14px}.hcc{font-size:18px}}
 .dailycard q{display:block;font-family:var(--f-display);font-weight:600;font-size:18px;line-height:1.25;margin-top:4px;quotes:"\201C" "\201D"}
 @media (max-width:480px){.dailycard{flex-direction:column;align-items:stretch}}
 .debrief{margin:16px 0;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--panel-2)}
@@ -5443,6 +5457,76 @@ function renderDaily(){
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="cardshare" data-card="daily">${ic('send')}Share a picture</button><button class="btn" data-act="dailyshare">${ic('copy')}Copy text</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}`});
 }
 
+/* ---- Zebra Hunt: seven quick cases a day, climbing from Common to Unicorn, the same for everyone ---- */
+// One minute, four choices a case and no career needed: the front door for people who have never played
+const HKEY='zebra-shift.hunt',HUNT_TIERS=[0,0,1,1,2,3,4];
+let HUNT={};try{HUNT=JSON.parse(localStorage.getItem(HKEY)||'{}')||{}}catch(e){HUNT={}}
+const saveHunt=()=>{try{localStorage.setItem(HKEY,JSON.stringify(HUNT))}catch(e){}};
+const sshuffle=(a,R)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+// The answer plus three look-alikes: listed differentials and mimics first, then the same organ system
+function huntOpts(di,R){
+  const d=D[di],out=[],add=i=>{if(i!=null&&i!==di&&!out.includes(i)&&out.length<3)out.push(i)};
+  const near=[...(DDX[d.n]||[]),d.mim,...D.filter(x=>x.mim===d.n).map(x=>x.n)].filter(Boolean).map(n=>IDX[n]);
+  sshuffle(near,R).forEach(add);
+  sshuffle(D.map((x,i)=>i).filter(i=>D[i].s===d.s).sort((a,b)=>D[a].n.localeCompare(D[b].n)),R).forEach(add);
+  sshuffle(D.map((x,i)=>i),R).forEach(add);
+  return sshuffle([di,...out],R).map(i=>D[i].n);
+}
+// Drawn from the date alone, so every player meets the same patients with the same choices
+function huntSet(date){
+  const R=seeded('zebra-hunt-'+date),used=new Set();
+  return HUNT_TIERS.map(t=>{
+    const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&!D[i].fake&&!used.has(i)).sort((a,b)=>D[a].n.localeCompare(D[b].n));
+    const di=pool[Math.floor(R()*pool.length)],d=D[di];used.add(di);
+    const sex=d.x==='A'?(R()<.5?'M':'F'):d.x,age=d.a[0]+Math.floor(R()*(d.a[1]-d.a[0]+1));
+    return{di,sex,age,name:nameFrom(sex,R(),R()),opts:huntOpts(di,R)};
+  });
+}
+const huntState=date=>HUNT[date]=HUNT[date]||{r:[]};
+const huntDone=st=>st.r.length>=HUNT_TIERS.length;
+const huntScore=st=>st.r.filter(x=>x.ok).length;
+const huntBest=st=>Math.max(-1,...st.r.map((x,i)=>x.ok?HUNT_TIERS[i]:-1));
+function huntStreak(){let n=0;const t=new Date();for(;;){const s=HUNT[dayStr(t)];if(s&&huntDone(s)){n++;t.setDate(t.getDate()-1)}else if(n===0&&dayStr(t)===todayStr()){t.setDate(t.getDate()-1)}else break}return n}
+function huntPick(k){
+  const date=todayStr(),st=huntState(date),i=st.r.length,set=huntSet(date);if(i>=set.length||S.ui.huntRev)return;
+  const n=set[i].opts[k],ok=n===D[set[i].di].n;
+  st.r.push({n,ok});S.ui.huntRev=true;saveHunt();sfx(ok?'right':'wrong');
+  if(ok)creditCasebook(D[set[i].di].n);
+  render();
+}
+function huntShare(date,st){
+  const b=huntBest(st);
+  return`Zebra Hunt ${date} · ${huntScore(st)}/7\n${st.r.map(x=>x.ok?'🟩':'🟥').join('')}\n${b>=0?`Highest catch: ${TIERS[b].k}${b===4?' 🦄':b===3?' 🦓':''}`:'No catches today'}\n${APP_URL}#hunt`;
+}
+function renderHunt(){
+  const date=todayStr(),set=huntSet(date),st=huntState(date),n=st.r.length,done=huntDone(st),show=S.ui.huntRev&&n>0?n-1:n;
+  const ladder=`<ol class="hladder" aria-label="Today's ladder">${set.map((c,i)=>{const r=st.r[i];
+    return`<li class="${r?(r.ok?'ok':'miss'):i===show&&!done?'cur':''}"><span class="hn">${i+1}</span><span class="hl">${TIERS[HUNT_TIERS[i]].k}</span>${r?ic(r.ok?'check':'x'):''}</li>`}).reverse().join('')}</ol>`;
+  let main;
+  if(done&&!S.ui.huntRev){
+    const sc=huntScore(st),b=huntBest(st),streak=huntStreak();
+    main=`<section class="panel hcard"><span class="label">Today's hunt · ${esc(dateLabel(date))}</span><h2 class="hscore">${sc}<small>/7</small></h2>
+      <p style="margin:0">${b>=0?`Highest catch: ${tierBadge(b)}`:'No catches today. The zebras got away.'}</p>
+      <p class="hgrid" aria-hidden="true">${st.r.map(x=>x.ok?'🟩':'🟥').join('')}</p>
+      <textarea class="code" id="hshare" readonly>${esc(huntShare(date,st))}</textarea>
+      <div class="rowbtns"><button class="btn primary" data-act="huntshare">${ic('send')}Share your result</button><button class="btn" data-act="newcareer">${ic('plus')}Play a full night shift</button><button class="btn" data-act="daily">${ic('search')}Case of the day</button></div>
+      <p class="hint" style="margin:0">A new hunt every day at midnight.${streak?` Streak: ${streak} day${streak>1?'s':''}.`:''}${STORE.active!=null&&STORE.slots[STORE.active]?' Every patient you caught is now in your Casebook, with its teaching point.':''}</p></section>`;
+  }else{
+    const c=set[show],d=D[c.di],r=st.r[show],clues=[d.h[0],d.e[0],d.l[0]].filter(Boolean);
+    main=`<section class="panel hcard"><div class="hhead"><span class="label">Case ${show+1} of 7</span>${tierBadge(HUNT_TIERS[show])}</div>
+      <div class="hpt">${portrait(patientLook({name:c.name,sex:c.sex,age:c.age}),{cls:'mini',gown:true,child:c.age<13,label:'Patient'})}<div><b>${esc(c.name)}, ${c.age}${c.age<6?'y':''} ${c.sex}</b><small>HR ${d.v[0]} · BP ${d.v[1]} · RR ${d.v[2]} · SpO₂ ${d.v[3]}% · T ${Number(d.v[4]).toFixed(1)}°C</small></div></div>
+      <q class="hcc">${esc(d.cc)}</q>
+      <ul class="hclues">${clues.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+      <p class="label" style="margin:2px 0 0">What is the diagnosis?</p>
+      <div class="rdopts">${c.opts.map((o,k)=>`<button data-hpick="${k}" class="${r?(o===d.n?'right':o===r.n?'wrong':''):''}" ${r?'disabled':''}>${esc(o)}</button>`).join('')}</div>
+      ${r?`<div class="minimsg ${r.ok?'good':''}"><b>${r.ok?'Caught it.':`It was ${esc(d.n)}.`}</b> ${esc(d.p)}</div>
+       <div class="rowbtns"><button class="btn primary" data-act="huntnext">${ic('play')}${done?'See your result':'Next case'}</button></div>`:''}
+    </section>`;
+  }
+  return`<div class="pagehead" style="margin:6px 0 14px"><div><span class="label">${esc(dateLabel(date))} · seven patients, the same for everyone today</span><h1>Zebra Hunt</h1></div><button class="btn" data-act="dailyback">${ic('back')}Menu</button></div>
+   <div class="hunt">${main}<aside class="panel hside"><span class="label">Common up to Unicorn</span>${ladder}<p class="hint hsidehint">Each case is rarer than the last. Pick from four. No career needed.</p></aside></div>`;
+}
+
 /* ---- Share links: a whole challenge or case travels inside the link itself ---- */
 const APP_URL=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://playzebrashift.github.io/';
 const b64u={enc:b=>{let s='';for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
@@ -7549,12 +7633,18 @@ async function bootHash(){
   const h=location.hash||'';let done=false;
   if(/^#(c|k)=/.test(h))done=await openCode(h,false);
   else if(h==='#daily'){S.screen='daily';render();done=true}
+  else if(h==='#hunt'){S.screen='hunt';S.ui.huntRev=false;render();done=true}
+  else if(h==='#reads'){S.screen='reads';render();done=true}
   if(done)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 }
 
 /* ---- Menu, creator ---- */
 function slotSummary(s){const d=normDoc(s.doctor),m=s.meta||{};return{d,m}}
 const DISCLAIMER=`<p class="disclaimer"><b>For education and entertainment only.</b> Not medical advice, and no substitute for clinical judgement or local guidelines. Cases are simplified and fictional, and treatments are condensed for play. Cameo characters are parodies with no connection to their owners.</p>`;
+function huntCard(){
+  const st=HUNT[todayStr()],done=st&&huntDone(st),mid=st&&st.r.length&&!done;
+  return`<section class="panel dailycard huntcard"><div style="min-width:0"><span class="label">Zebra Hunt · one minute</span><q>Seven patients, Common up to Unicorn. Can you catch the zebra?</q><p class="hint" style="margin:4px 0 0">${done?`Today: ${huntScore(st)}/7`:mid?`${st.r.length} of 7 done`:'New hunt today'} · same for everyone · no career needed</p></div><button class="btn primary" data-act="hunt">${ic('play')}${done?'Review':mid?'Continue':'Play'}</button></section>`;
+}
 function renderMenu(){
   const v=S.ui.menu,act=STORE.active!=null&&STORE.slots[STORE.active]?STORE.slots[STORE.active]:null;
   const dc=dailyCase(todayStr()),dst=DAILY[dc.date],streak=dailyStreak();
@@ -7575,6 +7665,7 @@ function renderMenu(){
     <li>After every shift a colleague debriefs you on what went wrong. Teaching points for every case you have diagnosed live in the Casebook.</li>
     <li>Pick a specialty: specialists see more of their own patients and handle them more easily. Generalists get a little help with everyone. Only Emergency Medicine and General Practice are open at first; earn the rest on shift (see Achievements for your progress). One specialty is secret.</li>
     <li>Try the Case of the day from the main menu: one patient, the same for everyone, scored on how few clues you need.</li>
+    <li>Short on time? Zebra Hunt is seven quick patients a day, each rarer than the last, with four choices for each. No career needed.</li>
     <li>Special guests sometimes arrive by ambulance. They score 25% more.</li>
     <li>Some results arrive as a picture: a 12-lead ECG, a blood gas or lab panel, an X-ray, an ultrasound or a slide. Read it yourself before the report appears. A right read steadies the patient; a misread costs a little. Practise any time in the Reading room.</li>
     <li>Challenge a friend: you both get the same five patients, and the best total wins. Send it as a link, or straight to an online friend.</li>
@@ -7588,7 +7679,7 @@ function renderMenu(){
    <header class="mhead"><div class="mtop"><p class="label">An ER roguelike</p><button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="Lobby music ${AUD.pref.music?'on':'off'}" title="Lobby music ${AUD.pref.music?'on':'off'}">${ic(AUD.pref.music?'music':'musicoff')}</button></div>
     <h1 class="logo">Zebra<br><span>Shift</span></h1>
     <p class="tagline">Diagnose, treat and survive the night shift. Common cases keep you alive. Zebras make you a legend.</p></header>
-   <div class="mart">${MENU_ART}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
+   <div class="mart">${MENU_ART}${huntCard()}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
    <div class="mmain">
     <div class="mprimary">${act?`<button class="btn primary big" data-act="continue">${ic('play')}<span>Continue<small>${drName(slotSummary(act).d)} · slot ${STORE.active+1}</small></span></button>`:''}<button class="btn ${act?'':'primary'} big" data-act="newcareer">${ic('plus')}<span>New career${act?'':'<small>Pick a specialty and start</small>'}</span></button></div>
     <div class="mtiles">
@@ -7598,6 +7689,7 @@ function renderMenu(){
      ${tile('data-act="chal"','trophy','Challenge',inb?inb+' waiting for you':'Beat a friend',inb?`<span class="dot">${inb}</span>`:'')}
      ${tile('data-act="cases"','doc','Write a case',CASES.mine.length?CASES.mine.length+' written':'Share with friends')}
      ${tile('data-act="reads"','monitor','Reading room','ECGs, scans, slides, labs')}
+     ${tile('data-act="articles"','book','Articles','Guides to every picture')}
      ${tile('data-act="ach"','badge','Achievements',`${achCount()}/${ACHS.length} · ${roles} specialties`)}
      ${tile('data-menu="remind"','pager','Reminder',REM.on||REM.cal?'Set':'Off')}
      ${tile('data-menu="transfer"','swap','Back up','Move a save')}
@@ -7687,6 +7779,7 @@ function renderInner(refocus){
   if(S.screen==='menu'){$('#main').innerHTML=renderMenu();$('#emer').innerHTML='';return}
   if(S.screen==='create'){$('#main').innerHTML=renderCreate();$('#emer').innerHTML='';return}
   if(S.screen==='daily'){setHudH();$('#main').innerHTML=renderDaily();$('#emer').innerHTML='';return}
+  if(S.screen==='hunt'){setHudH();$('#main').innerHTML=renderHunt();$('#emer').innerHTML='';return}
   const XS={chal:renderChal,custom:renderCustom,cases:renderCases,editor:renderEditor,reads:renderReads,ach:renderAch};
   if(XS[S.screen]){setHudH();$('#main').innerHTML=XS[S.screen]();$('#emer').innerHTML='';return}
   if(S.screen==='online'&&window.ZSOnline){setHudH();$('#main').innerHTML=ZSOnline.render();$('#emer').innerHTML='';return}
@@ -7790,6 +7883,7 @@ document.addEventListener('click',e=>{
   if(ds.gift){gift(ds.gift);window.scrollTo({top:0});return}
   if(ds.emdx!==undefined){emDx(+ds.emdx);return}
   if(ds.dxpick!==undefined){guess(ds.dxpick);return}
+  if(ds.hpick!==undefined){huntPick(+ds.hpick);return}
   if(ds.emtx!==undefined){emTx(+ds.emtx);return}
   if(ds.eq){const L=S.meta.loadout,i=L.indexOf(ds.eq);if(i>=0)L.splice(i,1);else if(L.length<4)L.push(ds.eq);else{toast('All four slots are full. Remove an item first.');return}
     S.run.rep=Math.min(S.run.rep,maxRep());save();render();return}
@@ -7841,6 +7935,12 @@ document.addEventListener('click',e=>{
     case'remics':remIcs();break;
     case'remgcal':window.open(remGoogle(),'_blank','noopener');render();break;
     case'dailyback':S.screen='menu';S.ui.menu='main';render();window.scrollTo({top:0});break;
+    case'articles':location.href='articles/';break;
+    case'hunt':S.screen='hunt';S.ui.huntRev=false;render();window.scrollTo({top:0});break;
+    case'huntnext':S.ui.huntRev=false;render();window.scrollTo({top:0});break;
+    case'huntshare':{const ta=$('#hshare');if(!ta)break;const text=ta.value;
+      if(navigator.share&&matchMedia('(pointer:coarse)').matches){navigator.share({text}).catch(()=>{});break}
+      try{navigator.clipboard.writeText(text).then(()=>toast('Result copied'),()=>{ta.select();toast('Press Ctrl+C to copy')})}catch(err){ta.select();toast('Press Ctrl+C to copy')}break}
     case'dailyshare':{const ta=$('#dshare');if(!ta)break;try{navigator.clipboard.writeText(ta.value).then(()=>toast('Result copied'),()=>{ta.select();toast('Press Ctrl+C to copy')})}catch(err){ta.select();toast('Press Ctrl+C to copy')}break}
     case'closechat':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();S.ui.chat=null;render();break;
     case'chatstop':if(S.ui.chat&&S.ui.chat.ctl)S.ui.chat.ctl.abort();break;

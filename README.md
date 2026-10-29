@@ -75,6 +75,15 @@ The game is a Progressive Web App, so it can be packaged without rewriting it:
 
 Before submitting a medical-themed game, add a short disclaimer to the store listing that it is for education and entertainment, not clinical guidance.
 
+## Zebra Hunt and articles
+
+- **Zebra Hunt** is a one-minute daily mode: seven patients, Common up to Unicorn, four choices each, the same for everyone. It needs no career. Link straight to it with **https://playzebrashift.github.io/#hunt** (and to the Reading room with `#reads`).
+- **Articles** live in `articles/`: a guide for each picture type, built from the game's own pictures and explanations, plus `sitemap.xml` and `robots.txt` for search engines. After changing cases or pictures, rebuild everything with:
+  ```
+  python3 tools/build_app.py && node tools/build_articles.js
+  ```
+  Then submit `https://playzebrashift.github.io/sitemap.xml` once in Google Search Console so the articles get indexed.
+
 ## Notes
 
 - **Talking to staff:** inside claude.ai the co-workers are played live by Claude. In this standalone app there is no Claude connection, so they use their written lines. Everything else works the same.

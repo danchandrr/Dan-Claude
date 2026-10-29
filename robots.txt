@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://playzebrashift.github.io/sitemap.xml
