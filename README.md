@@ -77,7 +77,7 @@ Before submitting a medical-themed game, add a short disclaimer to the store lis
 
 ## Zebra Hunt and articles
 
-- **Zebra Hunt** is a one-minute daily mode: seven patients, Common up to Unicorn, four choices each, the same for everyone. It needs no career. Link straight to it with **https://playzebrashift.github.io/#hunt** (and to the Reading room with `#reads`).
+- **Zebra Hunt** is a one-minute daily mode: seven patients with four choices each, the same for everyone. Every day has one Zebra and one Unicorn in a shuffled order, and a case's rarity is revealed only once it is answered. It needs no career. Link straight to it with **https://playzebrashift.github.io/#hunt** (and to the Reading room with `#reads`).
 - **Articles** live in `articles/`: a guide for each picture type, built from the game's own pictures and explanations, plus `sitemap.xml` and `robots.txt` for search engines. After changing cases or pictures, rebuild everything with:
   ```
   python3 tools/build_app.py && node tools/build_articles.js

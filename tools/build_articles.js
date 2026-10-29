@@ -122,7 +122,7 @@ ${sections}
 <h1>Read it yourself</h1>
 <p class="lede">Short guides to the pictures that come up on a night in the emergency department: ECGs, bedside ultrasound, microscope slides, blood gases and lab panels, and X-rays. Each one shows the finding, what to look for, and what it is often confused with.</p>
 <ul class="cards">${GUIDES.map(g => { const keys = Object.keys(READS).filter(k => g.kinds.includes(READS[k].k)); return `<li><a href="${g.slug}.html"><img src="img/${keys[0]}.jpg" alt="" loading="lazy"><b>${esc(g.title)}</b><span>${keys.length} pictures · ${esc(g.desc.split(':')[0])}</span></a></li>`; }).join('')}</ul>
-<aside class="cta"><h2>Prefer to play?</h2><p>Zebra Hunt is seven patients a day, each rarer than the last, with four choices for each. It takes a minute and needs no sign-up.</p><p><a class="btn" href="../#hunt">Play today's hunt</a></p></aside>
+<aside class="cta"><h2>Prefer to play?</h2><p>Zebra Hunt is seven patients a day with four choices for each. One of them is a Unicorn, but you only find out which when you answer. It takes a minute and needs no sign-up.</p><p><a class="btn" href="../#hunt">Play today's hunt</a></p></aside>
 </article>`;
   fs.writeFileSync(path.join(OUT, 'index.html'), page({ title: 'Articles · Zebra Shift', desc: 'Guides to ECGs, bedside ultrasound, microscope slides, blood gases, lab panels and X-rays for emergency clinicians and the curious.', url: SITE + 'articles/', body: hub, img: `${SITE}articles/img/antstemi.jpg` }));
   urls.push(SITE + 'privacy.html');
