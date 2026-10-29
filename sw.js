@@ -1,6 +1,6 @@
 // Zebra Shift service worker: keeps the game playable offline.
 // Bump VERSION whenever index.html changes so players get the new build.
-const VERSION = 'zebra-shift-v22';
+const VERSION = 'zebra-shift-v23';
 const SHELL = [
   './',
   './index.html',
@@ -74,7 +74,7 @@ self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (err) { d = { body: e.data && e.data.text() }; }
   e.waitUntil(self.registration.showNotification(d.title || 'Zebra Shift', {
-    body: d.body || 'A new patient is waiting.', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png',
+    body: d.body || 'A new Zebra Hunt and Case of the day are waiting.', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png',
     tag: 'daily', data: { url: d.url || './#daily' }
   }));
 });

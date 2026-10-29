@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
     const local = new Date(Date.now() - s.tz_offset * 60000).toISOString().slice(0, 10);
     const { data: played } = await db.from("daily_scores").select("day").eq("user_id", s.user_id).eq("day", local).maybeSingle();
     if (played) { skipped++; continue; }
-    const payload = JSON.stringify({ title: "Case of the day", body: "A new patient is waiting in the ER. Fewer clues, higher score.", url: APP + "#daily" });
+    const payload = JSON.stringify({ title: "Zebra Shift", body: "Today's Zebra Hunt and Case of the day are ready. One of the seven patients is a Unicorn.", url: APP });
     try {
       await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 3 * 3600 });
       sent++;

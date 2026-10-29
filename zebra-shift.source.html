@@ -5438,7 +5438,7 @@ function renderDaily(){
   return renderPuzzle(x,{label:`${esc(dateLabel(c.date))} · the same patient for everyone today`,title:'Case of the day',sub:'Case of the day',after:st=>`
     <p class="hint">${st.won?(st.credited?'Added to your Casebook, where you can read the teaching point.':'Start a career to keep a Casebook with teaching points.'):'Come back tomorrow for a new patient.'} ${dailyStreak()?`Streak: ${dailyStreak()} day${dailyStreak()>1?'s':''}.`:''}</p>
     <textarea class="code" id="dshare" readonly>${esc(dailyShare(c,st))}</textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="cardshare" data-card="daily">${ic('send')}Share a picture</button><button class="btn" data-act="dailyshare">${ic('copy')}Copy text</button><button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}`});
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn primary" data-act="cardshare" data-card="daily">${ic('send')}Share a picture</button><button class="btn" data-act="dailyshare">${ic('copy')}Copy text</button>${HUNT[todayStr()]&&huntDone(HUNT[todayStr()])?'':`<button class="btn" data-act="hunt">${ic('play')}Play today's Zebra Hunt</button>`}<button class="btn" data-act="dailyback">${ic('back')}Main menu</button></div>${window.ZSOnline?ZSOnline.dailyBoardHTML(c.date):''}`});
 }
 
 /* ---- Zebra Hunt: seven quick cases a day, the same for everyone, with the rarity a surprise ---- */
@@ -5500,7 +5500,7 @@ function renderHunt(){
       <p style="margin:0">${b>=0?`Highest catch: ${tierBadge(b)}`:'No catches today. The zebras got away.'}</p>
       <p class="hgrid" aria-hidden="true">${st.r.map(x=>x.ok?'🟩':'🟥').join('')}</p>
       <textarea class="code" id="hshare" readonly>${esc(huntShare(date,st))}</textarea>
-      <div class="rowbtns"><button class="btn primary" data-act="huntshare">${ic('send')}Share your result</button><button class="btn" data-act="newcareer">${ic('plus')}Play a full night shift</button><button class="btn" data-act="daily">${ic('search')}Case of the day</button></div>
+      <div class="rowbtns"><button class="btn primary" data-act="huntshare">${ic('send')}Share your result</button><button class="btn" data-act="newcareer">${ic('plus')}Play a full night shift</button><button class="btn" data-act="daily">${ic('search')}${DAILY[todayStr()]&&DAILY[todayStr()].done?'Review Case of the day':'Try today\'s harder case'}</button></div>
       <p class="hint" style="margin:0">A new hunt every day at midnight.${streak?` Streak: ${streak} day${streak>1?'s':''}.`:''}${STORE.active!=null&&STORE.slots[STORE.active]?' Every patient you caught is now in your Casebook, with its teaching point.':''}</p></section>`;
   }else{
     const c=set[show],d=D[c.di],r=st.r[show],clues=[d.h[0],d.e[0],d.l[0]].filter(Boolean);
@@ -7596,13 +7596,13 @@ function remIcs(){
   const h=remHour(),t=remNextStart(h),now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
   // a floating local time, so the reminder follows the phone's own time zone
   const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Zebra Shift//Daily reminder//EN','BEGIN:VEVENT','UID:zebra-daily-'+Date.now()+'@zebra-shift','DTSTAMP:'+now,'DTSTART:'+icsStamp(t),'DURATION:PT10M','RRULE:FREQ=DAILY',
-    'SUMMARY:Zebra Shift: Case of the day','DESCRIPTION:A new patient is waiting. '+APP_URL,'URL:'+APP_URL,'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Case of the day','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+    'SUMMARY:Zebra Shift: today\'s hunt and case','DESCRIPTION:A new Zebra Hunt and Case of the day are waiting. '+APP_URL,'URL:'+APP_URL,'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Zebra Hunt and Case of the day','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='zebra-shift-reminder.ics';document.body.appendChild(a);a.click();a.remove();
   REM.hour=h;REM.cal=true;saveRem();achEvent('remind');toast('Open the downloaded file to add the reminder to your calendar');
 }
 function remGoogle(){
   const h=remHour(),t=remNextStart(h),e=new Date(t.getTime()+6e5);REM.hour=h;REM.cal=true;saveRem();achEvent('remind');
-  return'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Zebra Shift: Case of the day')+'&details='+encodeURIComponent('A new patient is waiting. '+APP_URL)+'&recur='+encodeURIComponent('RRULE:FREQ=DAILY')+'&dates='+icsStamp(t)+'/'+icsStamp(e);
+  return'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Zebra Shift: today\'s hunt and case')+'&details='+encodeURIComponent('A new Zebra Hunt and Case of the day are waiting. '+APP_URL)+'&recur='+encodeURIComponent('RRULE:FREQ=DAILY')+'&dates='+icsStamp(t)+'/'+icsStamp(e);
 }
 function renderRemind(){
   const h=REM.hour==null?19:REM.hour,p=window.ZSOnline&&ZSOnline.pushInfo?ZSOnline.pushInfo():null;
@@ -7612,7 +7612,7 @@ function renderRemind(){
   else if(!p.signedIn)push=`<p class="hint">Sign in under Friends &amp; leaderboards first, so the reminder knows where to find you.</p><button class="btn" data-act="online">${ic('people')}Sign in</button>`;
   else if(p.denied)push=`<p class="hint">Notifications are blocked for Zebra Shift. Allow them in your phone or browser settings, then come back.</p>`;
   else if(p.on)push=`<p><b>${ic('check')} On.</b> You get a reminder at about ${hourLabel(p.hour)} each day, unless you have already played.</p><div class="rowbtns"><button class="btn" data-act="remon">${ic('pager')}Change the time</button><button class="btn danger" data-act="remoff">Turn off</button></div>`;
-  else push=`<p class="hint">A notification on this device when the new Case of the day is ready. It skips days you have already played.</p><button class="btn primary" data-act="remon"${p.busy?' disabled':''}>${ic('pager')}${p.busy?'Turning on…':'Turn on notifications'}</button>`;
+  else push=`<p class="hint">A notification on this device when the new Zebra Hunt and Case of the day are ready. It skips days you have already played the Case of the day.</p><button class="btn primary" data-act="remon"${p.busy?' disabled':''}>${ic('pager')}${p.busy?'Turning on…':'Turn on notifications'}</button>`;
   return`<div class="pagehead" style="margin-top:10px"><div><span class="label">Never miss a patient</span><h1>Daily reminder</h1></div><button class="btn" data-menu="main">Back</button></div>
    <section class="panel chalcard remcard" style="margin-top:14px"><label class="edf"><span>Remind me at</span></label>
     <div class="gform" style="margin-top:4px"><select id="remhour" aria-label="Reminder time">${Array.from({length:24},(_,i)=>`<option value="${i}" ${i===h?'selected':''}>${hourLabel(i)}</option>`).join('')}</select></div>
@@ -7671,7 +7671,7 @@ function renderMenu(){
    <header class="mhead"><div class="mtop"><p class="label">An ER roguelike</p><button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="Lobby music ${AUD.pref.music?'on':'off'}" title="Lobby music ${AUD.pref.music?'on':'off'}">${ic(AUD.pref.music?'music':'musicoff')}</button></div>
     <h1 class="logo">Zebra<br><span>Shift</span></h1>
     <p class="tagline">Diagnose, treat and survive the night shift. Common cases keep you alive. Zebras make you a legend.</p></header>
-   <div class="mart">${MENU_ART}${huntCard()}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · ${esc(dateLabel(dc.date))}</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''}. Fewer clues, higher score.</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
+   <div class="mart">${MENU_ART}${huntCard()}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · the harder one</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''} · type the diagnosis, fewer clues for a higher score</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
    <div class="mmain">
     <div class="mprimary">${act?`<button class="btn primary big" data-act="continue">${ic('play')}<span>Continue<small>${drName(slotSummary(act).d)} · slot ${STORE.active+1}</small></span></button>`:''}<button class="btn ${act?'':'primary'} big" data-act="newcareer">${ic('plus')}<span>New career${act?'':'<small>Pick a specialty and start</small>'}</span></button></div>
     <div class="mtiles">
