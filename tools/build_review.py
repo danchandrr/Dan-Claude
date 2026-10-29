@@ -12,6 +12,8 @@ PROCS,DISPO=d['PROCS'],d['DISPO_NAME']
 NEW=set(d.get('NEW',[]))
 # pictures added in the latest round, the case picture lists before it, and notes on values added beyond the case text
 NEWPICS=set(d.get('NEWPICS',[]));OLDCASEPICS=d.get('OLDCASEPICS',{});NOTES=d.get('NOTES',{})
+# the reviewer's comments from the last round, and what was changed in answer to each
+PREV=d.get('PREV',{});CHANGES=d.get('CHANGES',{})
 POOLN={'paeds':'Paediatrics','obgyn':'Obstetrics & Gynaecology','cardio':'Cardiology','neuro':'Neurology','tox':'Toxicology','id':'Infectious Diseases','surg':'Surgery'}
 KIND={'ecg':'12-lead ECG','abg':'Blood gas','lab':'Lab panel','xr':'X-ray','us':'Ultrasound','mic':'Microscopy'}
 CAT={'h':'History','e':'Exam','l':'Tests','i':'Imaging'}
@@ -44,7 +46,9 @@ rows=[('Zebra Shift: medical review sheet',),
 ('• "Emergency differentials" are the other diagnoses offered when the case appears as a timed emergency.',),
 ('• Use the filter arrows in the header row to show one rarity, system or status at a time.',),
 (f'• The {len(NEW)} cases with a green name were added most recently. Start with those if you have already reviewed the rest.',),
-(f'• Blue marks the latest round: the {len(NEWPICS)} new pictures on the Pictures sheet, and on the Cases sheet the "Shown as a picture first" cell of every case that gained a picture.',),
+(f'• Blue marks what changed since your last review: the {len(NEWPICS)} new or redrawn pictures on the Pictures sheet, and on the Cases sheet the "Shown as a picture first" cell of every case whose pictures changed.',),
+(f'• "Change made" (blue) answers each of your {len(CHANGES)} earlier comments, which are kept in "Your correction" so you can check them side by side. Mark Status OK when you are happy with a change.',),
+('• Units now follow your request: pressures in mmHg; glucose, BUN, creatinine, bilirubin, urate and CSF protein in mg/dL; Hb and albumin in g/dL; electrolytes, lactate and ketones in mmol/L.',),
 ('• "Reviewer note" (orange) on the Pictures sheet says which values I added beyond what the case text states, and where a shared picture differs from a case report. Check those first.',),
 ('• ECGs and scans are drawn by the game, not taken from patients. Judge whether the pattern is convincing and correct, rather than exact millimetres.',),
 ('• "Standards cross-match" lists every emergency in the five Indonesian specialist standards you sent and where it lives in the game. Green rows were added from those documents; red rows are not in the game yet, with the reason.',),
@@ -70,8 +74,8 @@ def sheet(name,headers,widths):
 # ---- Cases
 H=['#','Disease','Rarity','System','Specialty pool','Age range','Sex','Presenting complaint','HR','BP','RR','SpO₂ %','Temp °C','Monitor rhythm',
    'History','Exam','Tests','Imaging','Shown as a picture first','Correct treatment','Wrong treatment options','Destination','Bedside procedures',
-   'Also accepted as','Teaching point','Trick presentation','Looks like (mimic)','Emergency differentials','Status','Your correction']
-W=[5,30,11,15,16,9,8,40,6,9,6,8,8,14,48,42,42,40,30,36,40,16,18,22,48,40,22,40,14,50]
+   'Also accepted as','Teaching point','Trick presentation','Looks like (mimic)','Emergency differentials','Change made','Status','Your correction']
+W=[5,30,11,15,16,9,8,40,6,9,6,8,8,14,48,42,42,40,30,36,40,16,18,22,48,40,22,40,44,14,50]
 ws=sheet('Cases',H,W);ws.add_data_validation(status)
 order=sorted(range(len(D)),key=lambda i:(D[i]['t'],D[i]['n']))
 for n,i in enumerate(order,1):
@@ -81,12 +85,13 @@ for n,i in enumerate(order,1):
     sex={'A':'Any','M':'Male','F':'Female'}[x['x']]
     row=[n,x['n'],TIERS[x['t']],x['s'],POOLN.get(x.get('sp'),'Core (everyone)')+(' · false alarm' if x.get('fake') else ''),f"{x['a'][0]}–{x['a'][1]}",sex,x['cc'],v[0],v[1],v[2],v[3],v[4],RHY.get(x.get('ecg') or 'sinus','Sinus'),
          num(x['h']),num(x['e']),num(x['l']),num(x['i']),pics,x['tx'],'\n'.join('• '+w for w in x['w']),DISPO.get(x.get('dispo') or '', x.get('dispo') or '—'),
-         ', '.join(PROCS.get(p,p) for p in (x.get('proc') or [])) or '—',', '.join(x.get('al') or []) or '—',x['p'],trick,x.get('mim') or '—',', '.join(DDX.get(x['n'],[])) or '(picked automatically)','','']
+         ', '.join(PROCS.get(p,p) for p in (x.get('proc') or [])) or '—',', '.join(x.get('al') or []) or '—',x['p'],trick,x.get('mim') or '—',', '.join(DDX.get(x['n'],[])) or '(picked automatically)',CHANGES.get(x['n'],''),'',PREV.get(x['n'],'')]
     ws.append(row);r=ws.max_row
     for c in ws[r]: c.alignment=WRAP;c.border=BOX
     ws.cell(row=r,column=len(H)).fill=YEL
     if n%2==0:
         for c in ws[r][:len(H)-1]: c.fill=PALE
+    if CHANGES.get(x['n']): ws.cell(row=r,column=len(H)-2).fill=BLUE
     if x['n'] in NEW: ws.cell(row=r,column=2).fill=NEWF;ws.cell(row=r,column=2).font=Font(bold=True)
     if OLDCASEPICS and OLDCASEPICS.get(x['n'],'—')!=pics: ws.cell(row=r,column=19).fill=BLUE
     status.add(ws.cell(row=r,column=len(H)-1))
@@ -97,8 +102,8 @@ ws.conditional_formatting.add(f"{L}2:{L}{ws.max_row}",FormulaRule(formula=[f'{L}
 ws.conditional_formatting.add(f"{L}2:{L}{ws.max_row}",FormulaRule(formula=[f'{L}2="OK"'],fill=grn))
 
 # ---- Pictures
-H2=['#','Picture ID','Type','Title shown','Used in case','Replaces this written clue','What the player sees','Correct answer','Other options shown','Explanation shown after answering','Reviewer note','Status','Your correction']
-W2=[5,12,12,24,28,40,84,38,40,50,36,14,50]
+H2=['#','Picture ID','Type','Title shown','Used in case','Replaces this written clue','What the player sees','Correct answer','Other options shown','Explanation shown after answering','Reviewer note','Change made','Status','Your correction']
+W2=[5,12,12,24,28,40,84,38,40,50,36,44,14,50]
 wp=sheet('Pictures',H2,W2);wp.freeze_panes='C2';wp.add_data_validation(status)
 used={}
 for dn,lst in READ_AT.items():
@@ -107,10 +112,11 @@ for dn,lst in READ_AT.items():
 for n,key in enumerate(READS,1):
     r=READS[key];u=used.get(key,[])
     title=r.get('x2') or KIND[r['k']]
-    wp.append([n,key,KIND[r['k']],title,'\n'.join(a for a,_ in u) or '—','\n'.join(b for _,b in u) or '—','',r['o'][0],'\n'.join('• '+o for o in r['o'][1:]),r['x'],NOTES.get(key,''),'',''])
+    wp.append([n,key,KIND[r['k']],title,'\n'.join(a for a,_ in u) or '—','\n'.join(b for _,b in u) or '—','',r['o'][0],'\n'.join('• '+o for o in r['o'][1:]),r['x'],NOTES.get(key,''),CHANGES.get(key,''),'',PREV.get(key,'')])
     row=wp.max_row
     for c in wp[row]: c.alignment=WRAP;c.border=BOX
     wp.cell(row=row,column=len(H2)).fill=YEL
+    if CHANGES.get(key): wp.cell(row=row,column=len(H2)-2).fill=BLUE
     status.add(wp.cell(row=row,column=len(H2)-1))
     if key in NEWPICS: wp.cell(row=row,column=2).fill=BLUE;wp.cell(row=row,column=2).font=Font(bold=True)
     if NOTES.get(key): wp.cell(row=row,column=11).fill=ORNG

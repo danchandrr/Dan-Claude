@@ -82,7 +82,7 @@ ROWS = [
  (PAEDS, 'Neonatologi', 'Enterokolitis nekrotikans', ['Necrotising Enterocolitis'], ''),
  (PAEDS, 'Neonatologi', 'Hiperplasia adrenal kongenital', ['Salt-Wasting Congenital Adrenal Hyperplasia'], ''),
  (PAEDS, 'Neonatologi / nutrisi', 'Inborn error of metabolism; kedaruratan KMB', ['Maple Syrup Urine Disease Crisis'], ''),
- (PAEDS, 'Neonatologi', 'Hipoglikemia; hipotermia; kejang pada neonatus', [], 'Not added as separate newborn cases yet: newborn hypoglycaemia and hypothermia would need their own cases'),
+ (PAEDS, 'Neonatologi', 'Hipoglikemia; hipotermia; kejang pada neonatus', ['Neonatal Hypoglycaemia', 'Neonatal Hypothermia', 'Hypoxic-Ischaemic Encephalopathy'], 'Added after medical review; newborn seizures appear as hypoxic-ischaemic encephalopathy'),
  (PAEDS, 'Neonatologi', 'RDS, sindrom aspirasi mekonium, PPHN, asfiksia', [], 'Not added: delivery-room and NICU problems rather than ED arrivals'),
  (PAEDS, 'Neonatologi', 'Gastroskisis, omfalokel, ruptur meningokel, atresia koana, TGA', [], 'Not added: present at birth in the delivery room'),
  (PAEDS, 'Neurologi', 'Infeksi bakteri / virus SSP', ['Meningococcal Meningitis', 'Tuberculous Meningitis', 'Japanese Encephalitis'], ''),
