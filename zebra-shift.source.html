@@ -5461,9 +5461,10 @@ function huntOpts(di,R,age,sex){
   sshuffle(D.map((x,i)=>i).filter(i=>i!==di&&!out.includes(i)),R).slice(0,3-out.length).forEach(i=>out.push(i));
   return sshuffle([di,...out],R).map(i=>D[i].n);
 }
-// Drawn from the date alone, so every player meets the same patients with the same choices
+// Drawn from the date alone, so every player meets the same patients with the same choices.
+// Today's Case of the day is left out, so playing the hunt first never gives that answer away.
 function huntSet(date){
-  const R=seeded('zebra-hunt-'+date),used=new Set();
+  const R=seeded('zebra-hunt-'+date),used=new Set([dailyCase(date).di]);
   return sshuffle(HUNT_TIERS,R).map(t=>{
     const pool=D.map((d,i)=>i).filter(i=>D[i].t===t&&!D[i].fake&&!used.has(i)).sort((a,b)=>D[a].n.localeCompare(D[b].n));
     const di=pool[Math.floor(R()*pool.length)],d=D[di];used.add(di);
