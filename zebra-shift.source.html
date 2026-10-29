@@ -4666,7 +4666,7 @@ function beep(f=880,d=.15,n=1){
     for(let k=0;k<n;k++){const o=actx.createOscillator(),g=actx.createGain(),t0=actx.currentTime+k*.22;o.frequency.value=f;o.type='square';g.gain.setValueAtTime(.05,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(actx.destination);o.start(t0);o.stop(t0+d)}}catch(e){}
 }
 
-/* ---- Lobby ambience: HVAC hum, waiting-room murmur, distant monitors, PA chime and soft lobby music, all synthesised ---- */
+/* ---- Lobby music: a synthesised night-shift groove over the hospital's HVAC hum, waiting-room murmur, pumps and PA chime ---- */
 const AUD={ctx:null,amb:null,pref:{music:true}};
 try{const a=JSON.parse(localStorage.getItem('zebra-shift.audio')||'null');if(a&&typeof a==='object')AUD.pref=Object.assign(AUD.pref,a)}catch(e){}
 function saveAudioPref(){try{localStorage.setItem('zebra-shift.audio',JSON.stringify(AUD.pref))}catch(e){}}
@@ -4680,40 +4680,78 @@ function noiseBuf(ctx,kind){
   return b;
 }
 function impulse(ctx,sec){const len=Math.floor(ctx.sampleRate*sec),b=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}return b}
-const CHORDS=[[261.63,329.63,392,493.88],[220,261.63,329.63,392],[174.61,220,261.63,329.63],[196,246.94,293.66,392]];
-const PENTA=[523.25,587.33,659.25,783.99,880,1046.5];
-function ambTone(A,{f,t,dur,g,type='sine',att=.01,to}){
-  const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type=type;o.frequency.value=f;
+// Night-shift groove in A minor at 116 bpm: punchy drums, a pulsing bass, clipped stabs and a monitor blip on the beat.
+// Sections build and drop (groove, busy, busier, break with a riser) so it feels eventful but never out of hand.
+const BPM=116,STEP=60/BPM/4;
+// one chord per bar: [bass root, arpeggio notes]
+const PROG=[[55,[440,523.25,659.25,880]],[43.65,[349.23,440,523.25,698.46]],[65.41,[523.25,659.25,783.99,1046.5]],[49,[392,493.88,587.33,783.99]]];
+const SECTIONS=[['groove',4],['busy',4],['busier',4],['break',2]];
+function ambNode(A,type,f,t,dur,g,to,{att=.004,glide=null,filt=null}={}){
+  const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(glide)o.frequency.exponentialRampToValueAtTime(glide,t+dur*.6);
   v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
-  o.connect(v);to.forEach(n=>v.connect(n));o.start(t);o.stop(t+dur+.05);
+  let src=o;if(filt){const fl=A.ctx.createBiquadFilter();fl.type='lowpass';fl.Q.value=filt.q||1;fl.frequency.setValueAtTime(filt.f,t);if(filt.to)fl.frequency.exponentialRampToValueAtTime(filt.to,t+dur);o.connect(fl);src=fl}
+  src.connect(v);to.forEach(n=>v.connect(n));o.start(t);o.stop(t+dur+.05);
 }
-function ambPad(A,f,t,len){
-  [-6,6].forEach(dt=>{const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type='sine';o.frequency.value=f;o.detune.value=dt;
-    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.0055,t+2.4);v.gain.setValueAtTime(.0055,t+len-2.6);v.gain.linearRampToValueAtTime(0,t+len);
-    o.connect(v);v.connect(A.mus);o.start(t);o.stop(t+len+.1)});
+function ambNoise(A,t,dur,g,to,{type='highpass',f=7000,q=.7,sweep=null,att=.002}={}){
+  const s=A.ctx.createBufferSource(),fl=A.ctx.createBiquadFilter(),v=A.ctx.createGain();s.buffer=A.white;
+  fl.type=type;fl.frequency.setValueAtTime(f,t);fl.Q.value=q;if(sweep)fl.frequency.exponentialRampToValueAtTime(sweep,t+dur);
+  v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(fl);fl.connect(v);to.forEach(n=>v.connect(n));s.start(t,Math.random()*3);s.stop(t+dur+.05);
 }
-function ambSchedule(A){
-  const now=A.ctx.currentTime,h=now+.6,N=A.next;
+// One sixteenth note of music at time t
+function ambStep(A,t){
+  const i=A.si++,st=i%16,bar=Math.floor(i/16);
+  if(st===0){A.sb++;if(A.sb>=SECTIONS[A.sec][1]){A.sec=(A.sec+1)%SECTIONS.length;A.sb=0}}
+  const mode=SECTIONS[A.sec][0],[root,arp]=PROG[bar%PROG.length],D=[A.drum],M=[A.mus],R=Math.random;
+  const busy=mode!=='groove'&&mode!=='break',busier=mode==='busier',brk=mode==='break';
+  // crash back in after a break
+  if(st===0&&A.crashAt&&Math.abs(t-A.crashAt)<STEP/2){ambNoise(A,t,1.6,.05,[A.drum,A.verb],{f:5000});ambNode(A,'sine',150,t,.3,.34,D,{glide:42});A.crashAt=0}
+  // kick: on the beat, syncopated pushes when it gets busy
+  if(!brk&&(st===0||st===8||(busy&&st===10)||(busier&&st===14&&R()<.5)))ambNode(A,'sine',150,t,.26,.24,D,{glide:44});
+  // snare on 2 and 4, with ghost notes when it is busier
+  if(!brk&&(st===4||st===12)){ambNoise(A,t,.16,.07,[A.drum,A.verb],{type:'bandpass',f:1900,q:.8});ambNode(A,'triangle',196,t,.09,.05,D)}
+  if(busier&&(st===7||st===15)&&R()<.35)ambNoise(A,t,.06,.02,D,{type:'bandpass',f:2400,q:1});
+  // hi-hats: eighths, sixteenths when busy, an open hat on the off-beat
+  if(st%2===0||(busy&&R()<.75))ambNoise(A,t,st%4===2&&busy?.16:.035,st%4===0?.022:.013,D,{f:8000});
+  // monitor blip on each beat: the clinical pulse under everything
+  if(st%4===0)ambNode(A,'sine',st===0?1046.5:987.77,t,.07,brk?.006:.009,[A.mus]);
+  // pulsing bass in eighths, held through the break
+  if(brk){if(st===0)ambNode(A,'sawtooth',root,t,STEP*15,.08,M,{att:.05,filt:{f:260,to:700}})}
+  else if(st%2===0)ambNode(A,'sawtooth',st===6||st===14?root*2:root,t,STEP*1.7,.11,M,{filt:{f:1200,to:200,q:5}});
+  // clipped off-beat chord stabs
+  if(busy&&(st===3||st===11)&&R()<.8)arp.slice(0,3).forEach(f=>ambNode(A,'sawtooth',f/2,t,.16,.02,M,{filt:{f:3000,to:600}}));
+  // sixteenth-note arpeggio, with dropouts and the odd run upwards
+  if(busy||(brk&&A.sb===1)){if(R()<(busier?.92:.7)){const k=busier&&R()<.15?3:[0,1,2,3,2,1][st%6],f=arp[k]*(busier&&st>11&&R()<.4?2:1);ambNode(A,'square',f,t,.11,.018,[A.mus,A.verb],{filt:{f:3800}})}}
+  // the riser through a break, then a crash on the next downbeat
+  if(brk&&st===0&&A.sb===SECTIONS[A.sec][1]-1){ambNoise(A,t,STEP*16,.045,[A.drum,A.verb],{type:'bandpass',f:400,sweep:7000,q:2,att:STEP*14});A.crashAt=t+STEP*16}
+  // now and then, a pager goes off somewhere
+  if(st===0&&R()<.07)[0,1,0,1].forEach((k,j)=>ambNode(A,'square',k?1318.5:1046.5,t+j*.09,.07,.006,[A.far]));
+}
+function ambSchedule(A,until){
+  const now=A.ctx.currentTime,h=until||now+.6,N=A.next;
   for(const k in N)if(N[k]<now-.5)N[k]=now+.1+Math.random()*.4;
-  while(N.beep<h){if(Math.random()<.85)ambTone(A,{f:965,t:N.beep,dur:.09,g:.007,to:[A.far]});N.beep+=.92+Math.random()*.12}
-  while(N.pump<h){for(let k=0;k<3;k++)ambTone(A,{f:620,t:N.pump+k*.28,dur:.14,g:.006,type:'triangle',to:[A.far]});N.pump+=22+Math.random()*30}
-  while(N.chime<h){[784,659.25,523.25].forEach((f,k)=>{ambTone(A,{f,t:N.chime+k*.62,dur:1.9,g:.028,att:.004,to:[A.out,A.verb]});ambTone(A,{f:f*2,t:N.chime+k*.62,dur:.9,g:.005,att:.004,to:[A.verb]})});N.chime+=55+Math.random()*50}
-  while(N.chord<h){const ch=CHORDS[A.ci++%CHORDS.length];ch.forEach(f=>ambPad(A,f,N.chord,8.4));N.chord+=8}
-  while(N.note<h){if(Math.random()<.7){const f=pick(PENTA);ambTone(A,{f,t:N.note,dur:2.2,g:.011,att:.006,to:[A.mus]});ambTone(A,{f:f*2,t:N.note,dur:.8,g:.003,att:.006,to:[A.mus]})}N.note+=1.4+Math.random()*2.4}
+  while(N.step<h){ambStep(A,N.step);N.step+=STEP}
+  while(N.pump<h){for(let k=0;k<3;k++)ambNode(A,'triangle',620,N.pump+k*.28,.14,.005,[A.far]);N.pump+=22+Math.random()*30}
+  while(N.chime<h){[784,659.25,523.25].forEach((f,k)=>ambNode(A,'sine',f,N.chime+k*.62,1.9,.022,[A.out,A.verb]));N.chime+=70+Math.random()*60}
+}
+// The whole sound graph, so the same music can also be rendered offline for a preview
+function ambBuild(ctx,dest){
+  const out=ctx.createGain();out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.85,ctx.currentTime+2);out.connect(dest);
+  const verb=ctx.createConvolver();verb.buffer=impulse(ctx,1.6);const wet=ctx.createGain();wet.gain.value=.22;verb.connect(wet);wet.connect(out);
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.15;comp.connect(out);
+  const drum=ctx.createGain();drum.gain.value=.9;drum.connect(comp);
+  const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=5000;mus.connect(comp);
+  const farF=ctx.createBiquadFilter();farF.type='lowpass';farF.frequency.value=2200;farF.connect(out);farF.connect(verb);
+  // the room underneath: air handling and the waiting-room murmur
+  const hv=ctx.createBufferSource();hv.buffer=noiseBuf(ctx,'brown');hv.loop=true;const hf=ctx.createBiquadFilter();hf.type='lowpass';hf.frequency.value=260;const hg=ctx.createGain();hg.gain.value=.04;hv.connect(hf);hf.connect(hg);hg.connect(out);hv.start();
+  const mu=ctx.createBufferSource();mu.buffer=noiseBuf(ctx,'pink');mu.loop=true;const mf=ctx.createBiquadFilter();mf.type='bandpass';mf.frequency.value=520;mf.Q.value=.9;const mg=ctx.createGain();mg.gain.value=.022;
+  mu.connect(mf);mf.connect(mg);mg.connect(out);mu.start();
+  const t=ctx.currentTime;
+  return{ctx,out,verb,mus,drum,far:farF,white:noiseBuf(ctx,'white'),srcs:[hv,mu],si:0,sec:0,sb:-1,crashAt:0,next:{step:t+.3,pump:t+14,chime:t+30}};
 }
 function ambStart(){
   if(AUD.amb)return;const ctx=audioCtx();if(!ctx)return;
-  try{
-    const out=ctx.createGain();out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.85,ctx.currentTime+3);out.connect(ctx.destination);
-    const verb=ctx.createConvolver();verb.buffer=impulse(ctx,2.8);const wet=ctx.createGain();wet.gain.value=.35;verb.connect(wet);wet.connect(out);
-    const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=1500;mus.connect(out);mus.connect(verb);
-    const farF=ctx.createBiquadFilter();farF.type='lowpass';farF.frequency.value=2200;farF.connect(out);farF.connect(verb);
-    const hv=ctx.createBufferSource();hv.buffer=noiseBuf(ctx,'brown');hv.loop=true;const hf=ctx.createBiquadFilter();hf.type='lowpass';hf.frequency.value=260;const hg=ctx.createGain();hg.gain.value=.05;hv.connect(hf);hf.connect(hg);hg.connect(out);hv.start();
-    const mu=ctx.createBufferSource();mu.buffer=noiseBuf(ctx,'pink');mu.loop=true;const mf=ctx.createBiquadFilter();mf.type='bandpass';mf.frequency.value=520;mf.Q.value=.9;const mg=ctx.createGain();mg.gain.value=.03;
-    const lfo=ctx.createOscillator();lfo.frequency.value=.13;const lg=ctx.createGain();lg.gain.value=.014;lfo.connect(lg);lg.connect(mg.gain);mu.connect(mf);mf.connect(mg);mg.connect(out);mg.connect(verb);mu.start();lfo.start();
-    const t=ctx.currentTime,A={ctx,out,verb,mus,far:farF,srcs:[hv,mu,lfo],ci:0,next:{beep:t+1,pump:t+14,chime:t+20,chord:t+.5,note:t+3}};
-    A.timer=setInterval(()=>{if(!document.hidden)ambSchedule(A)},250);AUD.amb=A;ambSchedule(A);
-  }catch(e){AUD.amb=null}
+  try{const A=ambBuild(ctx,ctx.destination);A.timer=setInterval(()=>{if(!document.hidden)ambSchedule(A)},200);AUD.amb=A;ambSchedule(A)}catch(e){AUD.amb=null}
 }
 function ambStop(){
   const A=AUD.amb;if(!A)return;AUD.amb=null;clearInterval(A.timer);
