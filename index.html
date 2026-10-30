@@ -4682,7 +4682,7 @@ function beep(f=880,d=.15,n=1){
     for(let k=0;k<n;k++){const o=actx.createOscillator(),g=actx.createGain(),t0=actx.currentTime+k*.22;o.frequency.value=f;o.type='square';g.gain.setValueAtTime(.05,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(actx.destination);o.start(t0);o.stop(t0+d)}}catch(e){}
 }
 
-/* ---- Lobby music: a synthesised night-shift groove over the hospital's HVAC hum, waiting-room murmur, pumps and PA chime ---- */
+/* ---- Lobby music: a synthesised night-shift drive over the hospital's HVAC hum, waiting-room murmur, pumps and PA chime ---- */
 const AUD={ctx:null,amb:null,pref:{music:true}};
 try{const a=JSON.parse(localStorage.getItem('zebra-shift.audio')||'null');if(a&&typeof a==='object')AUD.pref=Object.assign(AUD.pref,a)}catch(e){}
 function saveAudioPref(){try{localStorage.setItem('zebra-shift.audio',JSON.stringify(AUD.pref))}catch(e){}}
@@ -4696,12 +4696,15 @@ function noiseBuf(ctx,kind){
   return b;
 }
 function impulse(ctx,sec){const len=Math.floor(ctx.sampleRate*sec),b=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}return b}
-// Night-shift groove in A minor at 116 bpm: punchy drums, a pulsing bass, clipped stabs and a monitor blip on the beat.
-// Sections build and drop (groove, busy, busier, break with a riser) so it feels eventful but never out of hand.
-const BPM=116,STEP=60/BPM/4;
+// Night-shift drive in A minor at 128 bpm: four-on-the-floor kick, clap and snare, sixteenth hats, tom fills,
+// a pumping bass, bright stabs, a fast arpeggio and a lead hook when it peaks. Sections build and drop
+// (groove, busy, two peak sections, then a break with a snare roll and riser that crashes back in).
+const BPM=128,STEP=60/BPM/4;
 // one chord per bar: [bass root, arpeggio notes]
 const PROG=[[55,[440,523.25,659.25,880]],[43.65,[349.23,440,523.25,698.46]],[65.41,[523.25,659.25,783.99,1046.5]],[49,[392,493.88,587.33,783.99]]];
-const SECTIONS=[['groove',4],['busy',4],['busier',4],['break',2]];
+const SECTIONS=[['groove',4],['busy',4],['peak',4],['peak',4],['break',2]];
+// the lead hook: which arpeggio note plays on each sixteenth (null = rest)
+const HOOK=[0,null,0,2,null,1,0,null,3,null,2,1,null,0,2,3];
 function ambNode(A,type,f,t,dur,g,to,{att=.004,glide=null,filt=null}={}){
   const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(glide)o.frequency.exponentialRampToValueAtTime(glide,t+dur*.6);
   v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
@@ -4714,34 +4717,46 @@ function ambNoise(A,t,dur,g,to,{type='highpass',f=7000,q=.7,sweep=null,att=.002}
   v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
   s.connect(fl);fl.connect(v);to.forEach(n=>v.connect(n));s.start(t,Math.random()*3);s.stop(t+dur+.05);
 }
+const ambKickHit=(A,t,g=.3)=>{ambNode(A,'sine',160,t,.24,g,[A.drum],{glide:45});ambNoise(A,t,.012,.05,[A.drum],{f:3000})};
+const ambClap=(A,t,g=.06)=>{[0,.011,.022].forEach(d=>ambNoise(A,t+d,.09,g,[A.drum,A.verb],{type:'bandpass',f:1500,q:1.2}));ambNoise(A,t,.17,g*.9,[A.drum],{type:'bandpass',f:2400,q:.7});ambNode(A,'triangle',200,t,.08,.05,[A.drum])};
 // One sixteenth note of music at time t
 function ambStep(A,t){
   const i=A.si++,st=i%16,bar=Math.floor(i/16);
   if(st===0){A.sb++;if(A.sb>=SECTIONS[A.sec][1]){A.sec=(A.sec+1)%SECTIONS.length;A.sb=0}}
-  const mode=SECTIONS[A.sec][0],[root,arp]=PROG[bar%PROG.length],D=[A.drum],M=[A.mus],R=Math.random;
-  const busy=mode!=='groove'&&mode!=='break',busier=mode==='busier',brk=mode==='break';
-  // crash back in after a break
-  if(st===0&&A.crashAt&&Math.abs(t-A.crashAt)<STEP/2){ambNoise(A,t,1.6,.05,[A.drum,A.verb],{f:5000});ambNode(A,'sine',150,t,.3,.34,D,{glide:42});A.crashAt=0}
-  // kick: on the beat, syncopated pushes when it gets busy
-  if(!brk&&(st===0||st===8||(busy&&st===10)||(busier&&st===14&&R()<.5)))ambNode(A,'sine',150,t,.26,.24,D,{glide:44});
-  // snare on 2 and 4, with ghost notes when it is busier
-  if(!brk&&(st===4||st===12)){ambNoise(A,t,.16,.07,[A.drum,A.verb],{type:'bandpass',f:1900,q:.8});ambNode(A,'triangle',196,t,.09,.05,D)}
-  if(busier&&(st===7||st===15)&&R()<.35)ambNoise(A,t,.06,.02,D,{type:'bandpass',f:2400,q:1});
-  // hi-hats: eighths, sixteenths when busy, an open hat on the off-beat
-  if(st%2===0||(busy&&R()<.75))ambNoise(A,t,st%4===2&&busy?.16:.035,st%4===0?.022:.013,D,{f:8000});
-  // monitor blip on each beat: the clinical pulse under everything
-  if(st%4===0)ambNode(A,'sine',st===0?1046.5:987.77,t,.07,brk?.006:.009,[A.mus]);
-  // pulsing bass in eighths, held through the break
-  if(brk){if(st===0)ambNode(A,'sawtooth',root,t,STEP*15,.08,M,{att:.05,filt:{f:260,to:700}})}
-  else if(st%2===0)ambNode(A,'sawtooth',st===6||st===14?root*2:root,t,STEP*1.7,.11,M,{filt:{f:1200,to:200,q:5}});
-  // clipped off-beat chord stabs
-  if(busy&&(st===3||st===11)&&R()<.8)arp.slice(0,3).forEach(f=>ambNode(A,'sawtooth',f/2,t,.16,.02,M,{filt:{f:3000,to:600}}));
-  // sixteenth-note arpeggio, with dropouts and the odd run upwards
-  if(busy||(brk&&A.sb===1)){if(R()<(busier?.92:.7)){const k=busier&&R()<.15?3:[0,1,2,3,2,1][st%6],f=arp[k]*(busier&&st>11&&R()<.4?2:1);ambNode(A,'square',f,t,.11,.018,[A.mus,A.verb],{filt:{f:3800}})}}
-  // the riser through a break, then a crash on the next downbeat
-  if(brk&&st===0&&A.sb===SECTIONS[A.sec][1]-1){ambNoise(A,t,STEP*16,.045,[A.drum,A.verb],{type:'bandpass',f:400,sweep:7000,q:2,att:STEP*14});A.crashAt=t+STEP*16}
-  // now and then, a pager goes off somewhere
-  if(st===0&&R()<.07)[0,1,0,1].forEach((k,j)=>ambNode(A,'square',k?1318.5:1046.5,t+j*.09,.07,.006,[A.far]));
+  const [mode,len]=SECTIONS[A.sec],[root,arp]=PROG[bar%PROG.length],D=[A.drum],M=[A.mus],R=Math.random;
+  const brk=mode==='break',busy=mode==='busy'||mode==='peak',peak=mode==='peak',lastBar=A.sb===len-1;
+  // a crash at the top of every busy section, and on the drop after a break
+  if(st===0&&A.sb===0&&busy||(st===0&&A.crashAt&&Math.abs(t-A.crashAt)<STEP/2)){ambNoise(A,t,1.4,.045,[A.drum,A.verb],{f:4500});A.crashAt=0}
+  if(!brk){
+    // four on the floor, with an extra push at the peak
+    if(st%4===0||(peak&&st===14&&R()<.6))ambKickHit(A,t);
+    // clap and snare on 2 and 4, ghost snares at the peak
+    if(st===4||st===12)ambClap(A,t);
+    if(peak&&(st===7||st===10||st===15)&&R()<.4)ambNoise(A,t,.06,.024,D,{type:'bandpass',f:2200,q:1});
+    // sixteenth hats, accented on the eighths, open on the off-beat
+    ambNoise(A,t,.03,st%2===0?.024:.013,D,{f:8500});
+    if(busy&&st%4===2)ambNoise(A,t,.15,.026,D,{f:7000});
+    // tom fill to close each phrase
+    if(busy&&lastBar&&st>=12)ambNode(A,'sine',[240,200,165,135][st-12],t,.18,.16,D,{glide:[240,200,165,135][st-12]*.7});
+  }else{
+    // break: a kick on the downbeat, then a snare roll building into the drop on the last bar
+    if(st===0&&A.sb===0)ambKickHit(A,t,.26);
+    if(lastBar&&st>=4)ambNoise(A,t,.07,.012+.004*(st-4),[A.drum,A.verb],{type:'bandpass',f:2000,q:.9});
+    if(lastBar&&st===0){ambNoise(A,t,STEP*16,.045,[A.drum,A.verb],{type:'bandpass',f:500,sweep:9000,q:2,att:STEP*14});A.crashAt=t+STEP*16}
+  }
+  // the monitor, only now and then while it is calm
+  if(mode==='groove'&&st===0&&bar%2===0)ambNode(A,'sine',1046.5,t,.06,.005,[A.mus]);
+  // pumping bass: root and octave in eighths, held through the break
+  if(brk){if(st===0)ambNode(A,'sawtooth',root,t,STEP*15,.08,M,{att:.05,filt:{f:300,to:900}})}
+  else if(st%2===0)ambNode(A,'sawtooth',st%4===2?root*2:root,t,STEP*1.6,.11,M,{filt:{f:2000,to:260,q:5}});
+  // bright off-beat stabs
+  if(busy&&(st===3||st===11||(peak&&st===6))&&R()<.85)arp.slice(0,3).forEach(f=>ambNode(A,'sawtooth',f,t,.15,.016,M,{filt:{f:6000,to:1500}}));
+  // fast arpeggio an octave up
+  if(busy||(brk&&A.sb===0)){if(R()<(peak?.95:.8)){const k=[0,1,2,3,2,1][st%6];ambNode(A,'square',arp[k]*2,t,.09,.012,[A.mus,A.verb],{filt:{f:8000}})}}
+  // the lead hook at the peak
+  if(peak&&HOOK[st]!=null)ambNode(A,'sawtooth',arp[HOOK[st]]*2,t,.13,.02,[A.mus,A.verb],{filt:{f:7000,to:2500,q:2}});
+  // very rarely, a pager somewhere down the corridor
+  if(st===0&&R()<.015)[0,1,0,1].forEach((k,j)=>ambNode(A,'square',k?1318.5:1046.5,t+j*.09,.07,.004,[A.far]));
 }
 function ambSchedule(A,until){
   const now=A.ctx.currentTime,h=until||now+.6,N=A.next;
@@ -4756,7 +4771,7 @@ function ambBuild(ctx,dest){
   const verb=ctx.createConvolver();verb.buffer=impulse(ctx,1.6);const wet=ctx.createGain();wet.gain.value=.22;verb.connect(wet);wet.connect(out);
   const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.15;comp.connect(out);
   const drum=ctx.createGain();drum.gain.value=.9;drum.connect(comp);
-  const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=5000;mus.connect(comp);
+  const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=10000;mus.connect(comp);
   const farF=ctx.createBiquadFilter();farF.type='lowpass';farF.frequency.value=2200;farF.connect(out);farF.connect(verb);
   // the room underneath: air handling and the waiting-room murmur
   const hv=ctx.createBufferSource();hv.buffer=noiseBuf(ctx,'brown');hv.loop=true;const hf=ctx.createBiquadFilter();hf.type='lowpass';hf.frequency.value=260;const hg=ctx.createGain();hg.gain.value=.04;hv.connect(hf);hf.connect(hg);hg.connect(out);hv.start();
