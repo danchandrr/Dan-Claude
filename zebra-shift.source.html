@@ -4666,7 +4666,7 @@ function beep(f=880,d=.15,n=1){
     for(let k=0;k<n;k++){const o=actx.createOscillator(),g=actx.createGain(),t0=actx.currentTime+k*.22;o.frequency.value=f;o.type='square';g.gain.setValueAtTime(.05,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(actx.destination);o.start(t0);o.stop(t0+d)}}catch(e){}
 }
 
-/* ---- Lobby ambience: HVAC hum, waiting-room murmur, distant monitors, PA chime and soft lobby music, all synthesised ---- */
+/* ---- Music: one synthesised theme that changes with the scene, over the hospital's HVAC hum, waiting-room murmur, pumps and PA chime ---- */
 const AUD={ctx:null,amb:null,pref:{music:true}};
 try{const a=JSON.parse(localStorage.getItem('zebra-shift.audio')||'null');if(a&&typeof a==='object')AUD.pref=Object.assign(AUD.pref,a)}catch(e){}
 function saveAudioPref(){try{localStorage.setItem('zebra-shift.audio',JSON.stringify(AUD.pref))}catch(e){}}
@@ -4680,47 +4680,156 @@ function noiseBuf(ctx,kind){
   return b;
 }
 function impulse(ctx,sec){const len=Math.floor(ctx.sampleRate*sec),b=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}return b}
-const CHORDS=[[261.63,329.63,392,493.88],[220,261.63,329.63,392],[174.61,220,261.63,329.63],[196,246.94,293.66,392]];
-const PENTA=[523.25,587.33,659.25,783.99,880,1046.5];
-function ambTone(A,{f,t,dur,g,type='sine',att=.01,to}){
-  const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type=type;o.frequency.value=f;
+// One theme in A minor (Am–F–C–G and a short hook), played five ways depending on where the player is:
+// lobby (relaxed groove), floor (a little more drive), staff room (slow piano), requisition (arcade chiptune)
+// and emergency (fast, tense and clinical). Each layer fades and the tempo glides, so scenes ease into each other.
+const PROG=[[55,[440,523.25,659.25,880]],[43.65,[349.23,440,523.25,698.46]],[65.41,[523.25,659.25,783.99,1046.5]],[49,[392,493.88,587.33,783.99]]];
+// the hook: which chord note plays on each sixteenth (null = rest)
+const HOOK=[0,null,0,2,null,1,0,null,3,null,2,1,null,0,2,3];
+const SECTIONS=[['groove',4],['busy',4],['peak',4],['break',2]];
+// per scene: tempo, and how loud each layer is (0 = silent)
+const SCENES={
+ lobby:{bpm:108,kick:.8,snare:.7,hat:.7,perc:0,bass:.8,keys:.35,arp:.7,lead:.6,stab:.7,chip:0,mon:0,drone:0,amb:1},
+ floor:{bpm:114,kick:.9,snare:.8,hat:.8,perc:.3,bass:.9,keys:0,arp:.8,lead:.7,stab:.8,chip:0,mon:.4,drone:0,amb:.7},
+ staff:{bpm:84,kick:.45,snare:.5,hat:.6,perc:0,bass:.7,keys:1,arp:0,lead:0,stab:0,chip:0,mon:0,drone:0,amb:.45},
+ req:{bpm:124,kick:.7,snare:.6,hat:.6,perc:0,bass:.6,keys:0,arp:0,lead:0,stab:0,chip:1,mon:0,drone:0,amb:.3},
+ em:{bpm:132,kick:.9,snare:.7,hat:.7,perc:1,bass:.8,keys:0,arp:.5,lead:1,stab:0,chip:0,mon:1,drone:1,amb:.5}
+};
+const LAYERS=['kick','snare','hat','perc','bass','keys','arp','lead','stab','chip','mon','drone'];
+function musicScene(){
+  const r=S.run;
+  if(S.screen==='game'&&r){if(r.em||S.cpr||(r.beds||[]).some(p=>p&&p.phase==='arrest'))return'em';if(PYX||S.tab==='req')return'req';if(S.tab==='staff')return'staff';return'floor'}
+  return PYX?'req':'lobby';
+}
+// switch scene: every layer eases to its new level over a few seconds, and the tempo glides
+function ambScene(A,sc,t){
+  const c=SCENES[sc];if(!c)return;A.scene=sc;A.tbpm=c.bpm;t=t==null?A.ctx.currentTime:t;
+  LAYERS.forEach(k=>{A.bus[k].gain.cancelScheduledValues(t);A.bus[k].gain.setTargetAtTime(c[k],t,1.1)});
+  A.ambG.gain.cancelScheduledValues(t);A.ambG.gain.setTargetAtTime(c.amb,t,1.5);
+  A.live=new Set(LAYERS.filter(k=>c[k]>0||A.last[k]>0));A.liveUntil=t+5;A.last=c;
+}
+function ambNode(A,type,f,t,dur,g,to,{att=.004,glide=null,filt=null}={}){
+  const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(glide)o.frequency.exponentialRampToValueAtTime(glide,t+dur*.6);
   v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
-  o.connect(v);to.forEach(n=>v.connect(n));o.start(t);o.stop(t+dur+.05);
+  let src=o;if(filt){const fl=A.ctx.createBiquadFilter();fl.type='lowpass';fl.Q.value=filt.q||1;fl.frequency.setValueAtTime(filt.f,t);if(filt.to)fl.frequency.exponentialRampToValueAtTime(filt.to,t+dur);o.connect(fl);src=fl}
+  src.connect(v);to.forEach(n=>v.connect(n));o.start(t);o.stop(t+dur+.05);
 }
-function ambPad(A,f,t,len){
-  [-6,6].forEach(dt=>{const o=A.ctx.createOscillator(),v=A.ctx.createGain();o.type='sine';o.frequency.value=f;o.detune.value=dt;
-    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.0055,t+2.4);v.gain.setValueAtTime(.0055,t+len-2.6);v.gain.linearRampToValueAtTime(0,t+len);
-    o.connect(v);v.connect(A.mus);o.start(t);o.stop(t+len+.1)});
+function ambNoise(A,t,dur,g,to,{type='highpass',f=7000,q=.7,sweep=null,att=.002}={}){
+  const s=A.ctx.createBufferSource(),fl=A.ctx.createBiquadFilter(),v=A.ctx.createGain();s.buffer=A.white;
+  fl.type=type;fl.frequency.setValueAtTime(f,t);fl.Q.value=q;if(sweep)fl.frequency.exponentialRampToValueAtTime(sweep,t+dur);
+  v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+att);v.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(fl);fl.connect(v);to.forEach(n=>v.connect(n));s.start(t,Math.random()*3);s.stop(t+dur+.05);
 }
-function ambSchedule(A){
-  const now=A.ctx.currentTime,h=now+.6,N=A.next;
+// an electric-piano note: a sine body with a soft bell partial, long decay
+const ambPiano=(A,f,t,g,dur=2.4)=>{ambNode(A,'sine',f,t,dur,g,[A.bus.keys,A.verb],{att:.006});ambNode(A,'triangle',f*2,t,dur*.4,g*.25,[A.bus.keys],{att:.004});ambNode(A,'sine',f*3.01,t,.35,g*.12,[A.bus.keys])};
+// One sixteenth note of every layer that is playing, at time t
+function ambStep(A,t){
+  const i=A.si++,st=i%16,bar=Math.floor(i/16),sc=A.scene,R=Math.random,on=k=>A.live.has(k);
+  if(t>A.liveUntil)A.live=new Set(LAYERS.filter(k=>A.last[k]>0));
+  if(st===0){A.sb++;if(A.sb>=SECTIONS[A.sec][1]){A.sec=(A.sec+1)%SECTIONS.length;A.sb=0}}
+  const sections=sc==='lobby'||sc==='floor',mode=sections?SECTIONS[A.sec][0]:'steady',lastBar=A.sb===SECTIONS[A.sec][1]-1;
+  const brk=mode==='break',busy=mode==='busy'||mode==='peak',peak=mode==='peak',[root,arp]=PROG[bar%PROG.length],B=A.bus;
+  if(st===0&&A.crashAt&&Math.abs(t-A.crashAt)<A.step/2){ambNoise(A,t,1.3,.03,[B.snare,A.verb],{f:4500});A.crashAt=0}
+  // ---- kick
+  if(on('kick')&&!brk){
+    if(sc==='em'){if(st===0||st===3||st===8||st===11)ambNode(A,'sine',st%8===0?130:110,t,.22,st%8===0?.24:.16,[B.kick],{glide:42})}
+    else if(sc==='req'){if(st%4===0)ambNode(A,'square',110,t,.09,.14,[B.kick],{glide:45,filt:{f:900}})}
+    else if(sc==='staff'){if(st===0)ambNode(A,'sine',120,t,.3,.18,[B.kick],{glide:45})}
+    else if(st===0||st===8||(busy&&sc==='floor'&&st%4===0)||(busy&&st===10&&R()<.5))ambNode(A,'sine',150,t,.25,.22,[B.kick],{glide:45});
+  }
+  // ---- snare, clap, rim
+  if(on('snare')&&!brk&&(st===4||st===12)){
+    if(sc==='staff')ambNoise(A,t,.05,.03,[B.snare],{f:3000});
+    else if(sc==='req')ambNoise(A,t,.08,.05,[B.snare],{type:'bandpass',f:1800,q:.6});
+    else{[0,.011].forEach(d=>ambNoise(A,t+d,.12,.04,[B.snare,A.verb],{type:'bandpass',f:1700,q:1}));ambNode(A,'triangle',200,t,.08,.035,[B.snare])}
+  }
+  if(on('snare')&&brk&&lastBar&&st>=8)ambNoise(A,t,.06,.008+.004*(st-8),[B.snare,A.verb],{type:'bandpass',f:2000,q:.9});
+  // ---- hats and brushes
+  if(on('hat')){
+    if(sc==='staff'){if(st%4===2)ambNoise(A,t,.16,.012,[B.hat],{type:'bandpass',f:5000,q:.5,att:.04})}
+    else if(sc==='req'){ambNoise(A,t,.018,.012,[B.hat],{f:9000})}
+    else if(!brk&&(st%2===0||busy||sc==='em'))ambNoise(A,t,.03,st%2===0?.016:.009,[B.hat],{f:8500});
+    if(sc==='floor'&&peak&&st%4===2)ambNoise(A,t,.13,.016,[B.hat],{f:7000});
+  }
+  // ---- ticking percussion: woodblock in an emergency, shaker on the floor
+  if(on('perc')){if(sc==='em')ambNode(A,'sine',st%4===0?1900:1500,t,.03,.012,[B.perc]);else if(busy&&st%2===1)ambNoise(A,t,.04,.008,[B.perc],{type:'bandpass',f:6000})}
+  // ---- bass
+  if(on('bass')){
+    if(sc==='staff'){if(st===0||st===8)ambNode(A,'triangle',root,t,A.step*7,.11,[B.bass],{att:.02})}
+    else if(sc==='req'){if(st%2===0)ambNode(A,'square',st%4===2?root*2:root,t,A.step*1.4,.07,[B.bass],{filt:{f:1500}})}
+    else if(sc==='em'){ambNode(A,'sawtooth',root,t,A.step*.9,.06,[B.bass],{filt:{f:700,to:180,q:4}})}
+    else if(brk){if(st===0)ambNode(A,'sawtooth',root,t,A.step*15,.07,[B.bass],{att:.05,filt:{f:260,to:700}})}
+    else if(st%2===0)ambNode(A,'sawtooth',st===6||st===14?root*2:root,t,A.step*1.6,.09,[B.bass],{filt:{f:1300,to:200,q:4}});
+  }
+  // ---- piano: chords and the hook, slowly, in the staff room; a soft chord now and then in the lobby
+  if(on('keys')){
+    if(sc==='staff'){if(st===0)arp.forEach((f,k)=>ambPiano(A,f/2,t+k*.025,.02,3.2));const m=(bar%2)*8+(st>>1);if(st%2===0&&st%4===0&&HOOK[m]!=null)ambPiano(A,arp[HOOK[m]],t,.03,1.8)}
+    else if(st===0&&bar%2===0)arp.slice(0,3).forEach((f,k)=>ambPiano(A,f/2,t+k*.02,.012,2.6));
+  }
+  // ---- arpeggio
+  if(on('arp')&&(busy||sc==='em'||(brk&&A.sb===0))){
+    if(sc==='em'){if(st%2===0)ambNode(A,'triangle',arp[[0,1,2,3][(st>>1)%4]]*4,t,.07,.007,[B.arp,A.verb])}
+    else if(R()<(peak?.9:.75))ambNode(A,'square',arp[[0,1,2,3,2,1][st%6]],t,.1,.011,[B.arp,A.verb],{filt:{f:4500}});
+  }
+  // ---- lead: the hook at the peak, or the tense high version in an emergency
+  if(on('lead')){
+    if(sc==='em'){if(bar%2===1&&HOOK[st]!=null){const f=arp[HOOK[st]]*2;ambNode(A,'sawtooth',st%4===3?f*1.0595:f,t,.11,.012,[B.lead,A.verb],{filt:{f:5000,to:2000,q:2}})}}
+    else if(peak&&HOOK[st]!=null)ambNode(A,'sawtooth',arp[HOOK[st]]*2,t,.12,.013,[B.lead,A.verb],{filt:{f:5000,to:1800,q:2}});
+  }
+  // ---- off-beat chord stabs
+  if(on('stab')&&busy&&(st===3||st===11)&&R()<.8)arp.slice(0,3).forEach(f=>ambNode(A,'sawtooth',f/2,t,.15,.012,[B.stab],{filt:{f:3500,to:700}}));
+  // ---- chiptune: square-wave arpeggio, the hook on a pulse lead, and a coin now and then
+  if(on('chip')){
+    ambNode(A,'square',arp[[0,1,2,3][st%4]]*2,t,.06,.016,[B.chip]);
+    if(HOOK[st]!=null&&bar%4!==3)ambNode(A,'square',arp[HOOK[st]]*2,t,.1,.026,[B.chip],{filt:{f:6000}});
+    if(st===0&&bar%4===0){ambNode(A,'square',987.77,t,.06,.018,[B.chip]);ambNode(A,'square',1318.5,t+.07,.18,.018,[B.chip])}
+  }
+  // ---- clinical: monitor beeps on the beat and a soft alarm in an emergency, a distant blip on the floor
+  if(on('mon')){
+    if(sc==='em'){if(st%4===0)ambNode(A,'sine',987.77,t,.08,.012,[B.mon]);if(st===0&&bar%4===2)[0,.16,.32].forEach(d=>ambNode(A,'square',880,t+d,.12,.006,[B.mon]))}
+    else if(st===0&&bar%4===0)ambNode(A,'sine',1046.5,t,.06,.006,[B.mon]);
+  }
+  // ---- a low drone that swells under an emergency
+  if(on('drone')&&st===0)ambNode(A,'sawtooth',root/2,t,A.step*16+.2,.05,[B.drone],{att:.4,filt:{f:300,to:500}});
+  // ---- the riser at the end of a break, crashing back in on the drop
+  if(sections&&brk&&lastBar&&st===0){ambNoise(A,t,A.step*16,.035,[B.snare,A.verb],{type:'bandpass',f:500,sweep:8000,q:2,att:A.step*14});A.crashAt=t+A.step*16}
+}
+function ambSchedule(A,until){
+  const now=A.ctx.currentTime,h=until||now+.6,N=A.next;
   for(const k in N)if(N[k]<now-.5)N[k]=now+.1+Math.random()*.4;
-  while(N.beep<h){if(Math.random()<.85)ambTone(A,{f:965,t:N.beep,dur:.09,g:.007,to:[A.far]});N.beep+=.92+Math.random()*.12}
-  while(N.pump<h){for(let k=0;k<3;k++)ambTone(A,{f:620,t:N.pump+k*.28,dur:.14,g:.006,type:'triangle',to:[A.far]});N.pump+=22+Math.random()*30}
-  while(N.chime<h){[784,659.25,523.25].forEach((f,k)=>{ambTone(A,{f,t:N.chime+k*.62,dur:1.9,g:.028,att:.004,to:[A.out,A.verb]});ambTone(A,{f:f*2,t:N.chime+k*.62,dur:.9,g:.005,att:.004,to:[A.verb]})});N.chime+=55+Math.random()*50}
-  while(N.chord<h){const ch=CHORDS[A.ci++%CHORDS.length];ch.forEach(f=>ambPad(A,f,N.chord,8.4));N.chord+=8}
-  while(N.note<h){if(Math.random()<.7){const f=pick(PENTA);ambTone(A,{f,t:N.note,dur:2.2,g:.011,att:.006,to:[A.mus]});ambTone(A,{f:f*2,t:N.note,dur:.8,g:.003,att:.006,to:[A.mus]})}N.note+=1.4+Math.random()*2.4}
+  while(N.step<h){A.bpm+=(A.tbpm-A.bpm)*.06;A.step=60/A.bpm/4;ambStep(A,N.step);N.step+=A.step}
+  while(N.pump<h){for(let k=0;k<3;k++)ambNode(A,'triangle',620,N.pump+k*.28,.14,.005,[A.far]);N.pump+=22+Math.random()*30}
+  while(N.chime<h){[784,659.25,523.25].forEach((f,k)=>ambNode(A,'sine',f,N.chime+k*.62,1.9,.02,[A.far,A.verb]));N.chime+=70+Math.random()*60}
+}
+// The whole sound graph, so the same music can also be rendered offline for a preview
+function ambBuild(ctx,dest,scene='lobby'){
+  const out=ctx.createGain();out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.85,ctx.currentTime+2);out.connect(dest);
+  const verb=ctx.createConvolver();verb.buffer=impulse(ctx,1.8);const wet=ctx.createGain();wet.gain.value=.24;verb.connect(wet);wet.connect(out);
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.ratio.value=3;comp.attack.value=.004;comp.release.value=.18;comp.connect(out);
+  const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=8000;mus.connect(comp);
+  const bus={};LAYERS.forEach(k=>{bus[k]=ctx.createGain();bus[k].gain.value=0;bus[k].connect(mus)});
+  // the room underneath: air handling, waiting-room murmur, pumps and the PA chime
+  const ambG=ctx.createGain();ambG.gain.value=0;ambG.connect(out);
+  const farF=ctx.createBiquadFilter();farF.type='lowpass';farF.frequency.value=2200;farF.connect(ambG);
+  const hv=ctx.createBufferSource();hv.buffer=noiseBuf(ctx,'brown');hv.loop=true;const hf=ctx.createBiquadFilter();hf.type='lowpass';hf.frequency.value=260;const hg=ctx.createGain();hg.gain.value=.04;hv.connect(hf);hf.connect(hg);hg.connect(ambG);hv.start();
+  const mu=ctx.createBufferSource();mu.buffer=noiseBuf(ctx,'pink');mu.loop=true;const mf=ctx.createBiquadFilter();mf.type='bandpass';mf.frequency.value=520;mf.Q.value=.9;const mg=ctx.createGain();mg.gain.value=.022;
+  mu.connect(mf);mf.connect(mg);mg.connect(ambG);mu.start();
+  const t=ctx.currentTime,c=SCENES[scene];
+  const A={ctx,out,verb,mus,bus,ambG,far:farF,white:noiseBuf(ctx,'white'),srcs:[hv,mu],si:0,sec:0,sb:-1,crashAt:0,bpm:c.bpm,tbpm:c.bpm,step:60/c.bpm/4,last:{},live:new Set(),liveUntil:0,
+    next:{step:t+.3,pump:t+14,chime:t+30}};
+  ambScene(A,scene,t);return A;
 }
 function ambStart(){
   if(AUD.amb)return;const ctx=audioCtx();if(!ctx)return;
-  try{
-    const out=ctx.createGain();out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.85,ctx.currentTime+3);out.connect(ctx.destination);
-    const verb=ctx.createConvolver();verb.buffer=impulse(ctx,2.8);const wet=ctx.createGain();wet.gain.value=.35;verb.connect(wet);wet.connect(out);
-    const mus=ctx.createBiquadFilter();mus.type='lowpass';mus.frequency.value=1500;mus.connect(out);mus.connect(verb);
-    const farF=ctx.createBiquadFilter();farF.type='lowpass';farF.frequency.value=2200;farF.connect(out);farF.connect(verb);
-    const hv=ctx.createBufferSource();hv.buffer=noiseBuf(ctx,'brown');hv.loop=true;const hf=ctx.createBiquadFilter();hf.type='lowpass';hf.frequency.value=260;const hg=ctx.createGain();hg.gain.value=.05;hv.connect(hf);hf.connect(hg);hg.connect(out);hv.start();
-    const mu=ctx.createBufferSource();mu.buffer=noiseBuf(ctx,'pink');mu.loop=true;const mf=ctx.createBiquadFilter();mf.type='bandpass';mf.frequency.value=520;mf.Q.value=.9;const mg=ctx.createGain();mg.gain.value=.03;
-    const lfo=ctx.createOscillator();lfo.frequency.value=.13;const lg=ctx.createGain();lg.gain.value=.014;lfo.connect(lg);lg.connect(mg.gain);mu.connect(mf);mf.connect(mg);mg.connect(out);mg.connect(verb);mu.start();lfo.start();
-    const t=ctx.currentTime,A={ctx,out,verb,mus,far:farF,srcs:[hv,mu,lfo],ci:0,next:{beep:t+1,pump:t+14,chime:t+20,chord:t+.5,note:t+3}};
-    A.timer=setInterval(()=>{if(!document.hidden)ambSchedule(A)},250);AUD.amb=A;ambSchedule(A);
-  }catch(e){AUD.amb=null}
+  try{const A=ambBuild(ctx,ctx.destination,musicScene());
+    A.timer=setInterval(()=>{if(document.hidden)return;const sc=musicScene();if(sc!==A.scene)ambScene(A,sc);ambSchedule(A)},200);AUD.amb=A;ambSchedule(A)}catch(e){AUD.amb=null}
 }
 function ambStop(){
   const A=AUD.amb;if(!A)return;AUD.amb=null;clearInterval(A.timer);
   try{const t=A.ctx.currentTime;A.out.gain.cancelScheduledValues(t);A.out.gain.setValueAtTime(A.out.gain.value,t);A.out.gain.linearRampToValueAtTime(0,t+.6);
     setTimeout(()=>{A.srcs.forEach(s=>{try{s.stop()}catch(e){}});try{A.out.disconnect()}catch(e){}},800)}catch(e){}
 }
-function toggleMusic(){AUD.pref.music=!AUD.pref.music;saveAudioPref();achEvent('music',{on:AUD.pref.music});if(AUD.pref.music)ambStart();else ambStop();toast(AUD.pref.music?'Lobby music on':'Lobby music off');render()}
+function toggleMusic(){AUD.pref.music=!AUD.pref.music;saveAudioPref();achEvent('music',{on:AUD.pref.music});if(AUD.pref.music)ambStart();else ambStop();toast(AUD.pref.music?'Music on':'Music off');render()}
 // Browsers only allow sound after the first tap or key press
 const ambKick=()=>{if(AUD.pref.music&&!AUD.amb)ambStart();else audioCtx()};
 document.addEventListener('pointerdown',ambKick,true);document.addEventListener('keydown',ambKick,true);
@@ -5053,7 +5162,7 @@ function renderHUD(){
     <div class="stat"><span class="label">${ic('trophy')}<span class="lt">Score</span></span><b>${fmt(r.score)}</b></div>
     <div class="stat streak"><span class="label">${ic('flame')}<span class="lt">Streak</span></span><b>${r.streak}</b></div>`:''}
     <div class="stat"><span class="label">${ic('coin')}<span class="lt">Grant</span></span><b>₲${fmt(S.meta.grant)}</b></div>
-    <button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="${AUD.pref.music?'Turn lobby music off':'Turn lobby music on'}" title="Lobby music">${ic(AUD.pref.music?'music':'musicoff')}</button>
+    <button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="${AUD.pref.music?'Turn music off':'Turn music on'}" title="Music">${ic(AUD.pref.music?'music':'musicoff')}</button>
     <button class="drchip" data-act="menu" title="Save and return to the main menu" aria-label="Save and return to the main menu">${portrait(docLook(S.doctor),{cls:'mini',label:'Your doctor'})}<span><b>${drName(S.doctor)}</b><small>Save &amp; menu</small></span></button>
    </div>`;
   const bn=$('#bnav');
@@ -6396,7 +6505,7 @@ const ACHS=[
  {id:'badday',k:'f',ic:'alert',n:'Rough first day',d:'Have a run end during shift 1.'},
  {id:'stubborn',k:'f',ic:'clipboard',n:'A very broad differential',d:'Get a diagnosis right after four or more wrong guesses.'},
  {id:'gracious',k:'f',ic:'people',n:'Gracious loser',d:'Lose a challenge.'},
- {id:'silence',k:'f',ic:'musicoff',n:'Silence of the labs',d:'Turn off the lobby music.'},
+ {id:'silence',k:'f',ic:'musicoff',n:'Silence of the labs',d:'Turn off the music.'},
  {id:'caffeine',k:'f',ic:'coffee',n:'Running on caffeine',d:'Bring co-workers 10 coffees.',c:'gifts',g:10},
  {id:'misread3',k:'f',ic:'eye',n:'Optometry referral',d:'Misread three pictures in a row.',c:'missRun',g:3},
  // secret
@@ -7705,7 +7814,7 @@ function renderMenu(){
   const tile=(attr,icn,label,sub,dot='')=>`<button class="btn mtile" ${attr}>${ic(icn)}<span><b>${label}${dot}</b><small>${sub}</small></span></button>`;
   // Two main actions, then everything else as small tiles; on phones the ambulance sits right under the logo
   return`<div class="menu">
-   <header class="mhead"><div class="mtop"><p class="label">An ER roguelike</p><button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="Lobby music ${AUD.pref.music?'on':'off'}" title="Lobby music ${AUD.pref.music?'on':'off'}">${ic(AUD.pref.music?'music':'musicoff')}</button></div>
+   <header class="mhead"><div class="mtop"><p class="label">An ER roguelike</p><button class="iconbtn" data-act="music" aria-pressed="${AUD.pref.music}" aria-label="Music ${AUD.pref.music?'on':'off'}" title="Music ${AUD.pref.music?'on':'off'}">${ic(AUD.pref.music?'music':'musicoff')}</button></div>
     <h1 class="logo">Zebra<br><span>Shift</span></h1>
     <p class="tagline">Diagnose, treat and survive the night shift. Common cases keep you alive. Zebras make you a legend.</p></header>
    <div class="mart">${MENU_ART}${huntCard()}<section class="panel dailycard"><div style="min-width:0"><span class="label">Case of the day · the harder one</span><q>${esc(D[dc.di].cc)}</q><p class="hint" style="margin:4px 0 0">${dStatus}${streak?` · ${streak}-day streak`:''} · type the diagnosis, fewer clues for a higher score</p></div><button class="btn primary" data-act="daily">${ic('play')}${dst&&dst.done?'Review':'Play'}</button></section></div>
