@@ -4697,7 +4697,7 @@ function noiseBuf(ctx,kind){
 }
 function impulse(ctx,sec){const len=Math.floor(ctx.sampleRate*sec),b=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}return b}
 // One theme in A minor (Am–F–C–G and a short hook), played five ways depending on where the player is:
-// lobby (relaxed groove), floor (a little more drive), staff room (slow piano), requisition (arcade chiptune)
+// lobby (relaxed groove), floor (light drums so players can concentrate), staff room (slow piano), requisition (arcade chiptune)
 // and emergency (fast, tense and clinical). Each layer fades and the tempo glides, so scenes ease into each other.
 const PROG=[[55,[440,523.25,659.25,880]],[43.65,[349.23,440,523.25,698.46]],[65.41,[523.25,659.25,783.99,1046.5]],[49,[392,493.88,587.33,783.99]]];
 // the hook: which chord note plays on each sixteenth (null = rest)
@@ -4706,7 +4706,7 @@ const SECTIONS=[['groove',4],['busy',4],['peak',4],['break',2]];
 // per scene: tempo, and how loud each layer is (0 = silent)
 const SCENES={
  lobby:{bpm:108,kick:.8,snare:.7,hat:.7,perc:0,bass:.8,keys:.35,arp:.7,lead:.6,stab:.7,chip:0,mon:0,drone:0,amb:1},
- floor:{bpm:114,kick:.9,snare:.8,hat:.8,perc:.3,bass:.9,keys:0,arp:.8,lead:.7,stab:.8,chip:0,mon:.4,drone:0,amb:.7},
+ floor:{bpm:110,kick:.3,snare:.22,hat:.28,perc:.08,bass:.7,keys:.4,arp:.65,lead:.5,stab:.5,chip:0,mon:.35,drone:0,amb:.7},
  staff:{bpm:84,kick:.45,snare:.5,hat:.6,perc:0,bass:.7,keys:1,arp:0,lead:0,stab:0,chip:0,mon:0,drone:0,amb:.45},
  req:{bpm:124,kick:.7,snare:.6,hat:.6,perc:0,bass:.6,keys:0,arp:0,lead:0,stab:0,chip:1,mon:0,drone:0,amb:.3},
  em:{bpm:132,kick:.9,snare:.7,hat:.7,perc:1,bass:.8,keys:0,arp:.5,lead:1,stab:0,chip:0,mon:1,drone:1,amb:.5}
@@ -4751,7 +4751,7 @@ function ambStep(A,t){
     if(sc==='em'){if(st===0||st===3||st===8||st===11)ambNode(A,'sine',st%8===0?130:110,t,.22,st%8===0?.24:.16,[B.kick],{glide:42})}
     else if(sc==='req'){if(st%4===0)ambNode(A,'square',110,t,.09,.14,[B.kick],{glide:45,filt:{f:900}})}
     else if(sc==='staff'){if(st===0)ambNode(A,'sine',120,t,.3,.18,[B.kick],{glide:45})}
-    else if(st===0||st===8||(busy&&sc==='floor'&&st%4===0)||(busy&&st===10&&R()<.5))ambNode(A,'sine',150,t,.25,.22,[B.kick],{glide:45});
+    else if(st===0||st===8||(busy&&sc==='lobby'&&st===10&&R()<.5))ambNode(A,'sine',150,t,.25,.22,[B.kick],{glide:45});
   }
   // ---- snare, clap, rim
   if(on('snare')&&!brk&&(st===4||st===12)){
@@ -4764,8 +4764,7 @@ function ambStep(A,t){
   if(on('hat')){
     if(sc==='staff'){if(st%4===2)ambNoise(A,t,.16,.012,[B.hat],{type:'bandpass',f:5000,q:.5,att:.04})}
     else if(sc==='req'){ambNoise(A,t,.018,.012,[B.hat],{f:9000})}
-    else if(!brk&&(st%2===0||busy||sc==='em'))ambNoise(A,t,.03,st%2===0?.016:.009,[B.hat],{f:8500});
-    if(sc==='floor'&&peak&&st%4===2)ambNoise(A,t,.13,.016,[B.hat],{f:7000});
+    else if(!brk&&(st%2===0||(busy&&sc==='lobby')||sc==='em'))ambNoise(A,t,.03,st%2===0?.016:.009,[B.hat],{f:8500});
   }
   // ---- ticking percussion: woodblock in an emergency, shaker on the floor
   if(on('perc')){if(sc==='em')ambNode(A,'sine',st%4===0?1900:1500,t,.03,.012,[B.perc]);else if(busy&&st%2===1)ambNoise(A,t,.04,.008,[B.perc],{type:'bandpass',f:6000})}
